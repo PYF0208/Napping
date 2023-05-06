@@ -330,11 +330,7 @@ namespace Napping_PJ.Models
 
                 entity.ToTable("Order_Detail");
 
-                entity.Property(e => e.OidRidPid)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("OIdRIdPId")
-                    .HasComputedColumnSql("(concat([Order_Id],[Room_Id],[Profit_Id]))", true);
+                entity.Property(e => e.OidRidPid).HasColumnName("OIdRIdPId");
 
                 entity.Property(e => e.CheckIn)
                     .HasColumnType("date")
@@ -377,29 +373,25 @@ namespace Napping_PJ.Models
 
             modelBuilder.Entity<OrderDetailExtraService>(entity =>
             {
-                entity.HasKey(e => new { e.OidRidPid, e.ExtraServiceId })
-                    .HasName("PK_Extra_Service_1");
+                entity.HasNoKey();
 
                 entity.ToTable("OrderDetail_ExtraService");
 
-                entity.Property(e => e.OidRidPid)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .HasColumnName("OIdRIdPId");
-
                 entity.Property(e => e.ExtraServiceId).HasColumnName("Extra_Service_Id");
 
+                entity.Property(e => e.OidRidPid).HasColumnName("OIdRIdPId");
+
                 entity.HasOne(d => d.ExtraService)
-                    .WithMany(p => p.OrderDetailExtraServices)
+                    .WithMany()
                     .HasForeignKey(d => d.ExtraServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetail_ExtraService_Extra_Service");
 
                 entity.HasOne(d => d.OidRidP)
-                    .WithMany(p => p.OrderDetailExtraServices)
+                    .WithMany()
                     .HasForeignKey(d => d.OidRidPid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Extra_Service_Order_Detail");
+                    .HasConstraintName("FK_OrderDetail_ExtraService_Order_Detail");
             });
 
             modelBuilder.Entity<Payment>(entity =>
