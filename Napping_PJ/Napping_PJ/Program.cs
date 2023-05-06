@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Napping_PJ.Models;
+using Napping_PJ.Models.Entity;
 
 namespace Napping_PJ
 {

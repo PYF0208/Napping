@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Napping_PJ.Models
+namespace Napping_PJ.Models.Entity
 {
     public partial class Comment
     {
