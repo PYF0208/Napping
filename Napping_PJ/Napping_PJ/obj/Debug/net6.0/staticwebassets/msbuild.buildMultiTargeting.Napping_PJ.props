@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Napping_PJ.props" />
+</Project>
