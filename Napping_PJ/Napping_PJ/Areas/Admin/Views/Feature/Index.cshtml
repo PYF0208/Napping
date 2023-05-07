@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Napping_PJ.Models.Entity.Feature>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>房型特徵</h1>
+
+<p>
+	<a href="/Admin/Feature/Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Image)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Image)
+				</td>
+				<td>
+					<a href="/Admin/Feature/Edit/@item.FeatureId">Edit</a> |
+					<a href="/Admin/Feature/Details/@item.FeatureId">Details</a> |
+					<a href="/Admin/Feature/Delete/@item.FeatureId">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
