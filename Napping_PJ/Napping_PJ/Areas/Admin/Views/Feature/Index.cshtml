@@ -7,7 +7,7 @@
 <h1>房型特徵</h1>
 
 <p>
-	<a href="/Admin/Feature/Create">Create New</a>
+	<a asp-action="Create">Create New</a>
 </p>
 <table class="table">
 	<thead>
@@ -29,12 +29,13 @@
 					@Html.DisplayFor(modelItem => item.Name)
 				</td>
 				<td>
+					<i class="@Html.DisplayFor(modelItem => item.Image)"></i>
 					@Html.DisplayFor(modelItem => item.Image)
 				</td>
 				<td>
-					<a href="/Admin/Feature/Edit/@item.FeatureId">Edit</a> |
-					<a href="/Admin/Feature/Details/@item.FeatureId">Details</a> |
-					<a href="/Admin/Feature/Delete/@item.FeatureId">Delete</a>
+					<a asp-action="Edit" asp-route-id="@item.FeatureId">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.FeatureId">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.FeatureId">Delete</a>
 				</td>
 			</tr>
 		}

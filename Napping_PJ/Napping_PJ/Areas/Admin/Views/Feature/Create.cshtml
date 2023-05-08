@@ -10,16 +10,16 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form action="Create" method="post">
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">特徵名稱</label>
-                <input Name="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Image" class="control-label">Font-Awesome連結</label>
-                <input Name="Image" class="form-control" />
+                <input asp-for="Image" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -30,7 +30,7 @@
 </div>
 
 <div>
-    <a href="/Admin/Feature">Back to List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

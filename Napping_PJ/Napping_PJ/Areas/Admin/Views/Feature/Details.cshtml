@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Details";
-    var id = Model.FeatureId;
 }
 
 <h1>Details</h1>
@@ -26,6 +25,6 @@
     </dl>
 </div>
 <div>
-    <a href="/Admin/Feature/Edit/@id">Edit</a> |
-    <a href="/Admin/Feature">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.FeatureId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>
