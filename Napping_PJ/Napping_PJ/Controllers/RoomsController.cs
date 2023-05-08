@@ -47,7 +47,7 @@ namespace Napping_PJ.Controllers
         // GET: Rooms/Create
         public IActionResult Create()
         {
-            ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "HotelId");
+            ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "Name");
             return View();
         }
 
@@ -58,13 +58,13 @@ namespace Napping_PJ.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoomId,HotelId,Type,Price,MaxGuests")] Room room)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
+            //}
                 _context.Add(room);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "HotelId", room.HotelId);
+            ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "Name", room.HotelId);
             return View(room);
         }
 
@@ -81,7 +81,7 @@ namespace Napping_PJ.Controllers
             {
                 return NotFound();
             }
-            ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "HotelId", room.HotelId);
+            ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "Name", room.HotelId);
             return View(room);
         }
 
@@ -97,9 +97,9 @@ namespace Napping_PJ.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
+            //if (ModelState.IsValid)
+            //{ }
+            try
                 {
                     _context.Update(room);
                     await _context.SaveChangesAsync();
@@ -116,8 +116,8 @@ namespace Napping_PJ.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "HotelId", room.HotelId);
+            
+            ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "Name", room.HotelId);
             return View(room);
         }
 
