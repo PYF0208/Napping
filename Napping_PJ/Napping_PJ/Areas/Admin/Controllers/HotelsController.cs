@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Areas.Admin.Models;
 using Napping_PJ.Models.Entity;
 
 namespace Napping_PJ.Areas.Admin.Controllers
@@ -56,11 +57,25 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("HotelId,Name,Star,Image,ContactName,Phone,Email,City,Region,Address,AvgComment")] Hotel hotel)
+        public async Task<IActionResult> Create( HotelsViewModel hotel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(hotel);
+                var h = new Hotel()
+                {
+                    HotelId = hotel.HotelId,
+                    Name= hotel.Name,
+                    Star= hotel.Star,
+                    Image= hotel.Image,
+                    ContactName= hotel.ContactName,
+                    Phone= hotel.Phone,
+                    Email= hotel.Email,
+                    City = hotel.City,
+                    Region = hotel.Region,
+                    Address = hotel.Address,
+                    AvgComment= hotel.AvgComment,
+                };
+                _context.Add(h);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -97,9 +112,23 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+				var h = new Hotel()
+				{
+					HotelId = hotel.HotelId,
+					Name = hotel.Name,
+					Star = hotel.Star,
+					Image = hotel.Image,
+					ContactName = hotel.ContactName,
+					Phone = hotel.Phone,
+					Email = hotel.Email,
+					City = hotel.City,
+					Region = hotel.Region,
+					Address = hotel.Address,
+					AvgComment = hotel.AvgComment,
+				};
+				try
                 {
-                    _context.Update(hotel);
+                    _context.Update(h);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

@@ -1,6 +1,6 @@
-﻿namespace Napping_PJ.Models.ViewModel
+﻿namespace Napping_PJ.Areas.Admin.Models
 {
-	public class RoomViewModel
+	public class RoomsViewModel
 	{
 		public int RoomId { get; set; }
 		public int HotelId { get; set; }
