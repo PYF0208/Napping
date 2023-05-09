@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models.Entity;
 
-namespace Napping_PJ.Controllers
+namespace Napping_PJ.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class PromotionsController : Controller
     {
         private readonly db_a989f8_nappingContext _context;
@@ -18,14 +19,14 @@ namespace Napping_PJ.Controllers
             _context = context;
         }
 
-        // GET: Promotions
+        // GET: Admin/Promotions
         public async Task<IActionResult> Index()
         {
             var db_a989f8_nappingContext = _context.Promotions.Include(p => p.Level);
             return View(await db_a989f8_nappingContext.ToListAsync());
         }
 
-        // GET: Promotions/Details/5
+        // GET: Admin/Promotions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Promotions == null)
@@ -44,14 +45,14 @@ namespace Napping_PJ.Controllers
             return View(promotion);
         }
 
-        // GET: Promotions/Create
+        // GET: Admin/Promotions/Create
         public IActionResult Create()
         {
             ViewData["LevelId"] = new SelectList(_context.Levels, "LevelId", "LevelId");
             return View();
         }
 
-        // POST: Promotions/Create
+        // POST: Admin/Promotions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -62,7 +63,7 @@ namespace Napping_PJ.Controllers
             {
                 var p = new Promotion()
                 {
-                    PromotionId=promotion.PromotionId,
+                    PromotionId = promotion.PromotionId,
                     LevelId = promotion.LevelId,
                     Name = promotion.Name,
                     StartDate = promotion.StartDate,
@@ -77,7 +78,7 @@ namespace Napping_PJ.Controllers
             return View(promotion);
         }
 
-        // GET: Promotions/Edit/5
+        // GET: Admin/Promotions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Promotions == null)
@@ -94,12 +95,12 @@ namespace Napping_PJ.Controllers
             return View(promotion);
         }
 
-        // POST: Promotions/Edit/5
+        // POST: Admin/Promotions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PromotionViewModel promotion)
+        public async Task<IActionResult> Edit(int id, [Bind("PromotionId,LevelId,Name,StartDate,EndDate,Discount")] Promotion promotion)
         {
             if (id != promotion.PromotionId)
             {
@@ -116,10 +117,12 @@ namespace Napping_PJ.Controllers
                     StartDate = promotion.StartDate,
                     EndDate = promotion.EndDate,
                     Discount = promotion.Discount,
+
                 };
+                
                 try
                 {
-                    _context.Update(p);
+                    _context.Update(promotion);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -139,7 +142,7 @@ namespace Napping_PJ.Controllers
             return View(promotion);
         }
 
-        // GET: Promotions/Delete/5
+        // GET: Admin/Promotions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Promotions == null)
@@ -158,7 +161,7 @@ namespace Napping_PJ.Controllers
             return View(promotion);
         }
 
-        // POST: Promotions/Delete/5
+        // POST: Admin/Promotions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models.Entity;
 
-namespace Napping_PJ.Controllers
+namespace Napping_PJ.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class LevelsController : Controller
     {
         private readonly db_a989f8_nappingContext _context;
@@ -18,7 +19,7 @@ namespace Napping_PJ.Controllers
             _context = context;
         }
 
-        // GET: Levels
+        // GET: Admin/Levels
         public async Task<IActionResult> Index()
         {
               return _context.Levels != null ? 
@@ -26,7 +27,7 @@ namespace Napping_PJ.Controllers
                           Problem("Entity set 'db_a989f8_nappingContext.Levels'  is null.");
         }
 
-        // GET: Levels/Details/5
+        // GET: Admin/Levels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Levels == null)
@@ -44,13 +45,13 @@ namespace Napping_PJ.Controllers
             return View(level);
         }
 
-        // GET: Levels/Create
+        // GET: Admin/Levels/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Levels/Create
+        // POST: Admin/Levels/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -66,7 +67,7 @@ namespace Napping_PJ.Controllers
             return View(level);
         }
 
-        // GET: Levels/Edit/5
+        // GET: Admin/Levels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Levels == null)
@@ -82,7 +83,7 @@ namespace Napping_PJ.Controllers
             return View(level);
         }
 
-        // POST: Levels/Edit/5
+        // POST: Admin/Levels/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -117,7 +118,7 @@ namespace Napping_PJ.Controllers
             return View(level);
         }
 
-        // GET: Levels/Delete/5
+        // GET: Admin/Levels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Levels == null)
@@ -135,7 +136,7 @@ namespace Napping_PJ.Controllers
             return View(level);
         }
 
-        // POST: Levels/Delete/5
+        // POST: Admin/Levels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
