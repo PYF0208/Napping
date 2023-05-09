@@ -100,7 +100,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PromotionId,LevelId,Name,StartDate,EndDate,Discount")] Promotion promotion)
+        public async Task<IActionResult> Edit(int id,PromotionViewModel promotion)
         {
             if (id != promotion.PromotionId)
             {
@@ -122,7 +122,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 
                 try
                 {
-                    _context.Update(promotion);
+                    _context.Update(p);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
