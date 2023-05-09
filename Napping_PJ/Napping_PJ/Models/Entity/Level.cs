@@ -12,7 +12,7 @@ namespace Napping_PJ.Models.Entity
         }
 
         public int LevelId { get; set; }
-        public string LevelName { get; set; } = null!;
+        public string Name { get; set; } = null!;
 
         public virtual ICollection<Customer> Customers { get; set; }
         public virtual ICollection<Promotion> Promotions { get; set; }
