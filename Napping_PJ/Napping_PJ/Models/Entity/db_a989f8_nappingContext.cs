@@ -18,6 +18,7 @@ namespace Napping_PJ.Models.Entity
 
         public virtual DbSet<BellEvent> BellEvents { get; set; } = null!;
         public virtual DbSet<Comment> Comments { get; set; } = null!;
+        public virtual DbSet<Currency> Currencies { get; set; } = null!;
         public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<CustomerGift> CustomerGifts { get; set; } = null!;
         public virtual DbSet<ExtraService> ExtraServices { get; set; } = null!;
@@ -33,8 +34,10 @@ namespace Napping_PJ.Models.Entity
         public virtual DbSet<Payment> Payments { get; set; } = null!;
         public virtual DbSet<Profit> Profits { get; set; } = null!;
         public virtual DbSet<Promotion> Promotions { get; set; } = null!;
+        public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
         public virtual DbSet<RoomImage> RoomImages { get; set; } = null!;
+        public virtual DbSet<UserRole> UserRoles { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -49,15 +52,7 @@ namespace Napping_PJ.Models.Entity
         {
             modelBuilder.Entity<BellEvent>(entity =>
             {
-                entity.ToTable("Bell_Event");
-
-                entity.Property(e => e.BellEventId).HasColumnName("Bell_Event_Id");
-
-                entity.Property(e => e.CustomerId).HasColumnName("Customer_Id");
-
-                entity.Property(e => e.EventContent)
-                    .HasMaxLength(50)
-                    .HasColumnName("Event_Content");
+                entity.Property(e => e.EventContent).HasMaxLength(50);
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.BellEvents)
@@ -68,17 +63,9 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Comment>(entity =>
             {
-                entity.ToTable("Comment");
-
-                entity.Property(e => e.CommentId).HasColumnName("Comment_Id");
-
                 entity.Property(e => e.Cp).HasColumnName("CP");
 
-                entity.Property(e => e.CustomerId).HasColumnName("Customer_Id");
-
                 entity.Property(e => e.Date).HasColumnType("date");
-
-                entity.Property(e => e.HotelId).HasColumnName("Hotel_Id");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Comments)
@@ -93,12 +80,17 @@ namespace Napping_PJ.Models.Entity
                     .HasConstraintName("FK_Comment_Hotel");
             });
 
+            modelBuilder.Entity<Currency>(entity =>
+            {
+                entity.Property(e => e.CurrencyId).ValueGeneratedNever();
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.Symbol).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.ToTable("Customer");
-
-                entity.Property(e => e.CustomerId).HasColumnName("Customer_Id");
-
                 entity.Property(e => e.Birthday).HasColumnType("date");
 
                 entity.Property(e => e.City).HasMaxLength(50);
@@ -109,8 +101,6 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.Gender).HasMaxLength(50);
 
-                entity.Property(e => e.LevelId).HasColumnName("Level_Id");
-
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Password)
@@ -119,8 +109,7 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.PasswordHash)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("Password_Hash");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Phone).HasColumnType("numeric(18, 0)");
 
@@ -129,7 +118,6 @@ namespace Napping_PJ.Models.Entity
                 entity.HasOne(d => d.Level)
                     .WithMany(p => p.Customers)
                     .HasForeignKey(d => d.LevelId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Customer_Level");
             });
 
@@ -138,24 +126,13 @@ namespace Napping_PJ.Models.Entity
                 entity.HasKey(e => new { e.CustomerId, e.GiftId, e.PostDate })
                     .HasName("PK_Gift");
 
-                entity.ToTable("Customer_Gift");
-
-                entity.Property(e => e.CustomerId).HasColumnName("Customer_Id");
-
-                entity.Property(e => e.GiftId).HasColumnName("Gift_Id");
-
                 entity.Property(e => e.PostDate)
                     .HasColumnType("date")
-                    .HasColumnName("Post_Date")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.EndDate)
-                    .HasColumnType("date")
-                    .HasColumnName("End_Date");
+                entity.Property(e => e.EndDate).HasColumnType("date");
 
-                entity.Property(e => e.StartDate)
-                    .HasColumnType("date")
-                    .HasColumnName("Start_Date");
+                entity.Property(e => e.StartDate).HasColumnType("date");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.CustomerGifts)
@@ -172,12 +149,6 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<ExtraService>(entity =>
             {
-                entity.ToTable("Extra_Service");
-
-                entity.Property(e => e.ExtraServiceId).HasColumnName("Extra_Service_Id");
-
-                entity.Property(e => e.HotelId).HasColumnName("Hotel_Id");
-
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.HasOne(d => d.Hotel)
@@ -189,10 +160,6 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Feature>(entity =>
             {
-                entity.ToTable("Feature");
-
-                entity.Property(e => e.FeatureId).HasColumnName("Feature_Id");
-
                 entity.Property(e => e.Image).IsUnicode(false);
 
                 entity.Property(e => e.Name).HasMaxLength(50);
@@ -200,30 +167,14 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Gift>(entity =>
             {
-                entity.ToTable("Gift");
-
-                entity.Property(e => e.GiftId).HasColumnName("Gift_Id");
-
-                entity.Property(e => e.HotelId).HasColumnName("Hotel_Id");
-
                 entity.Property(e => e.Name).HasMaxLength(50);
-
-                entity.Property(e => e.ValidDate).HasColumnName("Valid_Date");
             });
 
             modelBuilder.Entity<Hotel>(entity =>
             {
-                entity.ToTable("Hotel");
-
-                entity.Property(e => e.HotelId).HasColumnName("Hotel_Id");
-
-                entity.Property(e => e.AvgComment).HasColumnName("Avg_Comment");
-
                 entity.Property(e => e.City).HasMaxLength(50);
 
-                entity.Property(e => e.ContactName)
-                    .HasMaxLength(50)
-                    .HasColumnName("Contact_Name");
+                entity.Property(e => e.ContactName).HasMaxLength(50);
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
@@ -242,28 +193,15 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Level>(entity =>
             {
-                entity.ToTable("Level");
-
-                entity.Property(e => e.LevelId).HasColumnName("Level_Id");
-
-                entity.Property(e => e.LevelName)
-                    .HasMaxLength(50)
-                    .HasColumnName("Level_Name");
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Like>(entity =>
             {
-                entity.HasKey(e => new { e.RoomId, e.CustomerId });
+                entity.HasKey(e => new { e.RoomId, e.CustomerId })
+                    .HasName("PK_Like");
 
-                entity.ToTable("Like");
-
-                entity.Property(e => e.RoomId).HasColumnName("Room_Id");
-
-                entity.Property(e => e.CustomerId).HasColumnName("Customer_Id");
-
-                entity.Property(e => e.EndTime)
-                    .HasColumnType("date")
-                    .HasColumnName("End_Time");
+                entity.Property(e => e.EndTime).HasColumnType("date");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Likes)
@@ -280,13 +218,13 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Oauth>(entity =>
             {
-                entity.ToTable("OAuth");
+                entity.ToTable("OAuths");
 
                 entity.Property(e => e.OauthId)
                     .HasMaxLength(50)
-                    .HasColumnName("OAuth_Id");
+                    .HasColumnName("OAuthId");
 
-                entity.Property(e => e.CustomerId).HasColumnName("Customer_Id");
+                entity.Property(e => e.Type).HasMaxLength(50);
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Oauths)
@@ -297,19 +235,13 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.ToTable("Order");
-
-                entity.Property(e => e.OrderId).HasColumnName("Order_Id");
-
-                entity.Property(e => e.Currency)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CustomerId).HasColumnName("Customer_Id");
-
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
-                entity.Property(e => e.PaymentId).HasColumnName("Payment_Id");
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_Currencuies");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
@@ -326,31 +258,11 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasKey(e => e.OidRidPid);
+                entity.Property(e => e.CheckIn).HasColumnType("date");
 
-                entity.ToTable("Order_Detail");
+                entity.Property(e => e.CheckOut).HasColumnType("date");
 
-                entity.Property(e => e.OidRidPid).HasColumnName("OIdRIdPId");
-
-                entity.Property(e => e.CheckIn)
-                    .HasColumnType("date")
-                    .HasColumnName("Check_In");
-
-                entity.Property(e => e.CheckOut)
-                    .HasColumnType("date")
-                    .HasColumnName("Check_Out");
-
-                entity.Property(e => e.NumberOfGuests).HasColumnName("Number_Of_Guests");
-
-                entity.Property(e => e.OrderId).HasColumnName("Order_Id");
-
-                entity.Property(e => e.ProfitId).HasColumnName("Profit_Id");
-
-                entity.Property(e => e.RoomId).HasColumnName("Room_Id");
-
-                entity.Property(e => e.TravelType)
-                    .HasMaxLength(50)
-                    .HasColumnName("Travel_Type");
+                entity.Property(e => e.TravelType).HasMaxLength(50);
 
                 entity.HasOne(d => d.Profit)
                     .WithMany(p => p.OrderDetails)
@@ -373,44 +285,34 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<OrderDetailExtraService>(entity =>
             {
-                entity.HasNoKey();
-
-                entity.ToTable("OrderDetail_ExtraService");
-
-                entity.Property(e => e.ExtraServiceId).HasColumnName("Extra_Service_Id");
-
-                entity.Property(e => e.OidRidPid).HasColumnName("OIdRIdPId");
+                entity.HasKey(e => new { e.OrderDetailId, e.ExtraServiceId });
 
                 entity.HasOne(d => d.ExtraService)
-                    .WithMany()
+                    .WithMany(p => p.OrderDetailExtraServices)
                     .HasForeignKey(d => d.ExtraServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetail_ExtraService_Extra_Service");
 
-                entity.HasOne(d => d.OidRidP)
-                    .WithMany()
-                    .HasForeignKey(d => d.OidRidPid)
+                entity.HasOne(d => d.OrderDetail)
+                    .WithMany(p => p.OrderDetailExtraServices)
+                    .HasForeignKey(d => d.OrderDetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetail_ExtraService_Order_Detail");
             });
 
             modelBuilder.Entity<Payment>(entity =>
             {
-                entity.ToTable("Payment");
-
-                entity.Property(e => e.PaymentId).HasColumnName("Payment_Id");
-
-                entity.Property(e => e.Currency)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Date).HasColumnType("datetime");
-
-                entity.Property(e => e.OrderId).HasColumnName("Order_Id");
 
                 entity.Property(e => e.Status).HasMaxLength(50);
 
                 entity.Property(e => e.Type).HasMaxLength(50);
+
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.Payments)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Payment_Currencuies");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Payments)
@@ -421,30 +323,16 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Profit>(entity =>
             {
-                entity.ToTable("Profit");
-
-                entity.Property(e => e.ProfitId).HasColumnName("Profit_Id");
-
                 entity.Property(e => e.Date).HasColumnType("date");
             });
 
             modelBuilder.Entity<Promotion>(entity =>
             {
-                entity.ToTable("Promotion");
-
-                entity.Property(e => e.PromotionId).HasColumnName("Promotion_Id");
-
-                entity.Property(e => e.EndDate)
-                    .HasColumnType("date")
-                    .HasColumnName("End_Date");
-
-                entity.Property(e => e.LevelId).HasColumnName("Level_Id");
+                entity.Property(e => e.EndDate).HasColumnType("date");
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.Property(e => e.StartDate)
-                    .HasColumnType("date")
-                    .HasColumnName("Start_Date");
+                entity.Property(e => e.StartDate).HasColumnType("date");
 
                 entity.HasOne(d => d.Level)
                     .WithMany(p => p.Promotions)
@@ -453,16 +341,13 @@ namespace Napping_PJ.Models.Entity
                     .HasConstraintName("FK_Promotion_Level");
             });
 
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.Name).HasMaxLength(20);
+            });
+
             modelBuilder.Entity<Room>(entity =>
             {
-                entity.ToTable("Room");
-
-                entity.Property(e => e.RoomId).HasColumnName("Room_Id");
-
-                entity.Property(e => e.HotelId).HasColumnName("Hotel_Id");
-
-                entity.Property(e => e.MaxGuests).HasColumnName("Max_Guests");
-
                 entity.Property(e => e.Type).HasMaxLength(50);
 
                 entity.HasOne(d => d.Hotel)
@@ -481,33 +366,36 @@ namespace Napping_PJ.Models.Entity
                         {
                             j.HasKey("RoomId", "FeatureId").HasName("PK_Feature");
 
-                            j.ToTable("Room_Feature");
-
-                            j.IndexerProperty<int>("RoomId").HasColumnName("Room_Id");
-
-                            j.IndexerProperty<int>("FeatureId").HasColumnName("Feature_Id");
+                            j.ToTable("RoomFeatures");
                         });
             });
 
             modelBuilder.Entity<RoomImage>(entity =>
             {
-                entity.HasNoKey();
-
-                entity.ToTable("Room_Image");
-
                 entity.Property(e => e.Image).IsUnicode(false);
 
-                entity.Property(e => e.RoomId).HasColumnName("Room_Id");
-
-                entity.Property(e => e.RoomImageId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("Room_Image_Id");
-
                 entity.HasOne(d => d.Room)
-                    .WithMany()
+                    .WithMany(p => p.RoomImages)
                     .HasForeignKey(d => d.RoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Room_Image_Room");
+            });
+
+            modelBuilder.Entity<UserRole>(entity =>
+            {
+                entity.HasKey(e => e.RoleCustomerId);
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.UserRoles)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserRoles_Customer");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.UserRoles)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserRoles_Roles");
             });
 
             OnModelCreatingPartial(modelBuilder);
