@@ -54,7 +54,10 @@ namespace Napping_PJ
             app.UseAuthentication();
             app.UseAuthorization();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f670704fae36fc0bfb64f40b217222e71eba10a4
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapAreaControllerRoute(
@@ -63,9 +66,19 @@ namespace Napping_PJ
                     pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
+<<<<<<< HEAD
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+=======
+                  name: "Admin",
+                  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+>>>>>>> f670704fae36fc0bfb64f40b217222e71eba10a4
             });
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
             app.Run();
         }
     }
