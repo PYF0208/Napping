@@ -13,6 +13,7 @@ namespace Napping_PJ.Controllers
 {
     public class RegisterController : Controller
     {
+
         private readonly db_a989f8_nappingContext _context;
         public RegisterController(db_a989f8_nappingContext context)
         {
