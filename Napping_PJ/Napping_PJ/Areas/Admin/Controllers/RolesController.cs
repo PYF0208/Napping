@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -10,10 +11,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Areas.Admin.Models;
 using Napping_PJ.Models.Entity;
+using Newtonsoft.Json;
 
 namespace Napping_PJ.Areas.Admin.Controllers
 {
-    
+
     [Area("Admin")]
     public class RolesController : Controller
     {
@@ -29,25 +31,31 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // GET: Admin/Roles
         public async Task<IActionResult> Index()
         {
-
             List<UserRoleViewModel> allUserRoleViewModel = new List<UserRoleViewModel>();
 
             Customer[] cusList = await _context.Customers.ToArrayAsync();
             UserRole[] userRoleList = await _context.UserRoles.ToArrayAsync();
-            Role[] roleList = await _context.Roles.ToArrayAsync();
+            IEnumerable<Role> roleList = _context.Roles;
+            ViewBag.CreateRoleInput = new RoleViewModel();
+            ViewBag.Roles = roleList.Select(r =>
+                new RoleViewModel()
+                {
+                    RoleId = r.RoleId,
+                    Name = r.Name,
+                }
+            );
             foreach (Customer cs in cusList)
             {
                 UserRoleViewModel userRoleViewModel = new UserRoleViewModel()
                 {
                     customer = cs,
                     SelectedRole = new List<Role>(),
-                    //AllRoleList = new List<Role>()
                 };
                 foreach (var userRole in userRoleList.Where(ur => ur.CustomerId == cs.CustomerId))
                 {
                     userRoleViewModel.SelectedRole.Add(roleList.First(r => r.RoleId == userRole.RoleId));
                 }
-                ViewBag.Roles = new SelectList(roleList, "RoleId", "Name");
+                ViewBag.RolesSelectList = new SelectList(roleList, "RoleId", "Name");
                 allUserRoleViewModel.Add(userRoleViewModel);
             }
             return _context.Roles != null ?
@@ -104,7 +112,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            
+
             UserRole getRole = await _context.UserRoles.FirstAsync(ur => ur.RoleId == role.RoleId && ur.CustomerId == user.CustomerId);
             if (getRole == null)
             {
@@ -152,15 +160,20 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RoleId,RoleName")] Role role)
+        public async Task<IActionResult> Create([Bind("RoleId,Name")] RoleViewModel roleViewModel)
         {
             if (ModelState.IsValid)
             {
+                Role role = new Role()
+                {
+                    RoleId = roleViewModel.RoleId,
+                    Name = roleViewModel.Name,
+                };
                 _context.Add(role);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(role);
+            return RedirectToAction("Index","Roles");
         }
 
         // GET: Admin/Roles/Edit/5
@@ -228,8 +241,9 @@ namespace Napping_PJ.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            return View(role);
+            _context.Roles.Remove(role);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Admin/Roles/Delete/5

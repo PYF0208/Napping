@@ -4,6 +4,7 @@ using Napping_PJ.Models;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Helpers;
 
 namespace Napping_PJ.Controllers
 {
@@ -23,8 +24,10 @@ namespace Napping_PJ.Controllers
         {
             if (ModelState.IsValid)
             {
-                Customer? getCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == loginViewModel.Email && c.Password == loginViewModel.Password);
-                if (getCustomer != null)
+                
+                Customer? getCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == loginViewModel.Email);
+                bool isValid = PasswordHasher.VerifyPassword(loginViewModel.Password, getCustomer.Email, getCustomer.Password);
+                if (isValid)
                 {
                     IQueryable<UserRole> hasRoles = _context.UserRoles.Where(ur => ur.CustomerId == getCustomer.CustomerId);
                     // 根據啟動檔案中的 o.DefaultScheme = "Application" 初始化聲明值

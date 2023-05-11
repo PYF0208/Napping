@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using static System.Net.Mime.MediaTypeNames;
 using System.Data;
 using Napping_PJ.Models;
+using Napping_PJ.Helpers;
 
 namespace Napping_PJ.Controllers
 {
@@ -150,11 +151,12 @@ namespace Napping_PJ.Controllers
             if (getCustomer == null)
             {
                 newUser = true;
+                string passwodHash = PasswordHasher.HashPassword(passWord,Email);
                 Customer newCustomer = new Customer()
                 {
                     Name = Email,
                     Email = Email,
-                    Password = passWord
+                    Password = passwodHash
                 };
                 //寫入Customers資料表
                 _context.Customers.Add(newCustomer);

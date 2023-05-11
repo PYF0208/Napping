@@ -6,20 +6,20 @@
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Email"></label>
-                <span asp-validation-for="Email" class="text-danger"></span>
+            <span asp-validation-for="Email" class="text-danger"></span>
+            <div class="input-group mb-3">
+                <label class="input-group-text" asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" autocomplete="off" aria-required="true" />
             </div>
-            <div class="form-floating">
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <div class="input-group mb-3">
+                <label class="input-group-text" asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Password"></label>
-                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            <div class="input-group mb-3">
+                <label class="input-group-text" asp-for="ConfirmPassword"></label>
                 <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="ConfirmPassword"></label>
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
@@ -28,7 +28,7 @@
         <form asp-controller="Register" asp-action="OauthGooleLogin" method="post">
             <button type="submit" class="btn btn-primary" name="provider">Google</button>
         </form>
-        </div>
+    </div>
 </div>
 @section Scripts {
     @{
