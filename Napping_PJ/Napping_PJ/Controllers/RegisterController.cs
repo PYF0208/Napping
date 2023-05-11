@@ -25,23 +25,31 @@ namespace Napping_PJ.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> TryCreateCustomer(CustomerViewModel customerViewModel)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TryCreateCustomer([Bind("Email,Password,ConfirmPassword")] RegisterViewModel customerViewModel)
         {
-            //使用信箱尋找使用者是否存在，如不存在則創造一個，並傳回
-            (List<UserRole> hasRoles,bool newUser )= CheckOAuthRecord(customerViewModel.Email, customerViewModel.Password);
-            if (newUser)
+            if (ModelState.IsValid)
             {
-                // 根據啟動檔案中的 o.DefaultScheme = "Application" 初始化聲明值
-                var claimsIdentity = new ClaimsIdentity("Application");
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, customerViewModel.Email));
-                foreach (var role in hasRoles)
+                //使用信箱尋找使用者是否存在，如不存在則創造一個，並傳回
+                (List<UserRole> hasRoles, bool newUser) = CheckOAuthRecord(customerViewModel.Email, customerViewModel.Password);
+                if (newUser)
                 {
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.RoleId.ToString())); // 使用者的角色
+                    // 根據啟動檔案中的 o.DefaultScheme = "Application" 初始化聲明值
+                    var claimsIdentity = new ClaimsIdentity("Application");
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, customerViewModel.Email));
+                    foreach (var role in hasRoles)
+                    {
+                        claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.RoleId.ToString())); // 使用者的角色
+                    }
+                    await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
+                    return RedirectToAction("Index", "Home");
                 }
-                await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
+                else
+                {
+                    ModelState.AddModelError("Email", "該用戶已註冊。");
+                }
             }
-
-            return RedirectToAction("Index", "Home");
+            return View("Index", customerViewModel);
         }
         [HttpPost]
         public async Task<IActionResult> OauthLogout()
@@ -138,7 +146,7 @@ namespace Napping_PJ.Controllers
         {
             bool newUser = false;
             //查詢新會員的ID
-            Customer getCustomer = _context.Customers.FirstOrDefault(c => c.Email == Email);
+            Customer? getCustomer = _context.Customers.FirstOrDefault(c => c.Email == Email);
             if (getCustomer == null)
             {
                 newUser = true;

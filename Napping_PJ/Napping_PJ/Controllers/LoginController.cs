@@ -19,23 +19,30 @@ namespace Napping_PJ.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> TryLogin(CustomerViewModel customerViewModel)
+        public async Task<IActionResult> TryLogin([Bind("Email,Password")] LoginViewModel loginViewModel)
         {
-            Customer getCustomer = await _context.Customers.FirstAsync(c => c.Email == customerViewModel.Email && c.Password == customerViewModel.Password);
-            if (getCustomer != null)
+            if (ModelState.IsValid)
             {
-                IQueryable<UserRole> hasRoles = _context.UserRoles.Where(ur => ur.CustomerId == getCustomer.CustomerId);
+                Customer? getCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == loginViewModel.Email && c.Password == loginViewModel.Password);
+                if (getCustomer != null)
+                {
+                    IQueryable<UserRole> hasRoles = _context.UserRoles.Where(ur => ur.CustomerId == getCustomer.CustomerId);
                     // 根據啟動檔案中的 o.DefaultScheme = "Application" 初始化聲明值
                     var claimsIdentity = new ClaimsIdentity("Application");
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, customerViewModel.Email));
-                foreach (var role in hasRoles)
-                {
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.RoleId.ToString())); // 使用者的角色
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, loginViewModel.Email));
+                    foreach (var role in hasRoles)
+                    {
+                        claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.RoleId.ToString())); // 使用者的角色
+                    }
+                    await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
+                    return RedirectToAction("Index", "Home", new { area = "" });
                 }
-                await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
-
+                else
+                {
+                    ModelState.AddModelError("Email", "輸入的帳號或密碼有誤。");
+                }
             }
-            return RedirectToAction("Index", "Home", new { area = "" });
+            return View("Index", loginViewModel);
         }
     }
 }

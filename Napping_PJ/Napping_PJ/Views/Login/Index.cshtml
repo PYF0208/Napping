@@ -1,4 +1,4 @@
-﻿@model CustomerViewModel
+﻿@model LoginViewModel
 
 <div class="row">
     <div class="col-md-4">
@@ -25,3 +25,8 @@
         </form>
     </div>
 </div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
