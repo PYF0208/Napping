@@ -10,7 +10,7 @@ namespace Napping_PJ.Models.Entity
             Likes = new HashSet<Like>();
             OrderDetails = new HashSet<OrderDetail>();
             RoomImages = new HashSet<RoomImage>();
-            Features = new HashSet<Feature>();
+            Features = new HashSet<FeatureViewModel>();
         }
 
         public int RoomId { get; set; }
@@ -24,6 +24,6 @@ namespace Napping_PJ.Models.Entity
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<RoomImage> RoomImages { get; set; }
 
-        public virtual ICollection<Feature> Features { get; set; }
+        public virtual ICollection<FeatureViewModel> Features { get; set; }
     }
 }

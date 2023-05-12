@@ -22,7 +22,7 @@ namespace Napping_PJ.Models.Entity
         public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<CustomerGift> CustomerGifts { get; set; } = null!;
         public virtual DbSet<ExtraService> ExtraServices { get; set; } = null!;
-        public virtual DbSet<Feature> Features { get; set; } = null!;
+        public virtual DbSet<FeatureViewModel> Features { get; set; } = null!;
         public virtual DbSet<Gift> Gifts { get; set; } = null!;
         public virtual DbSet<Hotel> Hotels { get; set; } = null!;
         public virtual DbSet<Level> Levels { get; set; } = null!;
@@ -158,7 +158,7 @@ namespace Napping_PJ.Models.Entity
                     .HasConstraintName("FK_Extra_Service_Hotel");
             });
 
-            modelBuilder.Entity<Feature>(entity =>
+            modelBuilder.Entity<FeatureViewModel>(entity =>
             {
                 entity.Property(e => e.Image).IsUnicode(false);
 
@@ -360,7 +360,7 @@ namespace Napping_PJ.Models.Entity
                     .WithMany(p => p.Rooms)
                     .UsingEntity<Dictionary<string, object>>(
                         "RoomFeature",
-                        l => l.HasOne<Feature>().WithMany().HasForeignKey("FeatureId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Feature"),
+                        l => l.HasOne<FeatureViewModel>().WithMany().HasForeignKey("FeatureId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Feature"),
                         r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Room"),
                         j =>
                         {
