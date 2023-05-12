@@ -24,6 +24,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var db_a989f8_nappingContext = _context.Rooms.Include(r => r.Hotel);
+            var db_a989f8_nappingContext2 = db_a989f8_nappingContext.Select(s=>s.Hotel);
             return View(await db_a989f8_nappingContext.ToListAsync());
         }
 

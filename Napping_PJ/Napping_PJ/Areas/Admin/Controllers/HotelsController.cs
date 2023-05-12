@@ -103,7 +103,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("HotelId,Name,Star,Image,ContactName,Phone,Email,City,Region,Address,AvgComment")] Hotel hotel)
+        public async Task<IActionResult> Edit(int id,  HotelsViewModel hotel)
         {
             if (id != hotel.HotelId)
             {
