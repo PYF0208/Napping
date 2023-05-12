@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Napping_API.Models.Entity;
+
 namespace Napping_API
 {
     public class Program
