@@ -11,6 +11,7 @@ namespace Napping_PJ.Models.Entity
             Rooms = new HashSet<Room>();
         }
 
+        [Key]
         public int FeatureId { get; set; }
 
         [Required]
