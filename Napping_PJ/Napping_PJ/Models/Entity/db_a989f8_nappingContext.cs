@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Napping_PJ.Areas.Admin.Models;
 
 namespace Napping_PJ.Models.Entity
 {
@@ -403,7 +402,5 @@ namespace Napping_PJ.Models.Entity
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-        public DbSet<Napping_PJ.Areas.Admin.Models.RoleViewModel>? RoleViewModel { get; set; }
     }
 }
