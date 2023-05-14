@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models.Entity;
+using Napping_PJ.Areas.Admin.Models;
 
 namespace Napping_PJ.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Route("/{Area}/{Controller}/{Action}")]
     public class FeatureController : Controller
     {
         private readonly db_a989f8_nappingContext _context;
@@ -21,12 +21,13 @@ namespace Napping_PJ.Areas.Admin.Controllers
             _context = context;
         }
 
+
         // GET: Admin/Feature
         public async Task<IActionResult> Index()
         {
-              return _context.Features != null ? 
-                          View(await _context.Features.ToListAsync()) :
-                          Problem("Entity set 'db_a989f8_nappingContext.Features'  is null.");
+            return _context.Features != null ?
+                        View(await _context.Features.ToListAsync()) :
+                        Problem("Entity set 'db_a989f8_nappingContext.Features'  is null.");
         }
 
         // GET: Admin/Feature/Details/5

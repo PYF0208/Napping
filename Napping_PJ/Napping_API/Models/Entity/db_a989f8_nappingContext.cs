@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Napping_API.Models;
 
-namespace Napping_PJ.Models.Entity
+namespace Napping_API.Models.Entity
 {
     public partial class db_a989f8_nappingContext : DbContext
     {
@@ -402,5 +403,7 @@ namespace Napping_PJ.Models.Entity
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<Napping_API.Models.RegidterDTO>? RegidterDTO { get; set; }
     }
 }

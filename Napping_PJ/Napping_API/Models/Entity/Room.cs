@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Napping_PJ.Models.Entity
+namespace Napping_API.Models.Entity
 {
     public partial class Room
     {
