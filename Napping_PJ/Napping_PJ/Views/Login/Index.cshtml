@@ -33,7 +33,7 @@
                                             <span class="text-danger">{{errorMesseage.emailError}}</span>
                                         </template>
                                         <template v-else>
-                                            <span>請輸入使用者名稱</span>
+                                            <span>請輸入登入信箱</span>
                                         </template>
                                         <div class="form-floating mb-3">
                                             <input v-model="email" class="form-control" id="inputEmail" type="email" placeholder="name@example.com" @@keyup="ValidField" />
@@ -60,7 +60,7 @@
                                     </form>
                                 </div>
                                 <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="register.html">Need an account? Sign up!</a></div>
+                                    <div class="small"><a asp-controller="Register" asp-action="Index">Need an account? Sign up!</a></div>
                                     <form asp-controller="ThirdPartyLogin" asp-action="OauthGooleLogin" method="post">
                                         <button type="submit" class="btn btn-primary" name="provider">Google</button>
                                     </form>

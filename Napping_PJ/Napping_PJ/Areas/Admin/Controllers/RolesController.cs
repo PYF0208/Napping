@@ -25,8 +25,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         {
             _context = context;
         }
-
-        [Authorize(Roles = "1")]
+        //[Authorize(Roles = "1")]
         //[Authorize(Roles = "3")]
         // GET: Admin/Roles
         public async Task<IActionResult> Index()
@@ -62,18 +61,58 @@ namespace Napping_PJ.Areas.Admin.Controllers
                         View(allUserRoleViewModel) :
                         Problem("Entity set 'db_a989f8_nappingContext.Roles'  is null.");
         }
+        public IActionResult Index2()
+        {
+            return View();
+        }
         [HttpPost]
-        public async Task<IActionResult> AddRoleToUser(string userId, string roleId)
+        public async Task<IActionResult> GetUserRoleList()
+        {
+            List<UserRoleViewModel> allUserRoleViewModel = new List<UserRoleViewModel>();
+
+            Customer[] cusList = await _context.Customers.ToArrayAsync();
+            UserRole[] userRoleList = await _context.UserRoles.ToArrayAsync();
+            IEnumerable<Role> roleList = _context.Roles;
+
+            foreach (Customer cs in cusList)
+            {
+                UserRoleViewModel userRoleViewModel = new UserRoleViewModel()
+                {
+                    customer = cs,
+                    SelectedRole = new List<Role>(),
+                };
+                foreach (var userRole in userRoleList.Where(ur => ur.CustomerId == cs.CustomerId))
+                {
+                    userRoleViewModel.SelectedRole.Add(roleList.First(r => r.RoleId == userRole.RoleId));
+                }
+                allUserRoleViewModel.Add(userRoleViewModel);
+            }
+
+            RolesIndexViewModel rolesIndexViewModel = new RolesIndexViewModel()
+            {
+                UserRoleViewModels = allUserRoleViewModel,
+                Roles = roleList
+            };
+
+            string json = JsonConvert.SerializeObject(rolesIndexViewModel, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            return Ok(json);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRoleToUser([FromQuery] string userId, [FromQuery] string roleId)
         {
             var user = await _context.Customers.FindAsync(Convert.ToInt32(userId));
             if (user == null)
             {
-                return NotFound();
+                return BadRequest("無此使用者");
             }
             var role = await _context.Roles.FindAsync(Convert.ToInt32(roleId));
             if (role == null)
             {
-                return NotFound();
+                return BadRequest("請選擇正確角色");
             }
             UserRole userRole = new UserRole()
             {
@@ -96,21 +135,20 @@ namespace Napping_PJ.Areas.Admin.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
-            return RedirectToAction("Index");
+            return Ok("新增權限成功");
         }
         [HttpPost]
-        public async Task<IActionResult> RemoveRoleToUser(string userId, string roleId)
+        public async Task<IActionResult> RemoveRoleToUser([FromQuery] string userId, [FromQuery] string roleId)
         {
             var user = await _context.Customers.FindAsync(Convert.ToInt32(userId));
             if (user == null)
             {
-                return NotFound();
+                return BadRequest("無此使用者");
             }
             var role = await _context.Roles.FindAsync(Convert.ToInt32(roleId));
             if (role == null)
             {
-                return NotFound();
+                return BadRequest("無此角色");
             }
 
             UserRole getRole = await _context.UserRoles.FirstAsync(ur => ur.RoleId == role.RoleId && ur.CustomerId == user.CustomerId);
@@ -128,7 +166,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 return BadRequest(ex.Message);
             }
 
-            return RedirectToAction("Index");
+            return Ok("刪除成功");
         }
 
         // GET: Admin/Roles/Details/5
@@ -159,8 +197,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RoleId,Name")] RoleViewModel roleViewModel)
+        public async Task<IActionResult> AddRole([FromBody][Bind("RoleId,Name")] RoleViewModel roleViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -171,9 +208,9 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 };
                 _context.Add(role);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok("新增成功");
             }
-            return RedirectToAction("Index","Roles");
+            return BadRequest("新增失敗");
         }
 
         // GET: Admin/Roles/Edit/5
@@ -246,9 +283,8 @@ namespace Napping_PJ.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Admin/Roles/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        // POST: Admin/Roles/DeleteConfirmed/5
+        [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Roles == null)
@@ -259,10 +295,10 @@ namespace Napping_PJ.Areas.Admin.Controllers
             if (role != null)
             {
                 _context.Roles.Remove(role);
+                await _context.SaveChangesAsync();
+                return Ok("刪除成功");
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return BadRequest("刪除失敗");
         }
 
         private bool RoleExists(int id)
