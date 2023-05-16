@@ -4,10 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
-using Napping_PJ.Models.Entity;
 using Napping_PJ.Areas.Admin.Models;
+using Napping_PJ.Models.Entity;
 
 namespace Napping_PJ.Areas.Admin.Controllers
 {
@@ -21,17 +20,27 @@ namespace Napping_PJ.Areas.Admin.Controllers
             _context = context;
         }
 
-
         // GET: Admin/Feature
         public async Task<IActionResult> Index()
         {
-            return _context.Features != null ?
-                        View(await _context.Features.ToListAsync()) :
-                        Problem("Entity set 'db_a989f8_nappingContext.Features'  is null.");
+              return View();
         }
 
-        // GET: Admin/Feature/Details/5
-        public async Task<IActionResult> Details(int? id)
+		//[HttpPost("Filter")] //要小心動詞跟URI不可以重複
+		public IActionResult FilterFeature()
+		{
+            return Json(_context.Features.Select(ft => new FeatureViewModel
+			{
+				FeatureId = ft.FeatureId,
+				Name = ft.Name,
+				Image = ft.Image,
+			})
+                );
+		}
+
+
+		// GET: Admin/Feature/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Features == null)
             {
@@ -58,12 +67,11 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FeatureId,Name,Image")] FeatureViewModel feature)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("FeatureId,Name,Image")] Feature feature)
         {
             if (ModelState.IsValid)
             {
-                Console.WriteLine("有");
                 _context.Add(feature);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -92,7 +100,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FeatureId,Name,Image")] FeatureViewModel feature)
+        public async Task<IActionResult> Edit(int id, [Bind("FeatureId,Name,Image")] Feature feature)
         {
             if (id != feature.FeatureId)
             {
