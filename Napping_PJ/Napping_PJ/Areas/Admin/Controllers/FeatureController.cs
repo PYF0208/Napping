@@ -23,19 +23,90 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // GET: Admin/Feature
         public async Task<IActionResult> Index()
         {
-              return View();
+            return View();
         }
 
-		//[HttpPost("Filter")] //要小心動詞跟URI不可以重複
-		public IActionResult FilterFeature()
-		{
+        public IActionResult FilterFeature([FromBody] FeatureViewModel featureVM)
+        {
             return Json(_context.Features.Select(ft => new FeatureViewModel
-			{
-				FeatureId = ft.FeatureId,
-				Name = ft.Name,
-				Image = ft.Image,
-			})
+            {
+                FeatureId = ft.FeatureId,
+                Name = ft.Name,
+                Image = ft.Image,
+            })
                 );
+        }
+
+        [HttpPut]
+		public async Task<string> UpdateFeature(int id, [FromBody]FeatureViewModel featureVM)
+		{
+			if (id != featureVM.FeatureId)
+			{
+				return "修改失敗！";
+			}
+
+			Feature ft = await _context.Features.FindAsync(featureVM.FeatureId);
+			ft.FeatureId = featureVM.FeatureId;
+			ft.Name = featureVM.Name;
+			ft.Image = featureVM.Image;
+			_context.Entry(ft).State = EntityState.Modified;
+
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!FeatureExists(id))
+				{
+					return "修改失敗！";
+				}
+				else
+				{
+					throw;
+				}
+			}
+
+			return "修改成功！";
+		}
+
+		[HttpPost]
+		public async Task<string> InsertFeature([FromBody] FeatureViewModel featureVM)
+		{
+			Feature ft = new Feature
+			{
+				FeatureId = featureVM.FeatureId,
+                Name = featureVM.Name,
+                Image = featureVM.Image
+
+			};
+			_context.Features.Add(ft);
+			await _context.SaveChangesAsync();
+
+			return "新增成功！";
+		}
+
+		[HttpDelete]
+		public async Task<string> DeleteFeature(int id)
+		{
+
+			var feature = await _context.Features.FindAsync(id);
+			if (feature == null)
+			{
+				return "刪除失敗";
+			}
+
+			_context.Features.Remove(feature);
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch
+			{
+				return "刪除關聯紀錄失敗!";
+			}
+
+			return "刪除成功";
 		}
 
 
