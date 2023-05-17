@@ -9,6 +9,7 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Data;
 using Napping_PJ.Models;
 using Napping_PJ.Helpers;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Napping_PJ.Controllers
 {
@@ -25,9 +26,119 @@ namespace Napping_PJ.Controllers
         {
             return View();
         }
+        public IActionResult Index1()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ValidField([FromBody][Bind("Email,Password,ConfirmPassword")] RegisterViewModel registerViewModel)
+        {
+            UserValidViewModel userValidViewModel = new UserValidViewModel()
+            {
+                mainError = null,
+                emailError = null,
+                passWordError = null,
+                confirmPasswordError = null,
+            };
+            if (!ModelState.IsValid)
+            {
+                IEnumerable<string> emailErrors = ModelState["Email"]?.Errors.Select(e => e.ErrorMessage);
+                IEnumerable<string> passwordErrors = ModelState["Password"]?.Errors.Select(e => e.ErrorMessage);
+                IEnumerable<string> confirmPasswordError = ModelState["ConfirmPassword"]?.Errors.Select(e => e.ErrorMessage);
+
+                userValidViewModel.mainError = null;
+                userValidViewModel.emailError = emailErrors == null ? null : string.Join(", ", emailErrors);
+                userValidViewModel.passWordError = passwordErrors == null ? null : string.Join(", ", passwordErrors);
+                userValidViewModel.confirmPasswordError = confirmPasswordError == null ? null : string.Join(", ", confirmPasswordError);
+
+                return BadRequest(userValidViewModel);
+            }
+            return Ok(userValidViewModel);
+        }
+        public async Task<IActionResult> TryRegister([FromBody][Bind("Email,Password,ConfirmPassword")] RegisterViewModel registerViewModel)
+        {
+            UserValidViewModel error = new UserValidViewModel
+            {
+                mainError = null,
+                emailError = null,
+                passWordError = null,
+                confirmPasswordError = null
+            };
+            //確認Email是否已存在
+            bool emailExist = await _context.Customers.AnyAsync(c => c.Email == registerViewModel.Email);
+            if (emailExist)
+            {
+                error.emailError = "信箱已存在";
+                return BadRequest(error);
+            }
+            //驗證資料是否符合RegisterViewModel規範
+            if (!ModelState.IsValid)
+            {
+                IEnumerable<string> emailErrors = ModelState["Email"]?.Errors.Select(e => e.ErrorMessage);
+                IEnumerable<string> passwordErrors = ModelState["Password"]?.Errors.Select(e => e.ErrorMessage);
+                IEnumerable<string> confirmPasswordError = ModelState["ConfirmPassword"]?.Errors.Select(e => e.ErrorMessage);
+
+                error.mainError = null;
+                error.emailError = emailErrors == null ? null : string.Join(", ", emailErrors);
+                error.passWordError = passwordErrors == null ? null : string.Join(", ", passwordErrors);
+                error.confirmPasswordError = confirmPasswordError == null ? null : string.Join(", ", confirmPasswordError);
+
+                return BadRequest(error);
+            }
+            // 创建新用户
+            var newUser = new Customer
+            {
+                Name = registerViewModel.Email,
+                Email = registerViewModel.Email,
+                //密碼加鹽加密
+                Password = PasswordHasher.HashPassword(registerViewModel.Password, registerViewModel.Email)
+            };
+            try
+            {
+                await _context.Customers.AddAsync(newUser);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                error.mainError = ex.InnerException?.Message;
+                // 處理錯誤訊息...
+                return BadRequest(error);
+            }
+            // 添加成功，可以獲取新的 ID
+            Customer getCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == newUser.Email);
+
+            // 添加默認角色到用戶角色表
+            UserRole newUserRole = new UserRole()
+            {
+                RoleId = 3,
+                CustomerId = getCustomer.CustomerId
+            };
+            try
+            {
+                await _context.UserRoles.AddAsync(newUserRole);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // 處理錯誤訊息...
+                error.mainError = ex.InnerException?.Message;
+                return BadRequest(error);
+            }
+            IQueryable<UserRole> hasRoles = _context.UserRoles.Where(ur => ur.CustomerId == getCustomer.CustomerId);
+            // 根據啟動檔案中的 o.DefaultScheme = "Application" 初始化聲明值
+            var claimsIdentity = new ClaimsIdentity("Application");
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, getCustomer.Email));
+            foreach (var role in hasRoles)
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.RoleId.ToString())); // 使用者的角色
+            }
+            await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
+            //return RedirectToAction("Index", "Home", new { area = "" });
+            return Ok(error);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TryCreateCustomer([Bind("Email,Password,ConfirmPassword")] RegisterViewModel customerViewModel)
+        public async Task<IActionResult> TryCreateCustomer([FromBody][Bind("Email,Password,ConfirmPassword")] RegisterViewModel customerViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -151,7 +262,7 @@ namespace Napping_PJ.Controllers
             if (getCustomer == null)
             {
                 newUser = true;
-                string passwodHash = PasswordHasher.HashPassword(passWord,Email);
+                string passwodHash = PasswordHasher.HashPassword(passWord, Email);
                 Customer newCustomer = new Customer()
                 {
                     Name = Email,

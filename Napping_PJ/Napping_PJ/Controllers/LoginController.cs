@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Helpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Napping_PJ.Controllers
 {
@@ -15,7 +16,7 @@ namespace Napping_PJ.Controllers
         public LoginController(db_a989f8_nappingContext context)
         {
             _context = context;
-        }
+        }        
         public IActionResult Index()
         {
             return View();
