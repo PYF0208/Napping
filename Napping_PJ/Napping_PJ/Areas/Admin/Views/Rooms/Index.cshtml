@@ -52,7 +52,7 @@
 							<button class="btn btn-warning" @@click="cancel">取消</button>
 						</td>
 						<td>{{item.roomId}}</td>
-						<td><input v-model="item.hotelId" /> </td>
+						<td>{{item.hotelId}}</td>
 						<td><input v-model="item.type" /> </td>
 						<td><input v-model="item.price" /> </td>
 						<td><input v-model="item.maxGuests" /> </td>
@@ -174,14 +174,14 @@
 					},
 					createRooms: function () {
 						let _this=this;
-						var request = {
+						var req = {
 							RoomId:0,
-							HotelId: _this.hotelId,
+							HotelId:_this.hotelId,
 							Type: _this.type,
 							Price: _this.price,
-							MaxGuests: _this.maxGuests,
+							MaxGuests: _this.maxGuests
 						};
-						axios.post("Rooms/RoomCreate", request)
+						axios.post("Rooms/CreateRooms", req)
 							.then(response => {
 								alert(response.data);
 								$("#insertPage").modal('hide');
@@ -200,18 +200,17 @@
 						axios.post(`Rooms/Edit/${item.roomId}`, request)
 							.then(response => {
 								alert(response.data)
-								this.getRooms();
+								_this.getRooms();
 							});
 					},
 					cancel: function () {
 						let _this=this;
 						var RoomList=[];
 						for (var i = 0; i < _this.RoomsViewModel.length; i++){
-							var item=_this.RoomsViewModel[i];
+							var item= _this.RoomsViewModel[i];
 							if(item.Edit==true){
 								item.Edit=false;
-
-								//item.hotelId = _this.originalHotelId;
+								
 								item.type = _this.originalType;
 								item.price=_this.originalPrice;
 								item.maxGuests=_this.originalMaxGuests;
