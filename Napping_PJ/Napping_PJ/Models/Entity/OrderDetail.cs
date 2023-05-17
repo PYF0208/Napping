@@ -5,7 +5,12 @@ namespace Napping_PJ.Models.Entity
 {
     public partial class OrderDetail
     {
-        public int OidRidPid { get; set; }
+        public OrderDetail()
+        {
+            OrderDetailExtraServices = new HashSet<OrderDetailExtraService>();
+        }
+
+        public int OrderDetailId { get; set; }
         public int OrderId { get; set; }
         public int RoomId { get; set; }
         public int ProfitId { get; set; }
@@ -18,5 +23,6 @@ namespace Napping_PJ.Models.Entity
         public virtual Order Profit { get; set; } = null!;
         public virtual Profit ProfitNavigation { get; set; } = null!;
         public virtual Room Room { get; set; } = null!;
+        public virtual ICollection<OrderDetailExtraService> OrderDetailExtraServices { get; set; }
     }
 }
