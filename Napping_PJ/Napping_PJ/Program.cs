@@ -24,8 +24,9 @@ namespace Napping_PJ
             })
             .AddCookie("Application", options =>
             {
-                options.LoginPath = "/Register/Register";
+                options.LoginPath = "/Login/Index";
                 options.AccessDeniedPath = "/Path/To/Your/AccessDeniedPage";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             })
             .AddCookie("External")
             .AddGoogle(options =>
