@@ -18,171 +18,129 @@ namespace Napping_PJ.Areas.Admin.Controllers
         {
             _context = context;
         }
-
-        // GET: Admin/Promotions
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var db_a989f8_nappingContext = _context.Promotions.Include(p => p.Level);
-            return View(await db_a989f8_nappingContext.ToListAsync());
-        }
-
-        // GET: Admin/Promotions/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Promotions == null)
-            {
-                return NotFound();
-            }
-
-            var promotion = await _context.Promotions
-                .Include(p => p.Level)
-                .FirstOrDefaultAsync(m => m.PromotionId == id);
-            if (promotion == null)
-            {
-                return NotFound();
-            }
-
-            return View(promotion);
-        }
-
-        // GET: Admin/Promotions/Create
-        public IActionResult Create()
-        {
-            ViewData["LevelId"] = new SelectList(_context.Levels, "LevelId", "LevelId");
             return View();
         }
-
-        // POST: Admin/Promotions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpGet]
+        // GET: Admin/Promotions
+        public async Task<IEnumerable<PromotionViewModel>> GetPromotionService()
+        {
+            var PromotionService = _context.Promotions.Select(PromotionService => new PromotionViewModel
+            {
+                PromotionId = PromotionService.PromotionId,
+                LevelId = PromotionService.LevelId,
+                Name = PromotionService.Name,
+                StartDate = PromotionService.StartDate,
+                EndDate = PromotionService.EndDate,
+                Discount = PromotionService.Discount
+            });
+            return PromotionService;
+        }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PromotionViewModel promotion)
+        public async Task<IEnumerable<PromotionViewModel>> FilterPromotions(
+            [FromBody] PromotionViewModel prViewModel)
         {
-            if (ModelState.IsValid)
+            return _context.Promotions.Select(pro => new PromotionViewModel
             {
-                var p = new Promotion()
-                {
-                    PromotionId = promotion.PromotionId,
-                    LevelId = promotion.LevelId,
-                    Name = promotion.Name,
-                    StartDate = promotion.StartDate,
-                    EndDate = promotion.EndDate,
-                    Discount = promotion.Discount,
-                };
-                _context.Add(p);
+                PromotionId = pro.PromotionId,
+                LevelId = pro.LevelId,
+                Name = pro.Name,
+                StartDate = pro.StartDate,
+                EndDate = pro.EndDate,
+                Discount = pro.Discount
+            });
+        }
+
+           
+
+        [HttpPut("{id}")]
+        public async Task<string> PutPromotions(int id, [FromBody] PromotionViewModel promotion)
+        {
+            if (id != promotion.PromotionId)
+            {
+                return "修改促銷記錄失敗!";
+            }
+            Promotion pro = await _context.Promotions.FindAsync(id);
+            pro.PromotionId = promotion.PromotionId;
+            pro.LevelId = promotion.LevelId;
+            pro.Name = promotion.Name;
+            pro.StartDate = promotion.StartDate;
+            pro.EndDate = promotion.EndDate;
+            pro.Discount = promotion.Discount;
+            _context.Entry(pro).State = EntityState.Modified;
+
+            try
+            {
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["LevelId"] = new SelectList(_context.Levels, "LevelId", "LevelId", promotion.LevelId);
-            return View(promotion);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PromotionExists(id))
+                {
+                    return "修改促銷記錄失敗!";
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return "修改促銷記錄成功!";
         }
 
-        // GET: Admin/Promotions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Promotions == null)
-            {
-                return NotFound();
-            }
-
-            var promotion = await _context.Promotions.FindAsync(id);
-            if (promotion == null)
-            {
-                return NotFound();
-            }
-            ViewData["LevelId"] = new SelectList(_context.Levels, "LevelId", "LevelId", promotion.LevelId);
-            return View(promotion);
-        }
 
         // POST: Admin/Promotions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,PromotionViewModel promotion)
+        public async Task<string> PostPromotion([FromBody] PromotionViewModel promotion)
         {
-            if (id != promotion.PromotionId)
+            Promotion pro = new Promotion
             {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                var p = new Promotion()
-                {
-                    PromotionId = promotion.PromotionId,
-                    LevelId = promotion.LevelId,
-                    Name = promotion.Name,
-                    StartDate = promotion.StartDate,
-                    EndDate = promotion.EndDate,
-                    Discount = promotion.Discount,
-
-                };
+                PromotionId = promotion.PromotionId,
+                LevelId = promotion.LevelId,
+                Name = promotion.Name,
+                StartDate = promotion.StartDate,
+                EndDate = promotion.EndDate,
+                Discount = promotion.Discount,
                 
+            };
+            _context.Promotions.Add(pro);
+            await _context.SaveChangesAsync();
+
+            return $"促銷編號:{pro.PromotionId}";
+        }
+
+
+
+        // Delete: Admin/Promotions/Delete/5
+        [HttpDelete("{id}")]
+            public async Task<string> DeletePromotions(int id)
+            {
+                var promotion = await _context.Promotions.FindAsync(id);
+                if (promotion == null)
+                {
+                    return "刪除促銷記錄成功!";
+                }
+
+                _context.Promotions.Remove(promotion);
                 try
                 {
-                    _context.Update(p);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException ex)
                 {
-                    if (!PromotionExists(promotion.PromotionId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return "刪除促銷關聯記錄失敗!";
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["LevelId"] = new SelectList(_context.Levels, "LevelId", "LevelId", promotion.LevelId);
-            return View(promotion);
-        }
 
-        // GET: Admin/Promotions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Promotions == null)
+                return "刪除促銷記錄成功!";
+            }
+
+            private bool PromotionExists(int id)
             {
-                return NotFound();
+                return (_context.Promotions?.Any(e => e.PromotionId == id)).GetValueOrDefault();
             }
-
-            var promotion = await _context.Promotions
-                .Include(p => p.Level)
-                .FirstOrDefaultAsync(m => m.PromotionId == id);
-            if (promotion == null)
-            {
-                return NotFound();
-            }
-
-            return View(promotion);
-        }
-
-        // POST: Admin/Promotions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Promotions == null)
-            {
-                return Problem("Entity set 'db_a989f8_nappingContext.Promotions'  is null.");
-            }
-            var promotion = await _context.Promotions.FindAsync(id);
-            if (promotion != null)
-            {
-                _context.Promotions.Remove(promotion);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool PromotionExists(int id)
-        {
-          return (_context.Promotions?.Any(e => e.PromotionId == id)).GetValueOrDefault();
         }
     }
-}
