@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Napping_PJ", "Napping_PJ\Napping_PJ.csproj", "{7FD51FB1-2B88-447F-99BC-02BF733610A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Napping_PJ", "Napping_PJ\Napping_PJ.csproj", "{7FD51FB1-2B88-447F-99BC-02BF733610A4}"
+<<<<<<< HEAD
+=======
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Napping_API", "Napping_API\Napping_API.csproj", "{C360128D-7AFA-46D4-89D4-F93968246098}"
+>>>>>>> 9d15827d89c9ee16e1ae5e23a3785bf59d7de9f2
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{7FD51FB1-2B88-447F-99BC-02BF733610A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FD51FB1-2B88-447F-99BC-02BF733610A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FD51FB1-2B88-447F-99BC-02BF733610A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C360128D-7AFA-46D4-89D4-F93968246098}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C360128D-7AFA-46D4-89D4-F93968246098}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C360128D-7AFA-46D4-89D4-F93968246098}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C360128D-7AFA-46D4-89D4-F93968246098}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

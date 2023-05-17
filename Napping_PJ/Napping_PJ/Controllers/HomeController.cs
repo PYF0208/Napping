@@ -3,8 +3,7 @@ using Napping_PJ.Models;
 using System.Diagnostics;
 
 namespace Napping_PJ.Controllers
-{
-   
+{   
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -16,6 +16,25 @@ namespace Napping_PJ
 
             builder.Services.AddControllersWithViews();
 
+            // 加入身份驗證服務
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultScheme = "Application";
+                o.DefaultSignInScheme = "External";
+            })
+            .AddCookie("Application", options =>
+            {
+                options.LoginPath = "/Register/Register";
+                options.AccessDeniedPath = "/Path/To/Your/AccessDeniedPage";
+            })
+            .AddCookie("External")
+            .AddGoogle(options =>
+            {
+                IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
+                options.ClientId = googleAuthNSection["ClientId"];
+                options.ClientSecret = googleAuthNSection["ClientSecret"];
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -31,14 +50,29 @@ namespace Napping_PJ
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3d7f601a2e663acc69dfbc47053756f05826ad03
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAreaControllerRoute(
+                    name: "Admin",
+                    areaName: "Admin",
+                    pattern: "{Area}/{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapControllerRoute(
+<<<<<<< HEAD
                   name: "areas",
                   pattern: "{area:exists}/{controller=Home}/{action=Index}"
                 );
+=======
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+>>>>>>> 3d7f601a2e663acc69dfbc47053756f05826ad03
             });
             app.MapControllerRoute(
                 name: "default",
