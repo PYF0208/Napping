@@ -17,7 +17,7 @@ namespace Napping_PJ.Models.Entity
         public string Star { get; set; } = null!;
         public string Image { get; set; } = null!;
         public string ContactName { get; set; } = null!;
-        public decimal Phone { get; set; }
+        public string Phone { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string City { get; set; } = null!;
         public string Region { get; set; } = null!;
