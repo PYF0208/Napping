@@ -221,7 +221,7 @@
 					//alert("delete");
 					let _this = this;
 					var x = _this.PromotionViewModel.find(p => p.promotionId == promotionId)
-					var ret = confirm(`您確定要將${x.promotionId}-${x.name}刪除嗎?`);
+					var ret = confirm(`您確定要將促銷編號${x.promotionId}-${x.name}刪除嗎?`);
 					if (ret == true) {
 						axios.delete(`Promotions/DeletePromotions?Id=${promotionId}`)
 							.then(response => {

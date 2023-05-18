@@ -113,6 +113,10 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<string> PostPromotion([FromBody] PromotionViewModel promotion)
 		{
+			if (promotion == null)
+			{
+				return "欄位不可為空值!";
+			}
 			Promotion pro = new Promotion
 			{
 
