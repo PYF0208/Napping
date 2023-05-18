@@ -47,16 +47,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
 		public async Task<IEnumerable<RoomsViewModel>> FilterRooms(RoomsViewModel rmViewMod)
 		{
-			//return _context.Rooms.Where(rm =>
-			//rm.RoomId == rmViewMod.RoomId
-			//).Select(rm => new RoomsViewModel
-			//{
-			//    RoomId = rm.RoomId,
-			//    HotelId = rm.HotelId,
-			//    Type = rm.Type,
-			//    Price = rm.Price,
-			//    MaxGuests = rm.MaxGuests
-			//});
+
 			var Rooms = await _context.Rooms.Include(p => p.Hotel)
 			.Select(Rooms => new RoomsViewModel
 			{
@@ -100,8 +91,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
-
-		public async Task<string> RoomCreate([FromBody] RoomsViewModel room)
+		public async Task<string> CreateRooms([FromBody] RoomsViewModel room)
 		{
 
 			Room NewRoom = new Room
@@ -112,7 +102,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 				Price = room.Price,
 				MaxGuests = room.MaxGuests,
 			};
-			_context.Add(NewRoom);
+			_context.Rooms.Add(NewRoom);
 			await _context.SaveChangesAsync();
 			return "新增成功";
 
@@ -144,13 +134,13 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		{
 			if (id == null || room.RoomId == null || id != room.RoomId)
 			{
-				return "修改失敗";
+				return "修改失敗1";
 			}
 
 			var SearchHotel = await _context.Rooms.FindAsync(id);
 			if (SearchHotel == null)
 			{
-				return "修改失敗";
+				return "修改失敗2";
 			}
 			SearchHotel.RoomId = room.RoomId;
 			SearchHotel.HotelId = room.HotelId;
@@ -167,7 +157,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				if (!RoomExists(room.RoomId))
 				{
-					return "修改失敗";
+					return "修改失敗3";
 				}
 				else
 				{
