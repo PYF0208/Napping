@@ -135,13 +135,13 @@
                     var request = {};
                     request.Email = _this.email;
                     request.Password = _this.password;
-                    axios.post(`Login/TryLogin`, request)
+                    axios.post(`$Login/TryLogin`, request)
                         .then(res => {
                             console.log(res.data);
                             _this.errorMesseage.mainError = res.data.mainError;
                             _this.errorMesseage.emailError = res.data.emailError;
                             _this.errorMesseage.passWordError = res.data.passWordError;
-                            location.href = `Home/Index`;
+                            location.href = `$Home/Index`;
                         })
                         .catch(err => {
                             console.log(err.response.data);
