@@ -10,6 +10,10 @@ using System.Data;
 using Napping_PJ.Models;
 using Napping_PJ.Helpers;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
+using System.Net;
+using System.Text;
+using System.Text.Json;
 
 namespace Napping_PJ.Controllers
 {
@@ -17,9 +21,11 @@ namespace Napping_PJ.Controllers
     {
 
         private readonly db_a989f8_nappingContext _context;
-        public RegisterController(db_a989f8_nappingContext context)
+        private readonly EncryptHelper _encrypt;
+        public RegisterController(db_a989f8_nappingContext context, EncryptHelper encrypt)
         {
             _context = context;
+            _encrypt = encrypt;
         }
 
         public IActionResult Index()
@@ -124,44 +130,22 @@ namespace Napping_PJ.Controllers
                 error.mainError = ex.InnerException?.Message;
                 return BadRequest(error);
             }
-            IQueryable<UserRole> hasRoles = _context.UserRoles.Where(ur => ur.CustomerId == getCustomer.CustomerId);
-            // 根據啟動檔案中的 o.DefaultScheme = "Application" 初始化聲明值
-            var claimsIdentity = new ClaimsIdentity("Application");
-            claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, getCustomer.Email));
-            foreach (var role in hasRoles)
-            {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.RoleId.ToString())); // 使用者的角色
-            }
-            await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
-            //return RedirectToAction("Index", "Home", new { area = "" });
-            return Ok(error);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TryCreateCustomer([FromBody][Bind("Email,Password,ConfirmPassword")] RegisterViewModel customerViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                //使用信箱尋找使用者是否存在，如不存在則創造一個，並傳回
-                (List<UserRole> hasRoles, bool newUser) = CheckOAuthRecord(customerViewModel.Email, customerViewModel.Password);
-                if (newUser)
-                {
-                    // 根據啟動檔案中的 o.DefaultScheme = "Application" 初始化聲明值
-                    var claimsIdentity = new ClaimsIdentity("Application");
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, customerViewModel.Email));
-                    foreach (var role in hasRoles)
-                    {
-                        claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.RoleId.ToString())); // 使用者的角色
-                    }
-                    await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("Email", "該用戶已註冊。");
-                }
-            }
-            return View("Index", customerViewModel);
+            EmailValidViewModel emailValidViewModel = new EmailValidViewModel(registerViewModel.Email);
+            //寄送驗證信
+            SendValidEmail(emailValidViewModel);
+
+            ////找到使用者擁有的權限
+            //IQueryable<UserRole> hasRoles = _context.UserRoles.Where(ur => ur.CustomerId == getCustomer.CustomerId);
+            //// 根據啟動檔案中的 o.DefaultScheme = "Application" 初始化聲明值
+            //var claimsIdentity = new ClaimsIdentity("Application");
+            //claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, getCustomer.Email));
+            //foreach (var role in hasRoles)
+            //{
+            //    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.RoleId.ToString())); // 使用者的角色
+            //}
+            //await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));            
+            //return Ok(error);
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
         [HttpPost]
         public async Task<IActionResult> OauthLogout()
@@ -215,7 +199,6 @@ namespace Napping_PJ.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-
         private List<UserRole> CheckOAuthRecord(AuthenticateResult authenticateResult)
         {
             // 根據 id 取得 Google 帳戶 id，以執行任何基於該 id 的操作
@@ -285,6 +268,55 @@ namespace Napping_PJ.Controllers
             }
             List<UserRole> getOauth = _context.UserRoles.Where(ur => ur.Customer == getCustomer).ToList();
             return (getOauth, newUser);
+        }
+        internal IActionResult SendValidEmail(EmailValidViewModel emailValidViewModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                IEnumerable<string> emailErrors = ModelState["Email"]?.Errors.Select(e => e.ErrorMessage);
+                return BadRequest(emailErrors);
+            }
+            //if (string.IsNullOrEmpty(emailValidViewModel.Email))
+            //{
+            //    return BadRequest("請輸入信箱");
+            //}
+            //bool customerExist = _context.Customers.Any(c => c.Email == emailValidViewModel.Email);
+            //if (!customerExist)
+            //{
+            //    return BadRequest("此信箱未註冊");
+            //}
+            var obj = new AesValidationDto(emailValidViewModel.Email, DateTime.Now.AddDays(3));
+            var jString = JsonSerializer.Serialize(obj);
+            var code = _encrypt.AesEncryptToBase64(jString);
+
+
+            var mail = new MailMessage()
+            {
+                From = new MailAddress("tibameth101team3@gmail.com"),
+                Subject = "啟用網站驗證",
+                Body = @$"請點這<a href='https://localhost:7265/Register/ValidEmail?code={code}'>這裡</a>來啟用你的帳號",
+                IsBodyHtml = true,
+                BodyEncoding = Encoding.UTF8,
+            };
+            mail.To.Add(new MailAddress(emailValidViewModel.Email));
+            try
+            {
+                using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
+                {
+                    sm.EnableSsl = true;
+                    sm.Credentials = new NetworkCredential("tibameth101team3@gmail.com", "glyirsixoioagwmh");
+                    sm.Send(mail);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Ok("驗證信已寄出");
+        }
+        public void ValidEmail(string code)
+        {
+
         }
     }
 }
