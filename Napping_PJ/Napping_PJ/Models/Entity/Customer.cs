@@ -28,7 +28,6 @@ namespace Napping_PJ.Models.Entity
         public string? Country { get; set; }
         public string Email { get; set; } = null!;
         public int? LevelId { get; set; }
-        public bool? Locked { get; set; }
 
         public virtual Level? Level { get; set; }
         public virtual ICollection<BellEvent> BellEvents { get; set; }

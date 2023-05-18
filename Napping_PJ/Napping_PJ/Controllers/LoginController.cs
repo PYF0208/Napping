@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Helpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Authorization;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace Napping_PJ.Controllers
 {
@@ -19,10 +18,6 @@ namespace Napping_PJ.Controllers
             _context = context;
         }        
         public IActionResult Index()
-        {
-            return View();
-        }
-        public IActionResult ResendValidationEmail()
         {
             return View();
         }
