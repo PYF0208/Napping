@@ -119,6 +119,10 @@ namespace Napping_PJ.Areas.Admin.Controllers
         [HttpPost]
         public async Task<string> PostExtraServices([FromBody] ExtraServiceViewModel esViewModel)
         {
+            if (esViewModel == null)
+            {
+                return "欄位不可為空值!";
+            }
             ExtraService es = new ExtraService
             {
                 ExtraServiceId = esViewModel.ExtraServiceId,
