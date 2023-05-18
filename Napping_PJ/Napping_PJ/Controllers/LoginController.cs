@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Helpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Authorization;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace Napping_PJ.Controllers
 {
@@ -58,6 +59,11 @@ namespace Napping_PJ.Controllers
             if (ModelState.IsValid)
             {
                 Customer? getCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == loginViewModel.Email);
+                if (getCustomer.Locked == true)
+                {
+                    error.mainError = "此帳號未啟用";
+                    return BadRequest(error);
+                }
                 bool isValid = PasswordHasher.VerifyPassword(loginViewModel.Password, getCustomer.Email, getCustomer.Password);
                 if (isValid)
                 {
