@@ -326,7 +326,7 @@ namespace Napping_PJ.Controllers
             {
                 throw;
             }
-            return Ok("驗證信已寄出");
+            return Ok("驗證信件已寄出");
         }
         public async Task<IActionResult> ValidEmail(string code)
         {
@@ -353,13 +353,119 @@ namespace Napping_PJ.Controllers
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role.RoleId.ToString())); // 使用者的角色
             }
             await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
-            
+
             return RedirectToAction("Index", "Home", new { area = "" });
         }
         public IActionResult SendResetPasswordEmail([FromBody] EmailValidViewModel emailValidViewModel)
         {
+            //資料驗證
+            IEnumerable<string> emailErrors = null;
+            if (!ModelState.IsValid)
+            {
+                emailErrors = ModelState["Email"]?.Errors.Select(e => e.ErrorMessage);
 
-            return Ok();
+                return BadRequest(emailErrors == null ? null : string.Join(", ", emailErrors));
+            }
+            Customer getCustomer = _context.Customers.FirstOrDefault(c => c.Email == emailValidViewModel.Email);
+            if (getCustomer == null)
+            {
+                return BadRequest("無此使用者");
+            }
+
+            //加密資料
+            var obj = new AesValidationDto(getCustomer.Email, DateTime.Now.AddDays(3));
+            var jString = JsonSerializer.Serialize(obj);
+            var code = _encrypt.AesEncryptToBase64(jString);
+            string encodedStr = HttpUtility.UrlEncode(code);
+
+            //寄送驗證信
+            var mail = new MailMessage()
+            {
+                From = new MailAddress("tibameth101team3@gmail.com"),
+                Subject = "Napping會員重設密碼信件",
+                Body = $@"<a href='https://localhost:7265/Register/ResetPassword?code={encodedStr}'>驗證連結</a>",
+                IsBodyHtml = true,
+                BodyEncoding = Encoding.UTF8,
+            };
+            mail.To.Add(new MailAddress(emailValidViewModel.Email));
+            try
+            {
+                using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
+                {
+                    sm.EnableSsl = true;
+                    sm.Credentials = new NetworkCredential("tibameth101team3@gmail.com", "glyirsixoioagwmh");
+                    sm.Send(mail);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Ok("重設密碼信件已寄出");
         }
+        public IActionResult ResetPassword(string code)
+        {
+            var str = _encrypt.AesDecryptToString(code);
+            var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
+            if (DateTime.Now > obj.ExpiredDate)
+            {
+                return BadRequest("過期");
+            }
+            Customer getCustomer = _context.Customers.FirstOrDefault(x => x.Email == obj.Email);
+            if (getCustomer == null)
+            {
+                return BadRequest("無此使用者");
+            }
+            CustomerViewModel customerViewModel = new CustomerViewModel()
+            {
+                Email = getCustomer.Email,
+                Password = null,
+                ConfirmPassword = null,
+            };
+            return View(customerViewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> TryResetPassword([FromBody] CustomerViewModel customerViewModel)
+        {
+            UserValidViewModel userValidViewModel = new UserValidViewModel()
+            {
+                mainError = null,
+                emailError = null,
+                passWordError = null,
+                confirmPasswordError = null,
+            };
+            if (!ModelState.IsValid)
+            {
+                IEnumerable<string> emailErrors = ModelState["Email"]?.Errors.Select(e => e.ErrorMessage);
+                IEnumerable<string> passwordErrors = ModelState["Password"]?.Errors.Select(e => e.ErrorMessage);
+                IEnumerable<string> confirmPasswordError = ModelState["ConfirmPassword"]?.Errors.Select(e => e.ErrorMessage);
+
+                userValidViewModel.mainError = null;
+                userValidViewModel.emailError = emailErrors == null ? null : string.Join(", ", emailErrors);
+                userValidViewModel.passWordError = passwordErrors == null ? null : string.Join(", ", passwordErrors);
+                userValidViewModel.confirmPasswordError = confirmPasswordError == null ? null : string.Join(", ", confirmPasswordError);
+
+                return BadRequest(userValidViewModel);
+            }
+            Customer getCustomer = _context.Customers.FirstOrDefault(c => c.Email == customerViewModel.Email);
+            if (getCustomer == null)
+            {
+                userValidViewModel.mainError = "無此使用者";
+                return BadRequest(userValidViewModel);
+            }
+            getCustomer.Password = PasswordHasher.HashPassword(customerViewModel.Password, customerViewModel.Email);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // 處理錯誤訊息...
+                userValidViewModel.mainError = ex.InnerException?.Message;
+                return BadRequest(userValidViewModel);
+            }
+            return Ok(userValidViewModel);
+        }
+
     }
 }

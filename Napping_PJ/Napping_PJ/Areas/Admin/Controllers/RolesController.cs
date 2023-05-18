@@ -28,40 +28,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
         [Authorize]
         //[Authorize(Roles = "1")]
         //[Authorize(Roles = "3")]
-        // GET: Admin/Roles
-        public async Task<IActionResult> Index2()
-        {
-            List<UserRoleViewModel> allUserRoleViewModel = new List<UserRoleViewModel>();
-
-            Customer[] cusList = await _context.Customers.ToArrayAsync();
-            UserRole[] userRoleList = await _context.UserRoles.ToArrayAsync();
-            IEnumerable<Role> roleList = _context.Roles;
-            ViewBag.CreateRoleInput = new RoleViewModel();
-            ViewBag.Roles = roleList.Select(r =>
-                new RoleViewModel()
-                {
-                    RoleId = r.RoleId,
-                    Name = r.Name,
-                }
-            );
-            foreach (Customer cs in cusList)
-            {
-                UserRoleViewModel userRoleViewModel = new UserRoleViewModel()
-                {
-                    customer = cs,
-                    SelectedRole = new List<Role>(),
-                };
-                foreach (var userRole in userRoleList.Where(ur => ur.CustomerId == cs.CustomerId))
-                {
-                    userRoleViewModel.SelectedRole.Add(roleList.First(r => r.RoleId == userRole.RoleId));
-                }
-                ViewBag.RolesSelectList = new SelectList(roleList, "RoleId", "Name");
-                allUserRoleViewModel.Add(userRoleViewModel);
-            }
-            return _context.Roles != null ?
-                        View(allUserRoleViewModel) :
-                        Problem("Entity set 'db_a989f8_nappingContext.Roles'  is null.");
-        }
         public IActionResult Index()
         {
             return View();
@@ -169,34 +135,26 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
             return Ok("刪除成功");
         }
-
-        // GET: Admin/Roles/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpPost]
+        public async Task<IActionResult> UpdateRole([FromBody] RoleViewModel roleViewModel)
         {
-            if (id == null || _context.Roles == null)
+            Role getRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == roleViewModel.RoleId);
+            if(getRole == null)
             {
-                return NotFound();
+                return BadRequest("無此Role");
             }
-
-            var role = await _context.Roles
-                .FirstOrDefaultAsync(m => m.RoleId == id);
-            if (role == null)
+            try
             {
-                return NotFound();
+                getRole.Name = roleViewModel.Name;
+                _context.SaveChanges();
             }
-
-            return View(role);
+            catch (Exception)
+            {
+                return BadRequest("更新失敗");
+            }
+            return Ok("更新成功");
         }
-
-        // GET: Admin/Roles/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Admin/Roles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         public async Task<IActionResult> AddRole([FromBody][Bind("RoleId,Name")] RoleViewModel roleViewModel)
         {
@@ -214,85 +172,15 @@ namespace Napping_PJ.Areas.Admin.Controllers
             return BadRequest("新增失敗");
         }
 
-        // GET: Admin/Roles/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Roles == null)
-            {
-                return NotFound();
-            }
-
-            var role = await _context.Roles.FindAsync(id);
-            if (role == null)
-            {
-                return NotFound();
-            }
-            return View(role);
-        }
-
-        // POST: Admin/Roles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Admin/Roles/RemoveRole?roleId=5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RoleId,RoleName")] Role role)
-        {
-            if (id != role.RoleId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(role);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RoleExists(role.RoleId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(role);
-        }
-
-        // GET: Admin/Roles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Roles == null)
-            {
-                return NotFound();
-            }
-
-            var role = await _context.Roles
-                .FirstOrDefaultAsync(m => m.RoleId == id);
-            if (role == null)
-            {
-                return NotFound();
-            }
-            _context.Roles.Remove(role);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        // POST: Admin/Roles/DeleteConfirmed/5
-        [HttpPost]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> RemoveRole(int roleId)
         {
             if (_context.Roles == null)
             {
                 return Problem("Entity set 'db_a989f8_nappingContext.Roles'  is null.");
             }
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _context.Roles.FindAsync(roleId);
             if (role != null)
             {
                 _context.Roles.Remove(role);
@@ -300,11 +188,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 return Ok("刪除成功");
             }
             return BadRequest("刪除失敗");
-        }
-
-        private bool RoleExists(int id)
-        {
-            return (_context.Roles?.Any(e => e.RoleId == id)).GetValueOrDefault();
         }
     }
 }
