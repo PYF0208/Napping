@@ -21,7 +21,7 @@ namespace Napping_PJ.Models.Entity
         public DateTime? Birthday { get; set; }
         public string? Password { get; set; }
         public string? PasswordHash { get; set; }
-        public decimal? Phone { get; set; }
+        public string? Phone { get; set; }
         public string? Gender { get; set; }
         public string? City { get; set; }
         public string? Region { get; set; }

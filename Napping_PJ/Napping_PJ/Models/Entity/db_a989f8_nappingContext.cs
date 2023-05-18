@@ -111,7 +111,9 @@ namespace Napping_PJ.Models.Entity
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Phone).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Region).HasMaxLength(50);
 
@@ -182,7 +184,9 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.Property(e => e.Phone).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Region).HasMaxLength(50);
 
