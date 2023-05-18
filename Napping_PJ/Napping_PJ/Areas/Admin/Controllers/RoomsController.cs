@@ -134,13 +134,13 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		{
 			if (id == null || room.RoomId == null || id != room.RoomId)
 			{
-				return "修改失敗";
+				return "修改失敗1";
 			}
 
 			var SearchHotel = await _context.Rooms.FindAsync(id);
 			if (SearchHotel == null)
 			{
-				return "修改失敗";
+				return "修改失敗2";
 			}
 			SearchHotel.RoomId = room.RoomId;
 			SearchHotel.HotelId = room.HotelId;
@@ -157,7 +157,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				if (!RoomExists(room.RoomId))
 				{
-					return "修改失敗";
+					return "修改失敗3";
 				}
 				else
 				{
