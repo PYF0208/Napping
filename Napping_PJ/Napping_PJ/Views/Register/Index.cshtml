@@ -124,14 +124,14 @@
             },
             methods: {
                 ValidField: function () {
-                    console.log('ValidField')
+                    console.log('Register/ValidField')
                     let _this = this;
                     var request = {};
                     request.Email = _this.email;
                     request.Password = _this.password;
                     request.ConfirmPassword = _this.confirmPassword;
 
-                    axios.post(`ValidField`, request)
+                    axios.post(`Register/ValidField`, request)
                         .then(res => {
                             console.log(res.data);
                             _this.errorMesseage.mainError = res.data.mainError;
@@ -153,7 +153,7 @@
                     request.Email = _this.email;
                     request.Password = _this.password;
                     request.confirmPassword = _this.confirmPassword;
-                    axios.post(`TryRegister`, request)
+                    axios.post(`Register/TryRegister`, request)
                         .then(res => {
                             console.log(res.data);
                             _this.errorMesseage.mainError = res.data.mainError;
@@ -172,7 +172,7 @@
                 },
                 GoogleLogin: function () {
                     let _this = this;
-                    axios.post(`$ThirdPartyLogin/OauthGooleLogin`)
+                    axios.post(`ThirdPartyLogin/OauthGooleLogin`)
                         .then(res => {
                             //console.log(res.url);
                             //location.href = res.data.properties.items[".redirect"];
