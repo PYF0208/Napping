@@ -43,11 +43,7 @@
                         <td>{{ item.extraServiceId }}</td>
                         <td><input v-model="item.extraServiceName" /></td>
                         <td><input v-model="item.price" /></td>
-                        <td>
-                            <select v-model="item.hotelId">
-                                <option v-for="item in ExtraServiceViewModel" :value="item.hotelId">{{ item.hotelName }}</option>
-                            </select>
-                        </td>
+                        <td>{{ item.hotelName }}</td>
                     </template>
                     <template v-else>
                         <td>
@@ -84,7 +80,7 @@
                         <div class="form-group">
                             <label class="form-label">旅店名稱:</label>
                             <select class="form-control" v-model="hotelId">
-                                <option v-for="item in ExtraServiceViewModel" :value="item.hotelId">{{ item.hotelName }}</option>
+                                <option v-for="item in HotelsViewModel" :value="item.hotelId">{{ item.name }}</option>
                             </select>
                         </div>
                     </div>
@@ -107,7 +103,7 @@
             el: '#app',
             data: {
                 ExtraServiceViewModel: [],
-                HotelExtraServiceViewModel:[],
+                HotelsViewModel:[],
                 filter: "",
                 originalExtraServiceName: "",
                 originalPrice: "",
@@ -121,6 +117,7 @@
             mounted: function () {
                 let _this = this;
                 _this.filterExtraServices();
+                _this.getHotels();
             },
             methods: {
                 filterExtraServices: function () {
@@ -141,6 +138,14 @@
                             _this.ExtraServiceViewModel = ExtraServiceList;
                         });
                 },
+                getHotels: function () {
+                    let _this = this;
+                    axios.get('ExtraServices/GetHotels')
+                        .then(function (response) {
+                            //alert(JSON.stringify(response.data));
+                            _this.HotelsViewModel = response.data;
+                        });
+                },
                 update: function (item) {
                     //alert("update");
                     let _this = this;
@@ -152,7 +157,7 @@
                         HotelId: item.hotelId,
                       
                     };
-                    axios.put(`ExtraServices/PutExtraServices?Id=${extraServiceId}`, request).then(response => {
+                    axios.put(`ExtraServices/PutExtraServices?Id=${item.extraServiceId}`, request).then(response => {
                         alert(response.data);
                         _this.filterExtraServices();
                         //_this.cancel();
