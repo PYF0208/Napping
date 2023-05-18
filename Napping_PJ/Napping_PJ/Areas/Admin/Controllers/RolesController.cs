@@ -25,10 +25,11 @@ namespace Napping_PJ.Areas.Admin.Controllers
         {
             _context = context;
         }
+        [Authorize]
         //[Authorize(Roles = "1")]
         //[Authorize(Roles = "3")]
         // GET: Admin/Roles
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index2()
         {
             List<UserRoleViewModel> allUserRoleViewModel = new List<UserRoleViewModel>();
 
@@ -61,7 +62,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
                         View(allUserRoleViewModel) :
                         Problem("Entity set 'db_a989f8_nappingContext.Roles'  is null.");
         }
-        public IActionResult Index2()
+        public IActionResult Index()
         {
             return View();
         }

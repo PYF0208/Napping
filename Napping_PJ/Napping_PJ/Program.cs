@@ -24,8 +24,9 @@ namespace Napping_PJ
             })
             .AddCookie("Application", options =>
             {
-                options.LoginPath = "/Register/Register";
+                options.LoginPath = "/Login/Index";
                 options.AccessDeniedPath = "/Path/To/Your/AccessDeniedPage";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             })
             .AddCookie("External")
             .AddGoogle(options =>
@@ -56,6 +57,12 @@ namespace Napping_PJ
 
             app.UseEndpoints(endpoints =>
             {
+<<<<<<< HEAD
+=======
+                endpoints.MapControllerRoute(
+                 name: "areas",
+                 pattern: "{area:exists}/{controller=Home}/{action=Index}");
+>>>>>>> 6400a8732a97d2e900199ed4268ccb204af794ab
 
                 endpoints.MapControllerRoute(
                     name: "default",
