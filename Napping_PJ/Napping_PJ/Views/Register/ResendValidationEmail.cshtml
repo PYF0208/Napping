@@ -7,7 +7,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Resend Validation Email</title>
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="~/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-primary">
@@ -22,13 +22,19 @@
                                 <div class="card-body">
                                     <div class="small mb-3 text-muted">Enter your email address and we will send you a link to validate your account.</div>
                                     <form>
+                                        <template v-if="EmailErroe.emailError != null">
+                                            <span class="text-danger">{{EmailErroe.emailError}}</span>
+                                        </template>
+                                        <template v-else>
+                                            <span>請輸入信箱</span>
+                                        </template>
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+                                            <input v-model="EmailValidViewModel.Email" class="form-control" id="inputEmail" type="email" placeholder="name@example.com" @@keyup="ValidEmail" />
                                             <label for="inputEmail">Email address</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                             <a asp-controller="Login" asp-action="Index">Return to login</a>
-                                            <a class="btn btn-primary" href="login.html">這裡寫VUE連結Send Email</a>
+                                            <a class="btn btn-primary" @@click="SendValidEmail">Send Email</a>
                                         </div>
                                     </form>
                                 </div>
@@ -64,5 +70,49 @@
     <script src="~/lib/vue/vue.min.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script>
+        var basePath = "https://localhost:7265/";
+        var vueApp = new Vue({
+            data: {
+                EmailErroe: {
+                    emailError: null,
+                },
+                EmailValidViewModel: {
+                    Email: null,
+                }
+            },
+            mounted: function () {
+                let _this = this;
+            },
+            methods: {
+                ValidEmail: function () {
+                    //console.log('ValidEmail')
+                    var _this = this;;
+                axios.post(`ValidEmail`, _this.EmailValidViewModel)
+                        .then(response => {
+                            _this.EmailErroe.emailError = response.data;
+                        })
+                        .catch(error => {
+                            //console.log(error.response.data)
+                            _this.EmailErroe.emailError = error.response.data;
+                        })
+                },
+                SendValidEmail: function () {
+                    //console.log('ValidEmail')
+                    var _this = this;
+                    axios.post(`SendValidEmail`, _this.EmailValidViewModel)
+                        .then(response => {
+                            _this.EmailErroe.emailError = response.data;
+                            alert('已寄出')
+                            location.href = `${basePath}Home/Index`;
+                        })
+                        .catch(error => {
+                            //console.log(error.response.data)
+                            _this.EmailErroe.emailError = error.response.data;
+                        })
+                },
+
+            },
+        })
+        vueApp.$mount('#layoutAuthentication');
     </script>
 }

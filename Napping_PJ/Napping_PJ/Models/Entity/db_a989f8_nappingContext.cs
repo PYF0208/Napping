@@ -101,6 +101,10 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.Gender).HasMaxLength(50);
 
+                entity.Property(e => e.Locked)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Password)

@@ -22,10 +22,6 @@ namespace Napping_PJ.Controllers
         {
             return View();
         }
-        public IActionResult ResendValidationEmail()
-        {
-            return View();
-        }
 
         [HttpPost]
         public async Task<IActionResult> ValidField([FromBody][Bind("Email,Password")] LoginViewModel loginViewModel)
@@ -63,6 +59,11 @@ namespace Napping_PJ.Controllers
             if (ModelState.IsValid)
             {
                 Customer? getCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == loginViewModel.Email);
+                if (getCustomer.Locked == true)
+                {
+                    error.mainError = "此帳號未啟用";
+                    return BadRequest(error);
+                }
                 bool isValid = PasswordHasher.VerifyPassword(loginViewModel.Password, getCustomer.Email, getCustomer.Password);
                 if (isValid)
                 {

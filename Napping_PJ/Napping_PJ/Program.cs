@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Helpers;
 using Napping_PJ.Models.Entity;
 
 namespace Napping_PJ
@@ -35,6 +36,7 @@ namespace Napping_PJ
                 options.ClientId = googleAuthNSection["ClientId"];
                 options.ClientSecret = googleAuthNSection["ClientSecret"];
             });
+            builder.Services.AddTransient<EncryptHelper>();
 
             var app = builder.Build();
 
