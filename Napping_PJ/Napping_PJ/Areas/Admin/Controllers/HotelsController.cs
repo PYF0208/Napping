@@ -81,8 +81,16 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			[FromBody] HotelsViewModel hotel)
 		{
 			return _context.ExtraServices.Where(h =>
-			h.ExtraServiceId == hotel.HotelId ||
-			h.Name.Contains(hotel.Name)).Select(h => new HotelsViewModel
+			h.HotelId == hotel.HotelId ||
+			h.Hotel.Name.Contains(hotel.Name)||
+			h.Hotel.Star.Contains(hotel.Star)||
+			h.Hotel.Image.Contains(hotel.Image)||
+			h.Hotel.ContactName.Contains(hotel.ContactName)||
+			h.Hotel.Phone.Contains(hotel.Phone)||
+			h.Hotel.Email.Contains(hotel.Email)||
+			h.Hotel.City.Contains(hotel.City)||
+			h.Hotel.Region.Contains(hotel.Region)||
+			h.Hotel.Address.Contains(hotel.Address)).Select(h => new HotelsViewModel
 			{
 				HotelId = hotel.HotelId,
 				Name = hotel.Name,
@@ -249,14 +257,15 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			try
 			{
 				await _context.SaveChangesAsync();
+				
 			}
 			catch (DbUpdateException ex)
 			{
 				return "刪除聯紀錄失敗";
 			}
 
-
 			return "刪除成功";
+
 
 
 		}

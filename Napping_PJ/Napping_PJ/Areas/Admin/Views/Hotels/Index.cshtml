@@ -21,7 +21,7 @@
 		<div class="row" style="width:50%;margin-left:auto;margin-right:0px">
 			<label class="col-md-4">關鍵字:</label>
 			<input class="col-md-8 form-control" placeholder="請輸入篩選關鍵字"
-				   @@keyup="">   @*v-model="filter"*@
+				   v-model="filter" @@keyup="filter">   @*v-model="filter"*@
 		</div>
 	</div>
 	<div class="form-group">
@@ -173,6 +173,7 @@
 				city: "",
 				region: "",
 				address: "",
+				filter: ""
 
 			},
 			mounted: function () {
@@ -264,6 +265,31 @@
 						request.push(item);
 					}
 					_this.HotelsViewModel = request;
+				},
+				filter: function () {
+					let _this = this;
+					var request = {};
+						request.HotelId=parseInt(Number(_this.filter)) ? -1 : Number(_this.filter);
+						request.Name= _this.filter,
+						request.Star= _this.filter,
+						request.Image= _this.filter,
+						request.ContactName= _this.filter,
+						request.Phone= _this.filter,
+						request.Email= _this.filter,
+						request.City= _this.filter,
+						request.Region= _this.filter,
+						request.Address= _this.filter;
+					axios.post("Hotels/FilterExtraServices", request)
+						.then(function (response) {
+							_this.HotelsViewModel = response.data;
+							var HotelsViewModelList = [];
+							for (var i = 0; i < _this.HotelsViewModel.length; i++) {
+								var item = _this.HotelsViewModel[i];
+								item.Edit = false;
+								HotelsViewModelList.push(item);
+							}
+							_this.HotelsViewModelList = HotelsViewModelList;
+						});
 				},
 				edit: function (hotelId) {
 					//alert("edit");
