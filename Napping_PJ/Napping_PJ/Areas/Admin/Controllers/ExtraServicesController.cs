@@ -28,21 +28,43 @@ namespace Napping_PJ.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IEnumerable<ExtraServiceViewModel>> GetExtraServices()
         {
-            var extraServices = await _context.ExtraServices
-                .Include(e => e.Hotel)
-                .Select(extraService => new ExtraServiceViewModel
+            var esViewModel = await _context.ExtraServices
+                //.Include(e => e.Hotel)
+                .Select(es => new ExtraServiceViewModel
                 {
-                    ExtraServiceId = extraService.ExtraServiceId,
-                    HotelId = extraService.HotelId,
-                    ExtraServiceName = extraService.Name,
-                    Price = extraService.Price,
-                    HotelName = extraService.Hotel.Name
+                    ExtraServiceId = es.ExtraServiceId,
+                    HotelId = es.HotelId,
+                    ExtraServiceName = es.Name,
+                    Price = es.Price,
+                    HotelName = es.Hotel.Name
                 })
                 .ToListAsync();
 
-            return extraServices;
+            return esViewModel;
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<HotelsViewModel>> GetHotels()
+        {
+            var hotelsViewModel = await _context.Hotels
+                .Select(h => new HotelsViewModel
+                {
+                    HotelId = h.HotelId,
+                    Name = h.Name,
+                    Star = h.Star,
+                    Image = h.Image,
+                    ContactName = h.ContactName,
+                    Phone = h.Phone,
+                    Email = h.Email,
+                    City = h.City,
+                    Region = h.Region,
+                    Address = h.Address,
+                    AvgComment = h.AvgComment,
+                })
+                .ToListAsync();
+
+            return hotelsViewModel;
+        }
         [HttpPost]
         public async Task<IEnumerable<ExtraServiceViewModel>> FilterExtraServices(
             [FromBody] ExtraServiceViewModel esViewModel)
@@ -58,7 +80,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 ExtraServiceName = es.Name,
                 Price = es.Price,
                 HotelName = es.Hotel.Name
-            }) .ToListAsync();
+            }).ToListAsync();
 
         }
 
