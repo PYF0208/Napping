@@ -56,15 +56,16 @@ namespace Napping_PJ
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapAreaControllerRoute(
-                    name: "Admin",
-                    areaName: "Admin",
-                    pattern: "{Area}/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+
+				endpoints.MapAreaControllerRoute(
+					name: "Admin",
+					areaName: "Admin",
+					pattern: "{Area}/{controller=Home}/{action=Index}/{id?}");
+			});
             app.Run();
         }
     }
