@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Helpers;
 using Napping_PJ.Models.Entity;
 
 namespace Napping_PJ
@@ -34,6 +35,7 @@ namespace Napping_PJ
                 options.ClientId = googleAuthNSection["ClientId"];
                 options.ClientSecret = googleAuthNSection["ClientSecret"];
             });
+            builder.Services.AddTransient<EncryptHelper>();
 
             var app = builder.Build();
 
@@ -56,14 +58,14 @@ namespace Napping_PJ
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapAreaControllerRoute(
                     name: "Admin",
                     areaName: "Admin",
                     pattern: "{Area}/{controller=Home}/{action=Index}/{id?}");
-
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
             app.Run();
         }
