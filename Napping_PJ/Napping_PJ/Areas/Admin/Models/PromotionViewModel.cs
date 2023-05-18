@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Napping_PJ.Models.Entity;
 
-public partial class PromotionViewModel
+namespace Napping_PJ.Areas.Admin.Models { 
+public  class PromotionViewModel
 {
     
     public int PromotionId { get; set; }
@@ -11,4 +12,5 @@ public partial class PromotionViewModel
     public DateTime EndDate { get; set; }
     public double Discount { get; set; }
 
+}
 }

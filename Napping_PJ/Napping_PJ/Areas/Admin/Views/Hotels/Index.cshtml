@@ -233,7 +233,7 @@
 						address: item.address,
 
 					};
-					axios.put(`Hotels/Edit/${item.hotelId}`, request)
+					axios.put(`Hotels/Edit?ID=${item.hotelId}`, request)
 						.then(response => {
 							alert(response.data);
 							_this.getHotel();
@@ -294,7 +294,7 @@
 
 					var ret = confirm(`您確定要將ID:${x.hotelId}-${x.name}刪除嗎?`);
 					if (ret == true) {
-						axios.delete(`Hotels/DeleteConfirmed/${hotelId}`)
+						axios.delete(`Hotels/DeleteConfirmed?ID=${hotelId}`)
 							.then(response => {
 								var y = _this.HotelsViewModel.findIndex(h => h.hotelId == hotelId)
 								_this.HotelsViewModel.splice(y, 1)

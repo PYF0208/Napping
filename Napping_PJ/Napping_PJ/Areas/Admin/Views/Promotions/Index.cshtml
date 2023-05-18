@@ -9,7 +9,7 @@
 
 <div id="app" class="container">
 
-
+	
 	<div class="form-group">
 		@*篩選欄位*@
 		<div class="row" style="width:50%;margin-left:auto;margin-right:0px">
@@ -50,7 +50,7 @@
 						<td><input v-model="item.name" /></td>
 						<td><input v-model="item.startDate" /></td>
 						<td><input v-model="item.endDate" /></td>
-						<td><input v-model="item.disCount" /></td>
+						<td><input v-model="item.discount" /></td>
 					</template>
 					<template v-else>
 						<td>
@@ -62,7 +62,7 @@
 						<td>{{item.name}}</td>
 						<td>{{item.startDate}}</td>
 						<td>{{item.endDate}}</td>
-						<td>{{item.disCount}}</td>
+						<td>{{item.discount}}</td>
 					</template>
 				</tr>
 			</tbody>
@@ -78,14 +78,15 @@
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<div class="form-group">
-							<label class="form-label"> LevelId:</label>
-							<input class="form-control" v-model="levelId" />
-						</div>
+						<label class="form-label">LevelId:</label>
+						<select class="form-control" v-model="levelId">
+							<option v-for="item in LevelViewModel" :value="item.levelId">{{ item.levelId }}</option>
+						</select>
 						<div class="form-group">
 							<label class="form-label">Name:</label>
 							<input class="form-control" v-model="name" />
 						</div>
+
 						<div class="form-group">
 							<label class="form-label">StartDate:</label>
 							<input class="form-control" v-model="startDate" />
@@ -118,22 +119,20 @@
 			el: '#app',
 			data: {
 				PromotionViewModel: [],
+				LevelViewModel:[],
 				filter: "",
-				originalLevelId: "",
-				originalName: "",
-				originalStartDate: "",
-				originalEndDate: "",
-				originalDiscount: "",
 				promotionId: "",
 				levelId: "",
 				name: "",
 				startDate: "",
 				endDate: "",
-				discount: ""
+				discount: "",
+				date:""
 			},
 			mounted: function () {
 				let _this = this;
 				_this.filterPromotions();
+				_this.getLevel();
 			},
 			methods: {
 				filterPromotions: function () {
@@ -154,6 +153,16 @@
 							_this.PromotionViewModel = PromotionList;
 						});
 				},
+				getLevel: function(){
+					let _this=this;
+					axios.get('Promotions/GetLevel')
+						.then(function (response) {
+							//alert(JSON.stringify(response.data));
+							_this.LevelViewModel = response.data;
+							
+						});
+				},
+
 				update: function (item) {
 					//alert("update");
 					let _this = this;
@@ -161,11 +170,11 @@
 						PromotionId: item.promotionId,
 						LevelId: item.levelId,
 						Name: item.name,
-						StartDate: item.startdate,
-						Enddate: item.enddate,
+						StartDate: item.startDate,
+						Enddate: item.endDate,
 						Discount: item.discount
 					};
-					axios.put(`Promotions/PutPromotions/${item.promotionId}`, request).then(response => {
+					axios.put(`Promotions/PutPromotions?Id=${item.promotionId}`, request).then(response => {
 						alert(response.data);
 						_this.filterPromotions();
 						//_this.cancel();
@@ -180,11 +189,11 @@
 						var item = _this.PromotionViewModel[i];
 						if (item.Edit == true) {
 							item.Edit = false;
-							item.levelId = this_originalLevelId;
-							item.name = _this.originalName;
-							item.startDate = _this.originalStartDate;
-							item.endDate = _this.originalEndDate;
-							item.disCount = _this.originalDiscount;
+							item.levelId = _this.LevelId;
+							item.name = _this.Name;
+							item.startDate = _this.StartDate;
+							item.endDate = _this.EndDate;
+							item.discount = _this.Discount;
 						}
 						PromotionList.push(item);
 					}
@@ -198,11 +207,11 @@
 						var item = _this.PromotionViewModel[i];
 						if (promotionId == item.promotionId) {
 							item.Edit = true;
-							_this_originalLevelId = item.levelId;
-							_this.originalName = item.name;
-							_this.originalStartDate = item.startDate;
-							_this.originalEndDate = item.endDate;
-							_this.originalDiscount = item.disCount;
+							_this.LevelId = item.levelId;
+							_this.Name = item.name;
+							_this.StartDate = item.startDate;
+							_this.EndDate = item.endDate;
+							_this.Discount = item.discount;
 						}
 						PromotionList.push(item);
 					}
@@ -211,12 +220,13 @@
 				deletePromotion: function (promotionId) {
 					//alert("delete");
 					let _this = this;
-					var ret = confirm('確定要刪除嗎?');
+					var x = _this.PromotionViewModel.find(p => p.promotionId == promotionId)
+					var ret = confirm(`您確定要將${x.promotionId}-${x.name}刪除嗎?`);
 					if (ret == true) {
-						axios.delete(`Promotions/DeletePromotions/${promotionId}`).then(
-							response => {
-								alert(response.data);
-								_this.filterPromotion();
+						axios.delete(`Promotions/DeletePromotions?Id=${promotionId}`)
+							.then(response => {
+								var y = _this.PromotionViewModel.findIndex(p => p.promotionId == promotionId)
+								_this.PromotionViewModel.splice(y, 1)
 							});
 					}
 				},
@@ -229,23 +239,19 @@
 						PromotionId: 0,
 						LevelId: _this.levelId,
 						Name: _this.name,
-						StartDate: _this.startdate,
-						EndDate: _this.enddate,
+						StartDate: _this.startDate,
+						EndDate: _this.endDate,
 						Discount: _this.discount
 
 					};
-					axios.post('Promotiostartdatens/PostPromotion', prViewModel).then(response => {
+					axios.post('Promotions/PostPromotion', prViewModel).then(response => {
 						alert(response.data);
 						$('#insertPage').modal('hide');
 						_this.filterPromotions();
-						_this.levelId = "";
-						_this.name = "";
-						_this.startdate = "";
-						_this.enddate = "";
-						_this.discount = "";
-
 					});
-				}
+				},
+			
+						
 
 			}
 		});

@@ -128,7 +128,7 @@
 						Name: item.name,
 
 					};
-					axios.put(`Levels/PutLevel/${item.levelId}`, request).then(response => {
+					axios.put(`Levels/PutLevel?Id=${item.levelId}`, request).then(response => {
 						alert(response.data);
 						_this.filterLevel();
 						//_this.cancel();
@@ -169,7 +169,7 @@
 					let _this = this;
 					var ret = confirm('確定要刪除嗎?');
 					if (ret == true) {
-						axios.delete(`Levels/DeleteLevel/${levelId}`).then(
+						axios.delete(`Levels/DeleteLevel?Id=${levelId}`).then(
 							response => {
 								alert(response.data);
 								_this.filterLevel();
