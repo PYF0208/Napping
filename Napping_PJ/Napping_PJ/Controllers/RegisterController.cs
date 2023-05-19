@@ -1176,7 +1176,7 @@ namespace Napping_PJ.Controllers
             {
                 return BadRequest("無此使用者");
             }
-            CustomerViewModel customerViewModel = new CustomerViewModel()
+            RegisterViewModel customerViewModel = new RegisterViewModel()
             {
                 Email = getCustomer.Email,
                 Password = null,
@@ -1185,7 +1185,7 @@ namespace Napping_PJ.Controllers
             return View(customerViewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> TryResetPassword([FromBody] CustomerViewModel customerViewModel)
+        public async Task<IActionResult> TryResetPassword([FromBody] RegisterViewModel registerViewModel)
         {
             UserValidViewModel userValidViewModel = new UserValidViewModel()
             {
@@ -1207,13 +1207,13 @@ namespace Napping_PJ.Controllers
 
                 return BadRequest(userValidViewModel);
             }
-            Customer getCustomer = _context.Customers.FirstOrDefault(c => c.Email == customerViewModel.Email);
+            Customer getCustomer = _context.Customers.FirstOrDefault(c => c.Email == registerViewModel.Email);
             if (getCustomer == null)
             {
                 userValidViewModel.mainError = "無此使用者";
                 return BadRequest(userValidViewModel);
             }
-            getCustomer.Password = PasswordHasher.HashPassword(customerViewModel.Password, customerViewModel.Email);
+            getCustomer.Password = PasswordHasher.HashPassword(registerViewModel.Password, registerViewModel.Email);
             try
             {
                 await _context.SaveChangesAsync();
