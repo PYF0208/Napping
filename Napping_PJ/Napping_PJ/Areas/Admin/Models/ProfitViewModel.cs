@@ -1,6 +1,6 @@
 ﻿namespace Napping_PJ.Areas.Admin.Models
 {
-	public class Profit
+	public class ProfitViewModel
 	{
 		public int ProfitId { get; set; }
 		public DateTime Date { get; set; }

@@ -263,11 +263,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return "刪除聯紀錄失敗";
 			}
-
 			return "刪除成功";
-
-
-
 		}
 
 		private bool HotelExists(int id)
