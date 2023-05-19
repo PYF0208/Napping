@@ -22,7 +22,7 @@ namespace Napping_PJ.Models.Entity
         public string? Password { get; set; }
         public string? PasswordHash { get; set; }
         public string? Phone { get; set; }
-        public string? Gender { get; set; }
+        public bool? Gender { get; set; }
         public string? City { get; set; }
         public string? Region { get; set; }
         public string? Country { get; set; }

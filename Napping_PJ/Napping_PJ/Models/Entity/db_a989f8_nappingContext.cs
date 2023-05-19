@@ -99,8 +99,6 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
-                entity.Property(e => e.Gender).HasMaxLength(50);
-
                 entity.Property(e => e.Locked)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
