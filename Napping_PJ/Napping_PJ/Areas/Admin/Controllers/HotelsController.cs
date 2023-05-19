@@ -174,13 +174,13 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
 		public async Task<string> Edit(int id, [FromBody] HotelsViewModel hotel)
 		{
+			var SearchHotel = await _context.Hotels.FindAsync(id);
 			if (id == null || hotel.HotelId == null || id != hotel.HotelId)
 			{
 				return "修改加購服務選項失敗!";
 			}
 
 
-			var SearchHotel = await _context.Hotels.FindAsync(id);
 			if (SearchHotel == null)
 			{
 				return "修改加購服務選項失敗!";
