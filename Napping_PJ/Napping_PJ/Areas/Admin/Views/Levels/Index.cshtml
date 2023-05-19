@@ -167,12 +167,13 @@
 				deleteLevel: function (levelId) {
 					//alert("delete");
 					let _this = this;
-					var ret = confirm('確定要刪除嗎?');
+					var x=_this.LevelViewModel.find(l=>l.levelId==levelId)
+					var ret = confirm(`您確定要將會員等級${x.levelId}和會員名稱${x.name}刪除嗎?`);
 					if (ret == true) {
-						axios.delete(`Levels/DeleteLevel?Id=${levelId}`).then(
-							response => {
-								alert(response.data);
-								_this.filterLevel();
+						axios.delete(`Levels/DeleteLevel?Id=${levelId}`)
+						.then(response => {
+								var y=_this.LevelViewModel.findIndex(l => l.levelId == levelId)
+								_this.LevelViewModel.splice(y, 1)
 							});
 					}
 				},
