@@ -1,6 +1,4 @@
-﻿@model List<Napping_PJ.Areas.Admin.Models.UserRoleViewModel>
-
-@{
+﻿@{
     ViewData["Title"] = "角色管理";
 }
 <div class="row">
@@ -11,93 +9,186 @@
         <h1 class="mt-3">使用者角色</h1>
     </div>
 </div>
-<div class="row">
-    <div class="col">
-        <partial name="_RoleListPartial" model="@ViewBag.Roles" />
-        <partial name="_RoleCreatePartial" model="@ViewBag.CreateRoleInput" />
-    </div>
+<div id="app" class="row">
     <div class="col">
         <table class="table">
             <thead>
                 <tr>
                     <th>
-                        ID
+                        角色名
                     </th>
-                    <th>
-                        使用者
-                    </th>
-                    <th>
-                        擁有角色
-                    </th>
-                    <th>
-                        新增角色
-                    </th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var userRoleViewModel in Model)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(cName => userRoleViewModel.customer.CustomerId)</td>
-                        <td>
-                            @Html.DisplayFor(cName => userRoleViewModel.customer.Name)
-                        </td>
-                        <td>
-                            @foreach (var selectedRole in userRoleViewModel.SelectedRole)
-                            {
-                                <button class="btn-info roleTag" value="@selectedRole.RoleId">@selectedRole.Name</button>
-                            }
-                        </td>
-                        <td>
-                            <select class="rowRoleSelecter" asp-items="@ViewBag.RolesSelectList">
-                                <option>請選擇</option>
-                            </select>
-
-                        </td>
-                    </tr>
-                }
+                <tr v-for="(role,index) in rolesIndexViewModel.Roles">
+                    <template v-if="!role.Edit">
+                        <td>{{role.Name}}</td>
+                        <td class="col-2"><button class="btn-info" @@click="RemoveRole(role)">Delete</button></td>
+                        <td class="col-2"><button class="btn-info" @@click="EditRole(role,index)">Edit</button></td>
+                    </template>
+                    <template v-else>
+                        <td><input v-model="editRoleName" type="text" /></td>
+                        <td class="col-2"><button class="btn-info" @@click="UpdateRole(role,index)">Update</button></td>
+                        <td class="col-2"><button class="btn-info" @@click="CancelRole(index)">Cancel</button></td>
+                    </template>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-10">
+                <div class="input-group mb-3">
+                    <label class="input-group-text">角色名稱</label>
+                    <input v-model="newRoleName" class="form-control" autocomplete="off" aria-required="true" />
+                </div>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-success" type="submit" @@click="AddRole">新增</button>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>使用者</th>
+                    <th>擁有角色</th>
+                    <th>新增角色</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in rolesIndexViewModel.UserRoleViewModels">
+                    <td>{{item.customer.CustomerId}}</td>
+                    <td>{{item.customer.Email}}</td>
+                    <td>
+                        <button class="btn-info me-1" v-for="SRole in item.SelectedRole" :value="SRole.RoleId" @@click="() => RemoveRoleToUser(item.customer.CustomerId,SRole.RoleId)">{{SRole.Name}}</button>
+                    </td>
+                    <td>
+                        <select @@change="AddUserRole(item.customer.CustomerId,event.target.value)">
+                            <option v-for="Role in rolesIndexViewModel.Roles" :value="Role.RoleId">{{Role.Name}}</option>
+                        </select>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
 @section Scripts{
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/scripts.js"></script>
+    <script src="~/lib/vue/vue.min.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('.rowRoleSelecter').change(function () {
-                var userId = $(this).closest('tr').find('td:first-child').text();
-                var roleId = $(this).val();
-                $.ajax({
-                    url: '@Url.Action("AddRoleToUser", "Roles",new { area = "Admin" } )',
-                    type: "POST",
-                    data: { userId: userId, roleId: roleId }
-                }).done(function (result) {// success callback function
-                    alert('角色新增成功');
-                    location.reload();
-                }).fail(function (xhr, status, error) {
-                    // error callback function
-                    alert(xhr.responseText);
-                    location.reload();
-                })
-            });
+        var vueApp = new Vue({
+            data: {
+                rolesIndexViewModel: [],
+                newRoleName: '',
+                editRoleName: '',
+            },
 
-            $('.roleTag').click(function () {
-                var userId = $(this).closest('tr').find('td:first-child').text();
-                var roleId = $(this).val();
-                $.ajax({
-                    url: '@Url.Action("RemoveRoleToUser", "Roles",new { area = "Admin" })',
-                    type: "POST",
-                    data: { userId: userId, roleId: roleId }
-                }).done(function (result) {
-                    // success callback function
-                    alert('角色刪除成功');
-                    location.reload();
-                }).fail(function (xhr, status, error) {
-                    // error callback function
-                    alert(xhr.responseText);
-                    location.reload();
-                });
-            });
-        });
+            mounted: function () {
+                let _this = this;
+                _this.GetUserRoleList();
+            },
+            methods: {
+                GetUserRoleList: function () {
+                    _this = this;
+                    axios.post(`Roles/GetUserRoleList`)
+                        .then(response => {
+                            //console.log(response.data);
+                            _this.rolesIndexViewModel = response.data;
+                            var obj = [];
+                            for (i = 0; i < _this.rolesIndexViewModel.Roles.length; i++) {
+                                var item = _this.rolesIndexViewModel.Roles[i];
+                                item.Edit = false;//新增Edit屬性
+                                obj.push(item);
+                            };
+                            _this.rolesIndexViewModel.Roles = obj;
+                        })
+                        .catch(err => {
+                            console.log(err.response.data)
+                        })
+                },
+                AddUserRole: function (userId, RoleId) {
+                    _this = this;
+                    axios.post(`Roles/AddRoleToUser?userId=${userId}&roleId=${RoleId}`)
+                        .then(response => {
+                            var user = _this.rolesIndexViewModel.UserRoleViewModels.find(u => u.customer.CustomerId == userId);
+                            alert(response.data);
+                            this.GetUserRoleList()
+                        })
+                        .catch(err => { alert(err.response.data) })
+                },
+                RemoveRoleToUser: function (userId, roleId) {
+                    _this = this;
+                    axios.post(`Roles/RemoveRoleToUser?userId=${userId}&roleId=${roleId}`)
+                        .then(response => {
+                            var user = _this.rolesIndexViewModel.UserRoleViewModels.find(u => u.customer.CustomerId == userId);
+                            //var roleIndex = user.SelectedRole.findIndex(r => r.RoleId == roleId);
+                            //user.SelectedRole.splice(roleIndex, 1);
+                            alert(response.data);
+                            this.GetUserRoleList()
+                        })
+                        .catch(err => { alert(err.response.data) })
+                },
+                AddRole: function () {
+                    _this = this;
+                    var RoleViewModel = {
+                        RoleId: '0',
+                        Name: _this.newRoleName
+                    }
+                    axios.post(`Roles/AddRole`, RoleViewModel)
+                        .then(response => {
+                            alert(response.data);
+                            _this.GetUserRoleList();
+                        })
+                        .catch(err => {
+                            alert(err.response.data)
+                        })
+                },
+                RemoveRole: function (role) {
+                    _this = this;
+                    axios.post(`Roles/RemoveRole?roleId=${role.RoleId}`)
+                        .then(response => {
+                            alert(response.data);
+                            _this.GetUserRoleList();
+                        })
+                        .catch(err => {
+                            alert(err.response.data)
+                        })
+                },
+                EditRole: function (role,index) {
+                    var _this = this;
+                    _this.editRoleName = role.Name;
+                    this.$set(_this.rolesIndexViewModel.Roles[index], 'Edit', true);
+                    var obj = JSON.parse(JSON.stringify(this.rolesIndexViewModel));
+                    _this.rolesIndexViewModel = obj;
+                },
+                CancelRole: function (index) {
+                    var _this = this;
+                    this.$set(_this.rolesIndexViewModel.Roles[index], 'Edit', false);
+                    var obj = JSON.parse(JSON.stringify(this.rolesIndexViewModel));
+                    _this.rolesIndexViewModel = obj;
+                },
+                UpdateRole: function (role, index) {
+                    var _this = this;
+                    role.Name = _this.editRoleName;
+                    axios.post(`Roles/UpdateRole`, role)
+                        .then(response => {
+                            alert(response.data);
+                            this.$set(_this.rolesIndexViewModel.Roles[index], 'Edit', false);
+                            var obj = JSON.parse(JSON.stringify(this.rolesIndexViewModel));
+                            _this.rolesIndexViewModel = obj;
+                        })
+                        .catch(error => {
+                            alert(response.data);
+                        })
+                },
+            },
+        })
+        vueApp.$mount('#app');
     </script>
 }

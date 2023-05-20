@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Helpers;
 using Napping_PJ.Models.Entity;
 
 namespace Napping_PJ
@@ -10,7 +11,7 @@ namespace Napping_PJ
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("db_a989f8_napping_admin") ?? throw new InvalidOperationException("Connection string 'db_a989f8_napping_admin' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("azureDB") ?? throw new InvalidOperationException("Connection string 'azureDB' not found.");
             builder.Services.AddDbContext<db_a989f8_nappingContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -24,8 +25,9 @@ namespace Napping_PJ
             })
             .AddCookie("Application", options =>
             {
-                options.LoginPath = "/Register/Register";
+                options.LoginPath = "/Login/Index";
                 options.AccessDeniedPath = "/Path/To/Your/AccessDeniedPage";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             })
             .AddCookie("External")
             .AddGoogle(options =>
@@ -34,6 +36,7 @@ namespace Napping_PJ
                 options.ClientId = googleAuthNSection["ClientId"];
                 options.ClientSecret = googleAuthNSection["ClientSecret"];
             });
+            builder.Services.AddTransient<EncryptHelper>();
 
             var app = builder.Build();
 
@@ -56,15 +59,15 @@ namespace Napping_PJ
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapAreaControllerRoute(
-                    name: "Admin",
-                    areaName: "Admin",
-                    pattern: "{Area}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                 name: "areas",
+                 pattern: "{area:exists}/{controller=Home}/{action=Index}");
 
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+
+			});
             app.Run();
         }
     }

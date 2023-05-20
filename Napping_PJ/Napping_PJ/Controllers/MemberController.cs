@@ -1,0 +1,64 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Models;
+using Napping_PJ.Models.Entity;
+using System.Security.Claims;
+
+namespace Napping_PJ.Controllers
+{
+    public class MemberController : Controller
+    {
+        private readonly db_a989f8_nappingContext _context;
+
+        public MemberController(db_a989f8_nappingContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == User.FindFirstValue(ClaimTypes.Email));
+            MemberViewModel memberViewModel = new MemberViewModel()
+            {
+                Email = customer.Email,
+                Name = customer.Name,
+                Birthday = customer.Birthday,
+                Gender = customer.Gender,
+                Phone = customer.Phone,
+                City = customer.City,
+                Region = customer.Region,
+                Country = customer.Country,
+                LevelId = customer.LevelId,
+            };
+            return View(memberViewModel);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditMemberInfo([FromBody] MemberViewModel memberViewModel)
+        {
+            if (!(User.FindFirstValue(ClaimTypes.Email) == memberViewModel.Email))
+            {
+                return BadRequest("登入者與修改對象不同");
+            }
+            Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == User.FindFirstValue(ClaimTypes.Email));
+            customer.Name = memberViewModel.Name;
+            customer.Birthday = memberViewModel.Birthday;
+            customer.Gender = memberViewModel.Gender;
+            customer.Phone = memberViewModel.Phone;
+            customer.City = memberViewModel.City;
+            customer.Region = memberViewModel.Region;
+            customer.Country = memberViewModel.Country;
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return BadRequest("寫入失敗");
+            }
+
+            return View(memberViewModel);
+        }
+    }
+}

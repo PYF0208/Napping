@@ -21,13 +21,14 @@ namespace Napping_PJ.Models.Entity
         public DateTime? Birthday { get; set; }
         public string? Password { get; set; }
         public string? PasswordHash { get; set; }
-        public decimal? Phone { get; set; }
-        public string? Gender { get; set; }
+        public string? Phone { get; set; }
+        public bool? Gender { get; set; }
         public string? City { get; set; }
         public string? Region { get; set; }
         public string? Country { get; set; }
         public string Email { get; set; } = null!;
         public int? LevelId { get; set; }
+        public bool? Locked { get; set; }
 
         public virtual Level? Level { get; set; }
         public virtual ICollection<BellEvent> BellEvents { get; set; }

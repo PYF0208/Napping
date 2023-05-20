@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Areas.Admin.Models;
 using Napping_PJ.Models.Entity;
 
 namespace Napping_PJ.Areas.Admin.Controllers
@@ -18,144 +19,113 @@ namespace Napping_PJ.Areas.Admin.Controllers
         {
             _context = context;
         }
+		public IActionResult Index()
+		{
+			return View();
+		}
 
-        // GET: Admin/Levels
-        public async Task<IActionResult> Index()
-        {
-              return _context.Levels != null ? 
-                          View(await _context.Levels.ToListAsync()) :
-                          Problem("Entity set 'db_a989f8_nappingContext.Levels'  is null.");
-        }
 
-        // GET: Admin/Levels/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Levels == null)
-            {
-                return NotFound();
-            }
 
-            var level = await _context.Levels
-                .FirstOrDefaultAsync(m => m.LevelId == id);
-            if (level == null)
-            {
-                return NotFound();
-            }
+		[HttpGet]
+		public async Task<IEnumerable<LevelViewModel>> GetLevel()
+		{
+			var Level = await _context.Levels
+				.Select(Level => new LevelViewModel
+				{
+					LevelId = Level.LevelId,
+					Name = Level.Name
+					
+				})
+				.ToListAsync();
 
-            return View(level);
-        }
+			return Level;
+		}
 
-        // GET: Admin/Levels/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+		[HttpPost]
+		public async Task<IEnumerable<LevelViewModel>> FilterLevel(
+			[FromBody] LevelViewModel leViewModel)
+		{
+			return _context.Levels.Where(le =>
+			le.LevelId == leViewModel.LevelId ||
+			le.Name.Contains(leViewModel.Name))
+			.Select(le => new LevelViewModel
+			{
+				LevelId = le.LevelId,
+				Name = le.Name
+				
+			});
 
-        // POST: Admin/Levels/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LevelId,Name")] Level level)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(level);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(level);
-        }
+		}
 
-        // GET: Admin/Levels/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Levels == null)
-            {
-                return NotFound();
-            }
+		[HttpPut]
+		public async Task<string> PutLevel(int id, [FromBody] LevelViewModel leViewModel)
+		{
+			if (id != leViewModel.LevelId)
+			{
+				return "修改會員等級失敗!";
+			}
+			Level le = await _context.Levels.FindAsync(id);
+			le.LevelId = leViewModel.LevelId;
+			le.Name = leViewModel.Name;
+			
+			_context.Entry(le).State = EntityState.Modified;
 
-            var level = await _context.Levels.FindAsync(id);
-            if (level == null)
-            {
-                return NotFound();
-            }
-            return View(level);
-        }
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!LevelExists(id))
+				{
+					return "修改會員等級失敗!";
+				}
+				else
+				{
+					throw;
+				}
+			}
 
-        // POST: Admin/Levels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LevelId,Name")] Level level)
-        {
-            if (id != level.LevelId)
-            {
-                return NotFound();
-            }
+			return "修改會員等級成功!";
+		}
+		[HttpPost]
+		public async Task<string> PostLevel([FromBody] LevelViewModel leViewModel)
+		{
+			Level le = new Level
+			{
+				LevelId = leViewModel.LevelId,
+				Name = leViewModel.Name,
+			};
+			_context.Levels.Add(le);
+			await _context.SaveChangesAsync();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(level);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LevelExists(level.LevelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(level);
-        }
+			return $"會員等級編號:{le.LevelId}";
+		}
 
-        // GET: Admin/Levels/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Levels == null)
-            {
-                return NotFound();
-            }
+		[HttpDelete]
+		public async Task<string> DeleteLevel(int id)
+		{
 
-            var level = await _context.Levels
-                .FirstOrDefaultAsync(m => m.LevelId == id);
-            if (level == null)
-            {
-                return NotFound();
-            }
+			var Levels = await _context.Levels.FindAsync(id);
+			if (Levels == null)
+			{
+				return "刪除會員等級成功!";
+			}
 
-            return View(level);
-        }
+			_context.Levels.Remove(Levels);
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException ex)
+			{
+				return "刪除會員等級失敗!";
+			}
 
-        // POST: Admin/Levels/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Levels == null)
-            {
-                return Problem("Entity set 'db_a989f8_nappingContext.Levels'  is null.");
-            }
-            var level = await _context.Levels.FindAsync(id);
-            if (level != null)
-            {
-                _context.Levels.Remove(level);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+			return "刪除會員等級成功!";
+		}
 
-        private bool LevelExists(int id)
+		private bool LevelExists(int id)
         {
           return (_context.Levels?.Any(e => e.LevelId == id)).GetValueOrDefault();
         }

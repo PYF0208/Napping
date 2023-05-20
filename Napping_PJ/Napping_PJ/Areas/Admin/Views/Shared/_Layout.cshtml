@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Napping_PJ.styles.css" asp-append-version="true" />
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" asp-append-version="true" />
-    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
@@ -31,11 +30,19 @@
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Rooms" asp-action="Index">房型管理</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">TEST</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">後端</a>
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Levels" asp-action="Index">會員等級</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Promotions" asp-action="Index">會員促銷</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Roles" asp-action="Index">角色管理</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Feature" asp-action="Index">房型特徵</a>
@@ -52,7 +59,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted bg-white bg-opacity-25">
+    <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - Napping_PJ - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

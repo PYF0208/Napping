@@ -54,7 +54,8 @@
                                             <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="password.html">Forgot Password?</a>
+                                            <a class="small" asp-area="" asp-controller="Register" asp-action="ForgotPassword">Forgot Password?</a>
+                                            <a class="small" asp-area="" asp-controller="Register" asp-action="ResendValidationEmail">Resend Validation Email</a>
                                             <a class="btn btn-primary" @@click="TryLogin">Login</a>
                                         </div>
                                     </form>
@@ -70,20 +71,6 @@
                     </div>
                 </div>
             </main>
-        </div>
-        <div id="layoutAuthentication_footer">
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
     </div>
 </body>
@@ -111,14 +98,14 @@
             },
             methods: {
                 ValidField: function () {
-                    console.log('ValidField')
+                    //console.log('ValidField')
                     let _this = this;
                     var request = {};
                     request.Email = _this.email;
                     request.Password = _this.password;
                     axios.post(`Login/ValidField`, request)
                         .then(res => {
-                            console.log(res.data);
+                            //console.log(res.data);
                             _this.errorMesseage.mainError = res.data.mainError;
                             _this.errorMesseage.emailError = res.data.emailError;
                             _this.errorMesseage.passWordError = res.data.passWordError;
@@ -135,13 +122,13 @@
                     var request = {};
                     request.Email = _this.email;
                     request.Password = _this.password;
-                    axios.post(`$Login/TryLogin`, request)
+                    axios.post(`Login/TryLogin`, request)
                         .then(res => {
                             console.log(res.data);
                             _this.errorMesseage.mainError = res.data.mainError;
                             _this.errorMesseage.emailError = res.data.emailError;
                             _this.errorMesseage.passWordError = res.data.passWordError;
-                            location.href = `$Home/Index`;
+                            location.href = `Home/Index`;
                         })
                         .catch(err => {
                             console.log(err.response.data);
