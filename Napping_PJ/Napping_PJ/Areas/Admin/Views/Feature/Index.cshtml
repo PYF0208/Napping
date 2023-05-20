@@ -174,7 +174,7 @@
 						Image: _this.image,
 					};
 					//alert(JSON.stringify(request));
-					axios.put(`Feature/UpdateFeature/${_this.featureId}`, request)
+					axios.put(`Feature/UpdateFeature?id=${_this.featureId}`, request)
 						.then(response => {
 							alert(response.data);
 							$("#editModal").modal("hide");
@@ -204,7 +204,7 @@
 					let _this = this;
 					var ret = confirm("確定要刪除嗎？")
 					if (ret == true) {
-						axios.delete(`Feature/DeleteFeature/${featureId}`).then(response => {
+						axios.delete(`Feature/DeleteFeature?id=${_this.featureId}`).then(response => {
 							alert(response.data);
 							_this.filterFeatureVMs();
 						});
