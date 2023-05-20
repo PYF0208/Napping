@@ -21,7 +21,10 @@ namespace Napping_PJ.Models.Entity
         public string Email { get; set; } = null!;
         public string City { get; set; } = null!;
         public string Region { get; set; } = null!;
+        public double? PositionLat { get; set; }
+        public double? PositionLon { get; set; }
         public string Address { get; set; } = null!;
+        public string? Description { get; set; }
         public double? AvgComment { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }

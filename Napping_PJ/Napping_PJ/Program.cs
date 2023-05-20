@@ -11,7 +11,7 @@ namespace Napping_PJ
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("azureDB") ?? throw new InvalidOperationException("Connection string 'azureDB' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("AzureJP") ?? throw new InvalidOperationException("Connection string 'AzureJP' not found.");
             builder.Services.AddDbContext<db_a989f8_nappingContext>(options =>
                 options.UseSqlServer(connectionString));
 
