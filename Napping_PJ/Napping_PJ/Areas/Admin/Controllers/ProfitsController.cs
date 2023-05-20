@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Areas.Admin.Models;
 using Napping_PJ.Models.Entity;
+using NuGet.Versioning;
 
 namespace Napping_PJ.Areas.Admin.Controllers
 {
@@ -78,7 +79,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 Date = profit.Date,
                 Number = profit.Number,
             };
-            if (NewProfit != null)
+            if (NewProfit == null)
             {
                 return "創建失敗";
             }
@@ -107,22 +108,31 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPut]
-        
-        public async Task<string> Edit(int id,[FromBody]ProfitViewModel profit)
+
+        public async Task<string> Edit(int id, [FromBody] ProfitViewModel profit)
         {
-            var Profit = await _context.Profits.FirstOrDefaultAsync(p => p.ProfitId == profit.ProfitId);
-            if (id != profit.ProfitId || Profit.ProfitId==profit.ProfitId)
+
+            var Profit = await _context.Profits.FindAsync(id);
+
+            if (id == null || profit.ProfitId == null || id != profit.ProfitId || Profit == null)
             {
                 return "修改失敗";
-            }           
-                try
+            }
+
+                Profit.Date = profit.Date;
+                Profit.Number = profit.Number;
+                Profit.ProfitId = profit.ProfitId;
+           
+
+
+			try
                 {
                     _context.Update(Profit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProfitExists(profit.ProfitId))
+                    if (!ProfitExists(Profit.ProfitId))
                     {
                         return "修改失敗";
                     }

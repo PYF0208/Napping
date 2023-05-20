@@ -185,6 +185,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return "修改加購服務選項失敗!";
 			}
+			
 			SearchHotel.HotelId = hotel.HotelId;
 			SearchHotel.Name = hotel.Name;
 			SearchHotel.Star = hotel.Star;
@@ -195,7 +196,8 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			SearchHotel.City = hotel.City;
 			SearchHotel.Region = hotel.Region;
 			SearchHotel.Address = hotel.Address;
-			SearchHotel.AvgComment = hotel.AvgComment;
+				SearchHotel.AvgComment = hotel.AvgComment; 
+			
 			try
 			{
 				_context.Update(SearchHotel);
@@ -203,7 +205,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			}
 			catch (DbUpdateConcurrencyException)
 			{
-				if (!HotelExists(hotel.HotelId))
+				if (!HotelExists(SearchHotel.HotelId))
 				{
 					return "修改加購服務選項失敗!";
 				}
