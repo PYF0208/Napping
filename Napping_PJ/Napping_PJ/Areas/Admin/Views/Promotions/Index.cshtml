@@ -48,7 +48,6 @@
 						<td>{{item.promotionId}}</td>
 						<td><input v-model="item.levelId" /></td>
 						<td><input v-model="item.name" /></td>
-						<td><input v-model="item.startDate" /></td>
 						<td><input v-model="item.endDate" /></td>
 						<td><input v-model="item.discount" /></td>
 					</template>
@@ -60,8 +59,8 @@
 						<td>{{item.promotionId}}</td>
 						<td>{{item.levelId}}</td>
 						<td>{{item.name}}</td>
-						<td>{{item.startDate}}</td>
-						<td>{{item.endDate}}</td>
+						<td><input type="datetime-local" class="form-control" v-model="item.startDate" disabled="true" /></td>
+						<td><input type="datetime-local" class="form-control" v-model="item.endDate" disabled="true" /></td>
 						<td>{{item.discount}}</td>
 					</template>
 				</tr>
