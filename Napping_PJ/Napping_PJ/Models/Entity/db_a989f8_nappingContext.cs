@@ -331,8 +331,8 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Profit>(entity =>
             {
-                entity.Property(e => e.Date).HasColumnType("date");
-            });
+				entity.Property(e => e.Date).HasColumnType("date");
+			});
 
             modelBuilder.Entity<Promotion>(entity =>
             {
