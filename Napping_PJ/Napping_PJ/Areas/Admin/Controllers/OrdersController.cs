@@ -31,7 +31,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		[HttpGet]
 		public async Task<IEnumerable<OrdersViewModel>> GetOrder()
 		{
-			var ord = _context.Orders.Select(o => new OrdersViewModel
+			var ord = _context.Orders.Include(x=>x.Currency).Include(x=>x.Customer).Include(x=>x.Payment).Select(o => new OrdersViewModel
 			{
 				CurrencyId = o.CurrencyId,
 				CustomerId = o.CustomerId,
