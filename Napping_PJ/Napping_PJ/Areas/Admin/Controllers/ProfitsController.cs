@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Areas.Admin.Models;
 using Napping_PJ.Models.Entity;
+using NuGet.Versioning;
 
 namespace Napping_PJ.Areas.Admin.Controllers
 {
@@ -24,7 +26,21 @@ namespace Napping_PJ.Areas.Admin.Controllers
         {
               return View();
         }
+        [HttpGet]
+        public async Task<IEnumerable<ProfitViewModel>> GetProfit()
+        {
 
+            var Profit =  _context.Profits.Select(Profit=>new ProfitViewModel
+
+			{
+                Number = Profit.Number,
+                ProfitId = Profit.ProfitId,
+                Date = Profit.Date,
+
+            });
+
+			return Profit;
+        }
         // GET: Admin/Profits/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -53,16 +69,23 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProfitId,Date,Number")] Profit profit)
+        
+        public async Task<string> NewCreate([FromBody]ProfitViewModel profit)
         {
-            if (ModelState.IsValid)
+
+            var NewProfit = new Profit
             {
-                _context.Add(profit);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ProfitId = profit.ProfitId,
+                Date = profit.Date,
+                Number = profit.Number,
+            };
+            if (NewProfit == null)
+            {
+                return "創建失敗";
             }
-            return View(profit);
+				_context.Add(NewProfit);
+                await _context.SaveChangesAsync();
+            return "創建成功";
         }
 
         // GET: Admin/Profits/Edit/5
@@ -84,36 +107,41 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // POST: Admin/Profits/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProfitId,Date,Number")] Profit profit)
+        [HttpPut]
+
+        public async Task<string> Edit(int id, [FromBody] ProfitViewModel profit)
         {
-            if (id != profit.ProfitId)
+
+            var Profit = await _context.Profits.FindAsync(id);
+
+            if (id == null || profit.ProfitId == null || id != profit.ProfitId || Profit == null)
             {
-                return NotFound();
+                return "修改失敗";
             }
 
-            if (ModelState.IsValid)
-            {
-                try
+                Profit.Date = profit.Date;
+                Profit.Number = profit.Number;
+                Profit.ProfitId = profit.ProfitId;
+           
+
+
+			try
                 {
-                    _context.Update(profit);
+                    _context.Update(Profit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProfitExists(profit.ProfitId))
+                    if (!ProfitExists(Profit.ProfitId))
                     {
-                        return NotFound();
+                        return "修改失敗";
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(profit);
+            return "修改成功";
         }
 
         // GET: Admin/Profits/Delete/5
@@ -135,22 +163,22 @@ namespace Napping_PJ.Areas.Admin.Controllers
         }
 
         // POST: Admin/Profits/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete]
+        public async Task<string> DeleteConfirmed(int id)
         {
-            if (_context.Profits == null)
+            var del = await _context.Profits.FindAsync(id);
+            if (del == null)
             {
-                return Problem("Entity set 'db_a989f8_nappingContext.Profits'  is null.");
+                return "刪除失敗";
             }
-            var profit = await _context.Profits.FindAsync(id);
-            if (profit != null)
+            
+            if (del != null)
             {
-                _context.Profits.Remove(profit);
+                _context.Profits.Remove(del);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return "刪除成功";
         }
 
         private bool ProfitExists(int id)

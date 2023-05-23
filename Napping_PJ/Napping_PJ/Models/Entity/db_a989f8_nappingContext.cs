@@ -336,11 +336,7 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Promotion>(entity =>
             {
-                entity.Property(e => e.EndDate).HasColumnType("date");
-
-                entity.Property(e => e.Name).HasMaxLength(50);
-
-                entity.Property(e => e.StartDate).HasColumnType("date");
+                entity.Property(e => e.Name).HasMaxLength(50);               
 
                 entity.HasOne(d => d.Level)
                     .WithMany(p => p.Promotions)
