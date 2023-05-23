@@ -33,19 +33,20 @@
 						<td>Type</td>
 						<th>Price</th>
 						<th>MaxGuests</th>
+						
 					</tr>
 				</thead>
 				@*表格標題*@
 				@*表格內容*@
 				<tbody>
-					<tr v-for="item in RoomsViewModel">
+					<tr v-for="item in RoomsViewModel"  >
 						<td>{{item.roomId}}</td>
 						<td>{{item.hotelId}}</td>
 						<td>{{item.type}}</td>
 						<td>{{item.price}}</td>
 						<td>{{item.maxGuests}}</td>
 						<td>
-							<a class="btn edit" @@click="edit(item.roomId)"><i class="fa-solid fa-pen" title="Edit"></i></a>
+							<a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
 							<a class="btn delete" @@click="deleteRooms(item.roomId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
 						</td>
 					</tr>
@@ -105,7 +106,10 @@
 						<div class="modal-body">
 							<div class="form-group">
 								<label class="form-label">hotelId</label>
-								<input class="form-control" v-model="hotelId" />
+								@*<input class="form-control" v-model="hotelId" />*@
+								<select class="form-control" v-model="hotelId">
+									<option v-for="item in HotelsViewModel"  >{{item.hotelId}}</option>
+								</select>
 							</div>
 							<div class="form-group">
 								<label class="form-label">type</label>
@@ -144,6 +148,7 @@
 			el: "#app",
 			data: {
 				RoomsViewModel: [],
+				HotelsViewModel:[],
 				filter: "",
 				hotelId: "",
 				type: "",
@@ -159,9 +164,21 @@
 			mounted: function () {
 				let _this = this;
 				_this.getRooms();
+				_this.filterRooms();
 			},
 			methods: {
-				getRooms: function () {
+				getRooms: function(){
+					let _this=this;
+					axios.get('Rooms/GetHotels')
+					.then(function(response){
+						_this.HotelsViewModel = response.data;
+					});
+
+
+				},
+
+
+				filterRooms: function () {
 					//alert("有！！");
 					let _this = this;
 					var request = {};
@@ -181,21 +198,16 @@
 							console.log(error);
 						});
 				},
-				edit: function (roomId) {
+				edit: function (item) {
 					$("#editModal").modal("show");
 					let _this = this;
-					var RoomList = [];
-					for (var i = 0; i < _this.RoomsViewModel.length; i++) {
-						var item = _this.RoomsViewModel[i];
-						if (roomId == item.roomId) {
+					
 							_this.originalRoomId = item.roomId;
 							_this.originalHotelId = item.hotelId;
 							_this.originalType = item.type;
 							_this.originalPrice = item.price;
 							_this.originalMaxGuests = item.maxGuests;
-						} RoomList.push(item);
-					}
-					_this.RoomsViewModel = RoomList;
+						
 				},
 				update: function () {
 					let _this = this
@@ -210,7 +222,7 @@
 						.then(response => {
 							alert(response.data);
 							$("#editModal").modal('hide');
-							_this.getRooms();
+							_this.filterRooms();
 						});
 				},
 
@@ -230,7 +242,7 @@
 						.then(response => {
 							alert(response.data);
 							$("#insertModal").modal('hide');
-							_this.getRooms();
+							_this.filterRooms();
 						})
 				},
 				deleteRooms: function (roomId) {
@@ -240,7 +252,7 @@
 						axios.delete(`Rooms/DeleteConfirmed?ID=${roomId}`)
 							.then(response => {
 								alert(response.data);
-								_this.getRooms();
+								_this.filterRooms();
 							});
 					}
 				},

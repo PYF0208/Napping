@@ -20,27 +20,35 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			_context = context;
 		}
 
+
 		public IActionResult Index()
 		{
 			return View();
 		}
+
+		[HttpGet]
 		// GET: Admin/Rooms
-		public async Task<IEnumerable<RoomsViewModel>> GetRooms()
+		public async Task<IEnumerable<HotelsViewModel>> GetHotels()
 		{
 			//var db_a989f8_nappingContext = _context.Rooms.Include(r => r.Hotel);
 			//var db_a989f8_nappingContext2 = db_a989f8_nappingContext.Select(s=>s.Hotel);
 			//return View(await db_a989f8_nappingContext.ToListAsync());
-			var Rooms = await _context.Rooms.Include(p => p.Hotel)
-			.Select(Rooms => new RoomsViewModel
-			{
-				RoomId = Rooms.RoomId,
-				HotelId = Rooms.HotelId,
-				Type = Rooms.Type,
-				Price = Rooms.Price,
-				MaxGuests = Rooms.MaxGuests,
-
-			}).ToListAsync();
-			return Rooms;
+			var hotelViewModels = await _context.Hotels
+				.Select(h => new HotelsViewModel
+				{
+					HotelId = h.HotelId,
+					Name = h.Name,
+					Star = h.Star,
+					Image = h.Image,
+					ContactName = h.ContactName,
+					Phone = h.Phone,
+					Email = h.Email,
+					City = h.City,
+					Region = h.Region,
+					Address = h.Address,
+					AvgComment = h.AvgComment,
+				}).ToListAsync();
+			return hotelViewModels;
 		}
 
 		[HttpPost]
@@ -93,12 +101,12 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<string> CreateRooms([FromBody] RoomsViewModel room)
 		{
-			
+
 			Room NewRoom = new Room
 			{
 				RoomId = room.RoomId,
 				HotelId = room.HotelId,
-				Type = room.Type, 
+				Type = room.Type,
 				Price = room.Price,
 				MaxGuests = room.MaxGuests,
 			};
