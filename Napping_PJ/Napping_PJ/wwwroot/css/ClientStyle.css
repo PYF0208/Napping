@@ -546,7 +546,7 @@ img {
     top: 0;
     padding: 0px 50px;
     width: 100%;
-    background: #ffffff;
+    background: #171b27;
     z-index: 1;
 }
 
@@ -904,65 +904,11 @@ img {
     display: none;
 }
 
-.header-style-one.alternate .nav-outer .mobile-nav-toggler {
-    display: block;
-    margin-top: 37px;
-    color: #ffffff;
-    font-size: 20px;
-}
 
 .header-style-one.alternate .other-links {
     padding-top: 25px;
 }
 
-/*** 
-
-====================================================================
-	Header Style One / Alternate-Two
-====================================================================
-
-***/
-
-.header-style-one.alternate-two {
-    position: fixed;
-}
-
-    .header-style-one.alternate-two .header-span {
-        display: none;
-    }
-
-    .header-style-one.alternate-two .header-upper {
-        top: 50px;
-        padding-left: 50px;
-        padding-right: 50px;
-        background: none;
-        transition: all 300ms ease;
-        -moz-transition: all 300ms ease;
-        -webkit-transition: all 500ms ease;
-        -ms-transition: all 300ms ease;
-        -o-transition: all 300ms ease;
-    }
-
-.fixed-header.header-style-one.alternate-two .header-upper {
-    top: 0;
-    background: #ffffff;
-}
-
-.header-style-one.alternate-two .header-upper .inner-container {
-    background: #ffffff;
-    padding-left: 50px;
-    padding-right: 50px;
-    transition: all 300ms ease;
-    -moz-transition: all 300ms ease;
-    -webkit-transition: all 500ms ease;
-    -ms-transition: all 300ms ease;
-    -o-transition: all 300ms ease;
-}
-
-.fixed-header.header-style-one.alternate-two .header-upper .inner-container {
-    padding-left: 0px;
-    padding-right: 0px;
-}
 
 /*** 
 
