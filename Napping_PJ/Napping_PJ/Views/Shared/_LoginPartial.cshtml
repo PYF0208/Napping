@@ -1,23 +1,21 @@
 ﻿@using System.Security.Claims;
-<ul class="navbar-nav">
     @if (User.Identity.IsAuthenticated)
     {
-        <li class="nav-item">
-            <a asp-area="" asp-controller="Member" asp-action="Index" class="nav-link text-dark">Hello @User.FindFirst(ClaimTypes.Email).Value</a>
+        <li class="txt">
+            <a asp-area="" asp-controller="Member" asp-action="Index" class="nav-link ">Hello @User.FindFirst(ClaimTypes.Email).Value</a>
         </li>
-        <li class="nav-item">
+        <li class="txt">
             <form class="form-inline" asp-area="" asp-controller="Register" asp-action="OauthLogout" method="post">
-                <button class="nav-link btn btn-link text-dark" type="submit" name="provider">Logout</button>
+                <button class="nav-link btn btn-link " type="submit" name="provider">Logout</button>
             </form>
         </li>
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Index">Login</a>
+        <li class="txt">
+            <a class="nav-link " asp-area="" asp-controller="Login" asp-action="Index">Login</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="Index">Register</a>
+        <li class="txt">
+            <a class="nav-link " asp-area="" asp-controller="Register" asp-action="Index">Register</a>
         </li>
     }
-</ul>
