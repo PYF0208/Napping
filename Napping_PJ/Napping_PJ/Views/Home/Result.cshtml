@@ -1,6 +1,17 @@
-﻿	<!-- Main Header -->
-<header class="main-header header-style-one alternate">
+﻿@{
+	ViewBag.Title = "Simple Map";
+}
 
+
+	<!-- Main Header -->
+<header class="main-header header-style-one alternate">
+	<style>
+		#map{
+			height:800px;
+			width:auto;
+		}
+	</style>
+	
 	<!-- Header Upper -->
 	<div class="header-upper">
 		<div class="inner-container clearfix">
@@ -284,9 +295,10 @@
 					<!--Sidebar Widget-->
 					<div class="sidebar-widget search-box wow fadeInUp" data-wow-delay="0ms"
 						 data-wow-duration="1500ms">
-						<div class="widget-inner">
-							<div class="sidebar-title">
+						<div class="widget-inner" id="map">
+							<div class="sidebar-title" >
 								<h1>這裡會是地圖</h1>
+								
 							</div>
 						</div>
 					</div>
@@ -297,3 +309,24 @@
 
 	</div>
 </div>
+
+
+@section Scripts {
+	
+    <a href="~/lib/jquery/dist/jquery.min.map">~/lib/jquery/dist/jquery.min.map</a>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
+
+	<script>
+		let map;
+
+		function initMap() {
+			map = new google.maps.Map(document.getElementById("map"), {
+				center: { lat: 25.105497, lng: 121.597366 },
+				zoom: 14,
+			});
+		}
+
+		window.initMap = initMap;
+	</script>
+}
