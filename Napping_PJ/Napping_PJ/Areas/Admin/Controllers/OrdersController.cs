@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Napping_PJ.Areas.Admin.Models;
+using Napping_PJ.Models;
 using Napping_PJ.Models.Entity;
 
 namespace Napping_PJ.Areas.Admin.Controllers
@@ -35,11 +36,35 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				CurrencyId = o.CurrencyId,
 				CustomerId = o.CustomerId,
-				Date = o.Date,
 				OrderId = o.OrderId,
 				PaymentId = o.PaymentId,
+				Date = o.Date,
+				
+			
 			});
 			return ord;
+		}
+		[HttpGet]
+		//public async Task<IEnumerable<PaymentViewModel>> GetPayment()
+		//{
+		//	_context
+		//}
+		[HttpGet]
+		public async Task<IEnumerable<MemberViewModel>> GetMember()
+		{
+			var Mem = _context.Customers.Select(c => new MemberViewModel
+			{
+				Birthday = c.Birthday,
+				City = c.City,
+				Country = c.Country,
+				Email = c.Email,
+				Gender = c.Gender,
+				LevelId = c.LevelId,
+				Phone = c.Phone,
+				Region = c.Region,
+				Name = c.Name,
+			});
+			return Mem;
 		}
 		public async Task<IActionResult> Details(int? id)
 		{
