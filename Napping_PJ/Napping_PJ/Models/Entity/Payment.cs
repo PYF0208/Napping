@@ -14,11 +14,8 @@ namespace Napping_PJ.Models.Entity
         public int OrderId { get; set; }
         public DateTime Date { get; set; }
         public string Type { get; set; } = null!;
-        public int CurrencyId { get; set; }
         public string Status { get; set; } = null!;
 
-        public virtual Currency Currency { get; set; } = null!;
-        public virtual Order Order { get; set; } = null!;
         public virtual ICollection<Order> Orders { get; set; }
     }
 }

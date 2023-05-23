@@ -32,9 +32,9 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		[HttpGet]
 		public async Task<IEnumerable<OrdersViewModel>> GetOrder()
 		{
-			var ord = _context.Orders.Include(x=>x.Currency).Include(x=>x.Customer).Include(x=>x.Payment).Select(o => new OrdersViewModel
+			var ord = _context.Orders.Include(x=>x.Customer).Include(x=>x.Payment).Select(o => new OrdersViewModel
 			{
-				CurrencyId = o.CurrencyId,
+				
 				CustomerId = o.CustomerId,
 				OrderId = o.OrderId,
 				PaymentId = o.PaymentId,
@@ -74,7 +74,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			}
 
 			var order = await _context.Orders
-				.Include(o => o.Currency)
+				
 				.Include(o => o.Customer)
 				.Include(o => o.Payment)
 				.FirstOrDefaultAsync(m => m.OrderId == id);
@@ -87,13 +87,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		}
 
 		// GET: Admin/Orders/Create
-		public IActionResult Create()
-		{
-			ViewData["CurrencyId"] = new SelectList(_context.Currencies, "CurrencyId", "CurrencyId");
-			ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId");
-			ViewData["PaymentId"] = new SelectList(_context.Payments, "PaymentId", "PaymentId");
-			return View();
-		}
+	
 
 		// POST: Admin/Orders/Create
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -109,7 +103,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
 				{
 					OrderId = order.OrderId,
 					CustomerId = order.CustomerId,
-					CurrencyId = order.CurrencyId,
 					Date = order.Date,
 					PaymentId = order.PaymentId,
 
@@ -122,23 +115,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		}
 
 		// GET: Admin/Orders/Edit/5
-		public async Task<IActionResult> Edit(int? id)
-		{
-			if (id == null || _context.Orders == null)
-			{
-				return NotFound();
-			}
-
-			var order = await _context.Orders.FindAsync(id);
-			if (order == null)
-			{
-				return NotFound();
-			}
-			ViewData["CurrencyId"] = new SelectList(_context.Currencies, "CurrencyId", "CurrencyId", order.CurrencyId);
-			ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", order.CustomerId);
-			ViewData["PaymentId"] = new SelectList(_context.Payments, "PaymentId", "PaymentId", order.PaymentId);
-			return View(order);
-		}
+		
 
 		// POST: Admin/Orders/Edit/5
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -182,7 +159,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			}
 
 			var order = await _context.Orders
-				.Include(o => o.Currency)
 				.Include(o => o.Customer)
 				.Include(o => o.Payment)
 				.FirstOrDefaultAsync(m => m.OrderId == id);
