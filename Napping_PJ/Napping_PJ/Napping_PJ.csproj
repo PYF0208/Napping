@@ -27,6 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\Images\13.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Areas\Admin\Views\Hotels\Create.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

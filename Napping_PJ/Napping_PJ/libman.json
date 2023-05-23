@@ -13,6 +13,14 @@
     {
       "library": "axios@1.4.0",
       "destination": "wwwroot/lib/axios/"
+    },
+    {
+      "library": "wow@1.1.2",
+      "destination": "wwwroot/lib/wow/"
+    },
+    {
+      "library": "animate.css@4.1.1",
+      "destination": "wwwroot/lib/animate.css/"
     }
   ]
 }
