@@ -20,8 +20,7 @@ namespace Napping_PJ.Models.Entity
         public string TravelType { get; set; } = null!;
         public string? Note { get; set; }
 
-        public virtual Order Profit { get; set; } = null!;
-        public virtual Profit ProfitNavigation { get; set; } = null!;
+        public virtual Profit Profit { get; set; } = null!;
         public virtual Room Room { get; set; } = null!;
         public virtual ICollection<OrderDetailExtraService> OrderDetailExtraServices { get; set; }
     }
