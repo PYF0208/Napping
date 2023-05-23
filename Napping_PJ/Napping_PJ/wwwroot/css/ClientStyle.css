@@ -79,17 +79,6 @@
 	font-family: 'Yeseva One', cursive;
 */
 
-@import url('fontawesome-all.css');
-@import url('owl.css');
-@import url('simple-line-icons.css');
-@import url('themify-icons.css');
-@import url('flaticon.css');
-@import url('animate.css');
-@import url('jquery-ui.css');
-@import url('jquery.fancybox.min.css');
-@import url('scrollbar.css');
-@import url('hover.css');
-@import url('custom-animate.css');
 
 /*** 
 
@@ -416,7 +405,7 @@ figure {
         background-color: rgba(0,0,0,0);
         background-position: center center;
         background-repeat: no-repeat;
-        background-image: url(../images/icons/preloader.svg);
+        background-image: url('../images/preloader.svg');
         -webkit-transition: all 200ms ease;
         -moz-transition: all 200ms ease;
         -ms-transition: all 200ms ease;
@@ -1661,7 +1650,7 @@ img.lazy-image {
     bottom: -50px;
     width: 100%;
     height: 120px;
-    background: url(../images/main-slider/banner-bottom-1.png) center bottom no-repeat;
+    background: url("../wwwroot/images/banner-bottom-1.png") center bottom no-repeat;
     background-size: 100% 100%;
     z-index: 5;
 }
@@ -7053,7 +7042,7 @@ img.lazy-image {
         bottom: -10px;
         width: 100%;
         height: 120px;
-        background: url(../images/main-slider/banner-bottom-2.png) center bottom no-repeat;
+        background: url('../images/banner-bottom-2.png') center bottom no-repeat;
         background-size: 100% 100%;
         z-index: 5;
     }
@@ -7081,10 +7070,13 @@ img.lazy-image {
         top: 0;
         width: 100%;
         height: 100%;
+        background-image: url('../images/13.jpg');
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
     }
+
+
 
         .page-banner .image-layer:before {
             content: '';
@@ -9171,7 +9163,7 @@ img.lazy-image {
 
 .sidebar-page-container {
     position: relative;
-    padding: 110px 0px 110px 0px;
+    padding: 110px 0px 0px 0px;
 }
 
     .sidebar-page-container.blog-single {
@@ -9221,7 +9213,7 @@ img.lazy-image {
         margin-bottom: 30px;
         z-index: 1;
         overflow: auto;
-        height: 600px;
+        height: 800px;
     }
 
     .sidebar-page-container .blog-content {
@@ -9235,7 +9227,7 @@ img.lazy-image {
         position: relative;
         margin-bottom: 30px;
         z-index: 1;
-        height: 600px;
+        height: 800px;
     }
 
 .services-page .sidebar-side {
@@ -9260,7 +9252,7 @@ img.lazy-image {
     .sidebar .sidebar-widget .widget-inner {
         position: relative;
         display: block;
-        height: 600px;
+        height: 800px;
         padding: 40px 30px 50px;
         background: #ffffff;
         box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.05), 0px 20px 25px 0px rgba(0,0,0,0.03);

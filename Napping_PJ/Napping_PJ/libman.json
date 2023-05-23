@@ -21,6 +21,11 @@
     {
       "library": "animate.css@4.1.1",
       "destination": "wwwroot/lib/animate.css/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jqueryui@1.13.2",
+      "destination": "wwwroot/lib/jqueryui/"
     }
   ]
 }
