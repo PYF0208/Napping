@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Admin\Controllers\中和區.cs" />
     <Compile Remove="Models\CustomerViewModel.cs" />
   </ItemGroup>
 
