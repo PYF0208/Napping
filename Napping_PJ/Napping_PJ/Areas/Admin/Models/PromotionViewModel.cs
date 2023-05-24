@@ -12,5 +12,8 @@ public  class PromotionViewModel
     public DateTime EndDate { get; set; }
     public double Discount { get; set; }
 
-}
+	public string LevelName { get; set; } = null!;
+
+
+	}
 }

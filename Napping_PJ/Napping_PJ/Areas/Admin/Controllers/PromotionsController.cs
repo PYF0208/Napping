@@ -61,14 +61,16 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		public async Task<IEnumerable<PromotionViewModel>> FilterPromotions(
 			[FromBody] PromotionViewModel prViewModel)
 		{
-			return _context.Promotions.Select(pro => new PromotionViewModel
+			return _context.Promotions.Where(pro=>pro.Name.Contains(prViewModel.Name)||pro.Discount==prViewModel.Discount||pro.Level.Name.Contains(prViewModel.LevelName))
+				.Select(pro => new PromotionViewModel
 			{
 				PromotionId = pro.PromotionId,
 				LevelId = pro.LevelId,
 				Name = pro.Name,
 				StartDate = pro.StartDate,
 				EndDate = pro.EndDate,
-				Discount = pro.Discount
+				Discount = pro.Discount,
+				LevelName=pro.Level.Name
 			});
 		}
 
@@ -80,6 +82,11 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			if (id != promotion.PromotionId)
 			{
 				return "修改促銷記錄失敗!";
+			}
+			int result = DateTime.Compare(promotion.StartDate, promotion.EndDate);
+			if (result>=0)
+			{
+				return "結束日期必須大於起始日期!";
 			}
 			Promotion pro = await _context.Promotions.FindAsync(id);
 			pro.PromotionId = promotion.PromotionId;
@@ -109,7 +116,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			return "修改促銷記錄成功!";
 		}
 		[HttpPost]
-		public void SendMailByPromotionId([FromBody] SendemailViewModel sendmailviewmodel)
+		public string SendMailByPromotionId([FromBody] SendemailViewModel sendmailviewmodel)
 		{
 			var x = _context.Promotions.Include(x => x.Level).ThenInclude(x => x.Customers).FirstOrDefault(s => s.PromotionId == sendmailviewmodel.PromotionId);
 			if (x != null)
@@ -134,13 +141,18 @@ namespace Napping_PJ.Areas.Admin.Controllers
 							sm.Credentials = new NetworkCredential("tibameth101team3@gmail.com", "glyirsixoioagwmh");
 							sm.Send(mail);
 						}
+						return "寄送成功";
 					}
 					catch (Exception)
 					{
+						
 						throw;
+						
 					}
 				}
+				
 			}
+			return "寄送失敗";
 		}
 
 		// POST: Admin/Promotions/Edit/5
@@ -153,6 +165,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return "欄位不可為空值!";
 			}
+		
 			Promotion pro = new Promotion
 			{
 
@@ -163,7 +176,13 @@ namespace Napping_PJ.Areas.Admin.Controllers
 				EndDate = promotion.EndDate,
 				Discount = promotion.Discount,
 
+
 			};
+			int result = DateTime.Compare(pro.StartDate, pro.EndDate);
+			if (result >= 0)
+			{
+				return "結束日期必須大於起始日期!";
+			}
 			_context.Promotions.Add(pro);
 			await _context.SaveChangesAsync();
 
@@ -204,16 +223,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		{
 			return View();
 		}
-		[HttpGet]
-		public static string GetCurrentDateTime(PromotionViewModel pro)
-		{
-			DateTime currentDateTime = DateTime.Now;
-			string formattedDateTime = currentDateTime.ToString("yyyy-MM-dd HH:mm:ss");
-			var p = new PromotionViewModel
-			{
-				StartDate = currentDateTime
-			};
-			return formattedDateTime;
-		}
+		
+		
 	}
 }
