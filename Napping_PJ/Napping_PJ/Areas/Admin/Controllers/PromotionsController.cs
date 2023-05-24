@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models.Entity;
 using Napping_PJ.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Net.Mail;
+using System.Net;
+using System.Text;
 
 namespace Napping_PJ.Areas.Admin.Controllers
 {
@@ -105,7 +108,40 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
 			return "修改促銷記錄成功!";
 		}
-
+		[HttpPost]
+		public void SendMailByPromotionId([FromBody] SendemailViewModel sendmailviewmodel)
+		{
+			var x = _context.Promotions.Include(x => x.Level).ThenInclude(x => x.Customers).FirstOrDefault(s => s.PromotionId == sendmailviewmodel.PromotionId);
+			if (x != null)
+			{
+				var y = x.Level.Customers.Select(x => x.Email).ToList();
+				foreach (var email in y)
+				{
+					try
+					{
+						var mail = new MailMessage()
+						{
+							From = new MailAddress("tibameth101team3@gmail.com"),
+							Subject = "Napping會員促銷",
+							Body = "尊貴的會員您好:\r\n獻上此促銷",
+							IsBodyHtml = true,
+							BodyEncoding = Encoding.UTF8,
+						};
+						mail.To.Add(new MailAddress(email));
+						using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
+						{
+							sm.EnableSsl = true;
+							sm.Credentials = new NetworkCredential("tibameth101team3@gmail.com", "glyirsixoioagwmh");
+							sm.Send(mail);
+						}
+					}
+					catch (Exception)
+					{
+						throw;
+					}
+				}
+			}
+		}
 
 		// POST: Admin/Promotions/Edit/5
 		// To protect from overposting attacks, enable the specific properties you want to bind to.

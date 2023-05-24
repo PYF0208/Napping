@@ -36,6 +36,7 @@
 					<td>StartDate</td>
 					<td>EndDate</td>
 					<td>Discount</td>
+					<td>寄送EMAIL</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -62,6 +63,9 @@
 						<td><input type="datetime-local" class="form-control" v-model="item.startDate" disabled="true" /></td>
 						<td><input type="datetime-local" class="form-control" v-model="item.endDate" disabled="true" /></td>
 						<td>{{item.discount}}</td>
+						<td>
+							<button class="btn btn-danger" @@click="sendemail(item.promotionId)">寄送</button>
+						</td>
 					</template>
 				</tr>
 			</tbody>
@@ -134,6 +138,15 @@
 				_this.getLevel();
 			},
 			methods: {
+				sendemail: function (id) {
+					//var request = {};
+					//axios.get('Promotions/promotionId', request)
+					//	.then()
+					var request = {
+						PromotionId: id
+					};
+					axios.post('Promotions/SendMailByPromotionId', request)
+				},
 				filterPromotions: function () {
 					let _this = this;
 					var request = {};
