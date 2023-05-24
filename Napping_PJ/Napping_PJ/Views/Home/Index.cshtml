@@ -1,294 +1,353 @@
-﻿
+﻿@section Styles{
+    <link href="lib\element-ui\theme-chalk\index.min.css" rel="stylesheet" />
+    <style>
+        .el-date-editor .el-range-separator {
+            width: auto;
+        }
 
+        .filters-section.style-four .form-box {            
+            max-width: 400px;
+        }
+
+        .demo-date-picker {
+            display: flex;
+            width: 100%;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+            .demo-date-picker .block {
+                padding: 30px 0;
+                text-align: center;
+                border-right: solid 1px var(--el-border-color);
+                flex: 1;
+            }
+
+                .demo-date-picker .block:last-child {
+                    border-right: none;
+                }
+
+            .demo-date-picker .demonstration {
+                display: block;
+                color: var(--el-text-color-secondary);
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+    </style>
+}
 <header class="main-header header-style-one alternate">
 
-	<!-- Header Upper -->
-	<div class="header-upper">
-		<div class="inner-container clearfix">
-			<!--Logo-->
-			<div class="logo-box">
-				<div class="logo">
-					<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><h1 style="color: white;">Napping</h1></a>
-				</div>
-			</div>
-			<div class="nav-outer clearfix">
+    <!-- Header Upper -->
+    <div class="header-upper">
+        <div class="inner-container clearfix">
+            <!--Logo-->
+            <div class="logo-box">
+                <div class="logo">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><h1 style="color: white;">Napping</h1></a>
+                </div>
+            </div>
+            <div class="nav-outer clearfix">
 
-				<!-- Main Menu -->
-				<nav class="main-menu navbar-expand-md navbar-light">
-					<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
-					</div>
-				</nav>
-			</div>
+                <!-- Main Menu -->
+                <nav class="main-menu navbar-expand-md navbar-light">
+                    <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
+                    </div>
+                </nav>
+            </div>
 
-			<div class="other-links clearfix">
-				<div class="info">
-					<ul class="clearfix">
-						<partial name="_LoginPartial" />
-					</ul>
-				</div>
-			</div>
+            <div class="other-links clearfix">
+                <div class="info">
+                    <ul class="clearfix">
+                        <partial name="_LoginPartial" />
+                    </ul>
+                </div>
+            </div>
 
-		</div>
-	</div>
-	<!--End Header Upper-->
+        </div>
+    </div>
+    <!--End Header Upper-->
 
 
 </header>
 
 <section class="page-banner">
-	<div class="image-layer">
-	</div>
-	<div class="banner-bottom-pattern">
-	</div>
+    <div class="image-layer">
+    </div>
+    <div class="banner-bottom-pattern">
+    </div>
 
-	<div class="banner-inner">
-		<div class="auto-container">
-			<div class="inner-container clearfix">
-				<h1>Book Your Room</h1>
-				<div class="page-nav">
-					<ul class="bread-crumb clearfix">
-						<li class="active">Book</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="banner-inner">
+        <div class="auto-container">
+            <div class="inner-container clearfix">
+                <h1>Book Your Room</h1>
+                <div class="page-nav">
+                    <ul class="bread-crumb clearfix">
+                        <li class="active">Book</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="filters-section style-four">
-	<div class="auto-container clearfix">
-		<div class="form-box default-form filter-form-three wow fadeInRight" data-wow-delay="0ms"
-			 data-wow-duration="1500ms">
-			<h4>Book Your Room</h4>
-			<form method="" action="">
+    <div class="auto-container clearfix">
+        <div class="form-box default-form filter-form-three wow fadeInRight" data-wow-delay="0ms"
+             data-wow-duration="1500ms">
+            <h4>Book Your Room</h4>
 
-				<div class="outer clearfix">
-					<div class="form-group">
-						<div class="field-label">Arrival</div>
-						<div class="field-inner">
-							<input id="arrival-date" class="date-picker" type="text" name="field-name"
-								   value="Nov 02. 2019" placeholder="">
-							<span class="alt-icon flaticon-calendar-2"></span>
-							<label for="arrival-date" class="icon flaticon-down-arrow"></label>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="field-label">Departure</div>
-						<div class="field-inner">
-							<input id="depart-date" class="date-picker" type="text" name="field-name"
-								   value="Nov 12. 2019" placeholder="">
-							<span class="alt-icon flaticon-calendar-2"></span>
-							<label for="depart-date" class="icon flaticon-down-arrow"></label>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="field-label">Guests</div>
-						<div class="field-inner">
-							<span class="alt-icon flaticon-user-3"></span>
-							<div class="check-sel-box">
-								<div class="check-sel-btn">
-									<span class="adult-info">2 Adults.</span>
-									<span class="child-info">1 Children</span>
-								</div>
-								<ul class="check-sel-droplist">
-									<li>
-										<div class="sel-title">Select Adults:</div>
-										<div class="clearfix">
-											<div class="radio-block adult-block">
-												<input type="radio"
-													   name="adult-group" id="radio-1" value="1 Adults."><label for="radio-1">1</label>
-											</div>
-											<div class="radio-block adult-block">
-												<input type="radio"
-													   name="adult-group" id="radio-2" value="2 Adults."
-													   checked=""><label for="radio-2">2</label>
-											</div>
-											<div class="radio-block adult-block">
-												<input type="radio"
-													   name="adult-group" id="radio-3" value="3 Adults."><label for="radio-3">3</label>
-											</div>
-											<div class="radio-block adult-block">
-												<input type="radio"
-													   name="adult-group" id="radio-4" value="4 Adults."><label for="radio-4">4</label>
-											</div>
-										</div>
-									</li>
-									<li>
-										<div class="sel-title">Select Children:</div>
-										<div class="clearfix">
-											<div class="radio-block child-block">
-												<input type="radio"
-													   name="child-group" id="radio-5" value="1 Children"
-													   checked=""><label for="radio-5">1</label>
-											</div>
-											<div class="radio-block child-block">
-												<input type="radio"
-													   name="child-group" id="radio-6" value="2 Children"><label for="radio-6">2</label>
-											</div>
-											<div class="radio-block child-block">
-												<input type="radio"
-													   name="child-group" id="radio-7" value="3 Children"><label for="radio-7">3</label>
-											</div>
-											<div class="radio-block child-block">
-												<input type="radio"
-													   name="child-group" id="radio-8" value="4 Children"><label for="radio-8">4</label>
-											</div>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="field-inner">
-							<a class="theme-btn btn-style-one" asp-controller="Home" asp-action="Result">
-								<span class="btn-title">
-									Check
-									Availability
-								</span>
-							</a>
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+            <form method="" action="">
+                <div class="outer clearfix">
+
+                    <div id="vueApp" class="form-group">
+                        <template>
+                            <div class="demo-date-picker">
+                                <div class="block">
+                                    <span class="demonstration field-label">Time</span>
+                                    <el-date-picker v-model="timeValue"
+                                                    type="daterange"
+                                                    range-separator="To"
+                                                    start-placeholder="Start date"
+                                                    end-placeholder="End date"
+                                                    :size="size" />
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="field-label">Guests</div>
+                        <div class="field-inner">
+                            <span class="alt-icon flaticon-user-3"></span>
+                            <div class="check-sel-box">
+                                <div class="check-sel-btn">
+                                    <span class="adult-info">2 Adults.</span>
+                                    <span class="child-info">1 Children</span>
+                                </div>
+                                <ul class="check-sel-droplist">
+                                    <li>
+                                        <div class="sel-title">Select Adults:</div>
+                                        <div class="clearfix">
+                                            <div class="radio-block adult-block">
+                                                <input type="radio"
+                                                       name="adult-group" id="radio-1" value="1 Adults."><label for="radio-1">1</label>
+                                            </div>
+                                            <div class="radio-block adult-block">
+                                                <input type="radio"
+                                                       name="adult-group" id="radio-2" value="2 Adults."
+                                                       checked=""><label for="radio-2">2</label>
+                                            </div>
+                                            <div class="radio-block adult-block">
+                                                <input type="radio"
+                                                       name="adult-group" id="radio-3" value="3 Adults."><label for="radio-3">3</label>
+                                            </div>
+                                            <div class="radio-block adult-block">
+                                                <input type="radio"
+                                                       name="adult-group" id="radio-4" value="4 Adults."><label for="radio-4">4</label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="sel-title">Select Children:</div>
+                                        <div class="clearfix">
+                                            <div class="radio-block child-block">
+                                                <input type="radio"
+                                                       name="child-group" id="radio-5" value="1 Children"
+                                                       checked=""><label for="radio-5">1</label>
+                                            </div>
+                                            <div class="radio-block child-block">
+                                                <input type="radio"
+                                                       name="child-group" id="radio-6" value="2 Children"><label for="radio-6">2</label>
+                                            </div>
+                                            <div class="radio-block child-block">
+                                                <input type="radio"
+                                                       name="child-group" id="radio-7" value="3 Children"><label for="radio-7">3</label>
+                                            </div>
+                                            <div class="radio-block child-block">
+                                                <input type="radio"
+                                                       name="child-group" id="radio-8" value="4 Children"><label for="radio-8">4</label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="field-inner">
+                            <a class="theme-btn btn-style-one" asp-controller="Home" asp-action="Result">
+                                <span class="btn-title">
+                                    Check
+                                    Availability
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </section>
 
 <section class="featured-section-five">
-	<span class="dotted-pattern dotted-pattern-10"></span>
-	<div class="circles-two">
-		<div class="c-1"></div>
-		<div class="c-2"></div>
-	</div>
-	<div class="auto-container">
-		<div class="sec-title centered">
-			<h2>本月推薦</h2>
-		</div>
-		<div class="row clearfix">
-			<!--Block-->
-			<div class="featured-block-two col-xl-4 col-lg-6 col-md-6 col-sm-12">
-				<div class="inner-box">
-					<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-						<figure class="image">
-							<a href="#">
-								<img src="~/images/featured-image-15.jpg" />
-							</a>
-						</figure>
-					</div>
-					<div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
-						<div class="cap-inner">
-							<div class="price">From <span>$50.00</span></div>
-							<h5>Deluxe Room</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!--Block-->
-			<div class="featured-block-two col-xl-4 col-lg- col-md-6 col-sm-12">
-				<div class="inner-box">
-					<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-						<figure class="image">
-							<a href="#">
-								<img src="~/images/featured-image-16.jpg" />
-							</a>
-						</figure>
-					</div>
-					<div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
-						<div class="cap-inner">
-							<div class="price">From <span>$50.00</span></div>
-							<h5>Sea View Room</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!--Block-->
-			<div class="featured-block-two col-xl-4 col-lg-6 col-md-6 col-sm-12">
-				<div class="inner-box">
-					<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-						<figure class="image">
-							<a href="#">
-								<img src="~/images/featured-image-17.jpg" />
-							</a>
-						</figure>
-					</div>
-					<div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
-						<div class="cap-inner">
-							<div class="price">From <span>$50.00</span></div>
-							<h5>Superior Room</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <span class="dotted-pattern dotted-pattern-10"></span>
+    <div class="circles-two">
+        <div class="c-1"></div>
+        <div class="c-2"></div>
+    </div>
+    <div class="auto-container">
+        <div class="sec-title centered">
+            <h2>本月推薦</h2>
+        </div>
+        <div class="row clearfix">
+            <!--Block-->
+            <div class="featured-block-two col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                <div class="inner-box">
+                    <div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                        <figure class="image">
+                            <a href="#">
+                                <img src="~/images/featured-image-15.jpg" />
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
+                        <div class="cap-inner">
+                            <div class="price">From <span>$50.00</span></div>
+                            <h5>Deluxe Room</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Block-->
+            <div class="featured-block-two col-xl-4 col-lg- col-md-6 col-sm-12">
+                <div class="inner-box">
+                    <div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                        <figure class="image">
+                            <a href="#">
+                                <img src="~/images/featured-image-16.jpg" />
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
+                        <div class="cap-inner">
+                            <div class="price">From <span>$50.00</span></div>
+                            <h5>Sea View Room</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Block-->
+            <div class="featured-block-two col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                <div class="inner-box">
+                    <div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                        <figure class="image">
+                            <a href="#">
+                                <img src="~/images/featured-image-17.jpg" />
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
+                        <div class="cap-inner">
+                            <div class="price">From <span>$50.00</span></div>
+                            <h5>Superior Room</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="why-us-two style-two">
-	<span class="dotted-pattern dotted-pattern-5"></span>
-	<span class="tri-pattern tri-pattern-8"></span>
-	<div class="circles">
-		<div class="c-1"></div>
-		<div class="c-2"></div>
-	</div>
-	<div class="auto-container">
-		<div class="sec-title centered">
-			<h2>Why Choose Hotera</h2>
-			<div class="lower-text">
-				Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-				deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
-				voluptatem.
-			</div>
-		</div>
-		<div class="row clearfix">
-			<!--Feature Box-->
-			<div class="feature-box-two col-xl-3 col-lg-4 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms"
-				 data-wow-duration="1500ms">
-				<div class="inner-box">
-					<div class="icon-box">
-						<span class="circle"></span>
-						<span class="flaticon-wine"></span>
-					</div>
-					<h4>Restaurant & Bar</h4>
-				</div>
-			</div>
+    <span class="dotted-pattern dotted-pattern-5"></span>
+    <span class="tri-pattern tri-pattern-8"></span>
+    <div class="circles">
+        <div class="c-1"></div>
+        <div class="c-2"></div>
+    </div>
+    <div class="auto-container">
+        <div class="sec-title centered">
+            <h2>Why Choose Hotera</h2>
+            <div class="lower-text">
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
+                voluptatem.
+            </div>
+        </div>
+        <div class="row clearfix">
+            <!--Feature Box-->
+            <div class="feature-box-two col-xl-3 col-lg-4 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms"
+                 data-wow-duration="1500ms">
+                <div class="inner-box">
+                    <div class="icon-box">
+                        <span class="circle"></span>
+                        <span class="flaticon-wine"></span>
+                    </div>
+                    <h4>Restaurant & Bar</h4>
+                </div>
+            </div>
 
-			<!--Feature Box-->
-			<div class="feature-box-two col-xl-3 col-lg-4 col-md-6 col-sm-12 wow fadeInUp"
-				 data-wow-delay="200ms" data-wow-duration="1500ms">
-				<div class="inner-box">
-					<div class="icon-box">
-						<span class="circle"></span>
-						<span class="flaticon-modem"></span>
-					</div>
-					<h4>Free Wi-Fi</h4>
-				</div>
-			</div>
+            <!--Feature Box-->
+            <div class="feature-box-two col-xl-3 col-lg-4 col-md-6 col-sm-12 wow fadeInUp"
+                 data-wow-delay="200ms" data-wow-duration="1500ms">
+                <div class="inner-box">
+                    <div class="icon-box">
+                        <span class="circle"></span>
+                        <span class="flaticon-modem"></span>
+                    </div>
+                    <h4>Free Wi-Fi</h4>
+                </div>
+            </div>
 
-			<!--Feature Box-->
-			<div class="feature-box-two col-xl-3 col-lg-4 col-md-6 col-sm-12 wow fadeInUp"
-				 data-wow-delay="400ms" data-wow-duration="1500ms">
-				<div class="inner-box">
-					<div class="icon-box">
-						<span class="circle"></span>
-						<span class="flaticon-swimming-pool-1"></span>
-					</div>
-					<h4>Pool Access</h4>
-				</div>
-			</div>
+            <!--Feature Box-->
+            <div class="feature-box-two col-xl-3 col-lg-4 col-md-6 col-sm-12 wow fadeInUp"
+                 data-wow-delay="400ms" data-wow-duration="1500ms">
+                <div class="inner-box">
+                    <div class="icon-box">
+                        <span class="circle"></span>
+                        <span class="flaticon-swimming-pool-1"></span>
+                    </div>
+                    <h4>Pool Access</h4>
+                </div>
+            </div>
 
-			<!--Feature Box-->
-			<div class="feature-box-two col-xl-3 col-lg-4 col-md-6 col-sm-12 wow fadeInUp"
-				 data-wow-delay="600ms" data-wow-duration="1500ms">
-				<div class="inner-box">
-					<div class="icon-box">
-						<span class="circle"></span>
-						<span class="flaticon-conference"></span>
-					</div>
-					<h4>Conference Room</h4>
-				</div>
-			</div>
+            <!--Feature Box-->
+            <div class="feature-box-two col-xl-3 col-lg-4 col-md-6 col-sm-12 wow fadeInUp"
+                 data-wow-delay="600ms" data-wow-duration="1500ms">
+                <div class="inner-box">
+                    <div class="icon-box">
+                        <span class="circle"></span>
+                        <span class="flaticon-conference"></span>
+                    </div>
+                    <h4>Conference Room</h4>
+                </div>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 </section>
+@section Scripts{
+    <script src="lib\vue\vue.min.js"></script>
+    <script src="lib\element-ui\index.min.js"></script>
+    <script src="lib\axios\axios.min.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#vueApp',
+            data: {
+                size: 'default',
+                timeValue: null,
+            },
+            mounted: function () {
+
+            },
+            methods: {
+                submitForm() {
+                    // 提交後想做什麼邏輯
+                    console.log("開始日期:", this.timeValue[0]);
+                    console.log("结束日期:", this.timeValue[1]);
+                },
+            },
+        });
+
+    </script>
+}
