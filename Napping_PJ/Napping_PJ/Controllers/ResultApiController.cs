@@ -28,7 +28,7 @@ namespace Napping_PJ.Controllers
 				City = x.City,
 				Region = x.Region,
 
-			}).Take(12);
+			});
 
 		}
 

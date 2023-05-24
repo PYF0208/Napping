@@ -9868,13 +9868,13 @@ img.lazy-image {
     .result-box h3 {
         font-family: 'Dancing Script', cursive;
         font-family: 'Noto Serif TC', serif;
-        font-size: 30px;
+        font-size: 28px;
         text-transform: capitalize;
         margin-bottom: 10px;
     }
 
     .result-box h4 {
-        font-size: 26px;
+        font-size: 24px;
         text-transform: capitalize;
         text-align: left;
         margin-bottom: 0px;
@@ -9882,7 +9882,7 @@ img.lazy-image {
 
     .result-box h6 {
         color: #9b9fa6;
-        font-size: 16px;
+        font-size: 14px;
         text-transform: capitalize;
         text-align: left;
         margin-bottom: 0px;
