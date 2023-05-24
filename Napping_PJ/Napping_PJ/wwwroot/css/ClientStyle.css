@@ -2001,7 +2001,7 @@ img.lazy-image {
     width: 322px;
     height: 322px;
     display: block;
-    background: url('../images/5.png') center center no-repeat;
+    background: url(../images/icons/patterns/5.png) center center no-repeat;
 }
 
 .dotted-pattern-6 {
@@ -2041,7 +2041,7 @@ img.lazy-image {
     width: 250px;
     height: 264px;
     display: block;
-    background: url('../images/10.png') center center no-repeat;
+    background: url(../images/icons/patterns/10.png) center center no-repeat;
 }
 
 .dotted-pattern-11 {
@@ -2137,7 +2137,7 @@ img.lazy-image {
     width: 285px;
     height: 294px;
     display: block;
-    background: url('../images/tri-8.png') center center no-repeat;
+    background: url(../images/icons/patterns/tri-8.png) center center no-repeat;
 }
 
 .tri-pattern-9 {
