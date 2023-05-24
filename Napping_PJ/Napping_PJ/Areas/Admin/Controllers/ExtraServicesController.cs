@@ -71,7 +71,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         {
             return await _context.ExtraServices.Where(es =>
             es.ExtraServiceId == esViewModel.ExtraServiceId ||
-            es.Price == esViewModel.Price ||
+            //es.Price==esViewModel.Price||
             es.Name.Contains(esViewModel.ExtraServiceName) ||
             es.Hotel.Name.Contains(esViewModel.HotelName)).Select(es => new ExtraServiceViewModel
             {
