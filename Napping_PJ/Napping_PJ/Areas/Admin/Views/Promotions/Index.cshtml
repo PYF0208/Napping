@@ -9,7 +9,7 @@
 
 <div id="app" class="container">
 
-	
+
 	<div class="form-group">
 		@*篩選欄位*@
 		<div class="row" style="width:50%;margin-left:auto;margin-right:0px">
@@ -30,8 +30,8 @@
 			<thead>
 				<tr>
 					<td>編輯</td>
-					<td>PromotionId</td>
-					<td>LevelId</td>
+
+					<td>LevelName</td>
 					<td>Name</td>
 					<td>StartDate</td>
 					<td>EndDate</td>
@@ -46,25 +46,27 @@
 							<button class="btn btn-success" @@click="update(item)">修改</button>
 							<button class="btn btn-warning" @@click="cancel">取消</button>
 						</td>
-						<td>{{item.promotionId}}</td>
-						<td><input v-model="item.levelId" /></td>
+
+						<td>{{item.levelName}}</td>
 						<td><input v-model="item.name" /></td>
-						<td><input v-model="item.endDate" /></td>
+						<td><input type="datetime-local" class="form-control" v-model="item.startDate" /></td>
+						<td><input type="datetime-local" class="form-control" v-model="item.endDate" /></td>
 						<td><input v-model="item.discount" /></td>
+						<td>編輯中無法寄送</td>
 					</template>
 					<template v-else>
 						<td>
 							<button class="btn btn-primary" @@click="edit(item.promotionId)">編輯</button>
 							<button class="btn btn-danger" @@click="deletePromotion(item.promotionId)">刪除</button>
 						</td>
-						<td>{{item.promotionId}}</td>
-						<td>{{item.levelId}}</td>
+
+						<td>{{item.levelName}}</td>
 						<td>{{item.name}}</td>
 						<td><input type="datetime-local" class="form-control" v-model="item.startDate" disabled="true" /></td>
 						<td><input type="datetime-local" class="form-control" v-model="item.endDate" disabled="true" /></td>
 						<td>{{item.discount}}</td>
 						<td>
-							<button class="btn btn-danger" @@click="sendemail(item.promotionId)">寄送</button>
+							<button class="btn btn-danger" @@click="sendemail(item)">寄送</button>
 						</td>
 					</template>
 				</tr>
@@ -81,9 +83,9 @@
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<label class="form-label">LevelId:</label>
+						<label class="form-label">LevelName:</label>
 						<select class="form-control" v-model="levelId">
-							<option v-for="item in LevelViewModel" :value="item.levelId">{{ item.levelId }}</option>
+							<option v-for="item in LevelViewModel" :value="item.levelId">{{ item.name }}</option>
 						</select>
 						<div class="form-group">
 							<label class="form-label">Name:</label>
@@ -122,7 +124,7 @@
 			el: '#app',
 			data: {
 				PromotionViewModel: [],
-				LevelViewModel:[],
+				LevelViewModel: [],
 				filter: "",
 				promotionId: "",
 				levelId: "",
@@ -130,7 +132,8 @@
 				startDate: "",
 				endDate: "",
 				discount: "",
-				date:""
+				date: "",
+				levelName: ""
 			},
 			mounted: function () {
 				let _this = this;
@@ -138,20 +141,29 @@
 				_this.getLevel();
 			},
 			methods: {
-				sendemail: function (id) {
+				sendemail: function (item) {
 					//var request = {};
 					//axios.get('Promotions/promotionId', request)
 					//	.then()
 					var request = {
-						PromotionId: id
+						PromotionId: item.promotionId,
+						PromotionName: item.name,
+						LevelName: item.levelName,
+						StartDate: item.startDate,
+						EndDate: item.endDate,
+						Discount: item.discount
 					};
-					axios.post('Promotions/SendMailByPromotionId', request)
+					axios.post('Promotions/SendMailByPromotionId', request).then(response => {
+						alert(response.data);
+					});
+
 				},
 				filterPromotions: function () {
 					let _this = this;
 					var request = {};
-					request.PromotionId = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
-					request.LevelId = request.Name = request.StartDate = request.EndDate = request.Discount = _this.filter;
+
+					request.Discount = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
+					request.Name = request.LevelName = _this.filter;
 					axios.post('Promotions/FilterPromotions', request)
 						.then(function (response) {
 							//alert(JSON.stringify(response.data));
@@ -165,13 +177,13 @@
 							_this.PromotionViewModel = PromotionList;
 						});
 				},
-				getLevel: function(){
-					let _this=this;
+				getLevel: function () {
+					let _this = this;
 					axios.get('Promotions/GetLevel')
 						.then(function (response) {
 							//alert(JSON.stringify(response.data));
 							_this.LevelViewModel = response.data;
-							
+
 						});
 				},
 
@@ -184,7 +196,8 @@
 						Name: item.name,
 						StartDate: item.startDate,
 						Enddate: item.endDate,
-						Discount: item.discount
+						Discount: item.discount,
+						LevelName: item.levelName
 					};
 					axios.put(`Promotions/PutPromotions?Id=${item.promotionId}`, request).then(response => {
 						alert(response.data);
@@ -206,6 +219,7 @@
 							item.startDate = _this.StartDate;
 							item.endDate = _this.EndDate;
 							item.discount = _this.Discount;
+							item.levelName = _this.LevelName;
 						}
 						PromotionList.push(item);
 					}
@@ -224,6 +238,7 @@
 							_this.StartDate = item.startDate;
 							_this.EndDate = item.endDate;
 							_this.Discount = item.discount;
+							_this.LevelName = item.levelName;
 						}
 						PromotionList.push(item);
 					}
@@ -251,8 +266,8 @@
 						PromotionId: 0,
 						LevelId: _this.levelId,
 						Name: _this.name,
-						StartDate: _this.startDate,
-						EndDate: _this.endDate,
+						StartDate: new Date(_this.startDate).toISOString(),
+						EndDate: new Date(_this.endDate).toISOString(),
 						Discount: _this.discount
 
 					};
@@ -262,8 +277,8 @@
 						_this.filterPromotions();
 					});
 				},
-			
-						
+
+
 
 			}
 		});
