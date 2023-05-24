@@ -1,65 +1,99 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Napping_PJ</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Napping_PJ.styles.css" asp-append-version="true" />
-    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" asp-append-version="true" />
-    @await RenderSectionAsync("Styles", required: false)
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Napping</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/Napping_PJ.styles.css" asp-append-version="true" />
+	<link href="~/css/flaticon.css" rel="stylesheet" />
+	<link href="~/css/responsive.css" rel="stylesheet" />
+	<link href="~/css/clientstyle.css" rel="stylesheet" />
+    <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
+	<link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+	<link href="~/css/jquery-ui.css" rel="stylesheet" />
+	@await RenderSectionAsync("Styles", required: false)
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Napping_PJ</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Hotels" asp-action="Index">飯店管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Rooms" asp-action="Index">房型管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
+	<div class="page-wrapper">
+		<!-- Preloader -->
+		<div class="preloader">
+			<div class="icon"></div>
+		</div>
 
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">後端</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Feature" asp-action="Index">房型特徵</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+		@RenderBody()
 
-    <footer class="border-top footer text-muted bg-white bg-opacity-25">
-        <div class="container">
-            &copy; 2023 - Napping_PJ - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+</div>
+
+	
+
+	<footer class="main-footer">
+		<div class="top-pattern-layer-dark"></div>
+
+
+		<div class="widgets-section">
+			<div class="auto-container">
+				<div class="row clearfix">
+
+
+					<div class="column col-xl-3 col-lg-12 col-md-12 col-sm-12">
+						<div class="footer-widget about-widget">
+							<div class="logo">
+								<h3>Napping</h3>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="column col-xl-5 col-lg-8 col-md-12 col-sm-12">
+						<div class="footer-widget links-widget">
+							<div class="widget-content">
+								<div class="row clearfix">
+									<div class="col-lg-6 col-md-6 col-sm-12">
+										<div class="widget-title">
+											<h4>Services</h4>
+										</div>
+										<ul class="links">
+											<li><a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後端</a></li>
+											<li><a href="rooms-grid.html">Our Rooms</a></li>
+											<li><a href="restaurant.html">Restaurant</a></li>
+											<li><a href="about.html">About Hotera</a></li>
+											<li><a href="contact.html">Contact</a></li>
+										</ul>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+		<div class="footer-bottom">
+			<div class="auto-container">
+				<div class="inner clearfix">
+					<div class="copyright">本網站僅供教學使用</div>
+					<div class="bottom-links">
+						<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</footer>
+
+
+	<script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+	<script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+	<script src="~/js/site.js"></script>
+	<script src="~/js/appear.js"></script>
+	<script src="~/lib/wow/wow.min.js"></script>
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

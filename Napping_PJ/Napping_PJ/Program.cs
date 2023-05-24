@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Helpers;
 using Napping_PJ.Models.Entity;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Napping_PJ
 {
@@ -68,6 +70,7 @@ namespace Napping_PJ
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 			});
+
             app.Run();
         }
     }

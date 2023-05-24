@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models.Entity;
 using Napping_PJ.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Napping_PJ.Models;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
@@ -110,9 +109,9 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			return "修改促銷記錄成功!";
 		}
 		[HttpPost]
-		public void SendMailByPromotionId([FromBody]SendemailViewModel sendmailviewmodel)
+		public void SendMailByPromotionId([FromBody] SendemailViewModel sendmailviewmodel)
 		{
-			var x = _context.Promotions.Include(x=>x.Level).ThenInclude(x=>x.Customers).FirstOrDefault(s => s.PromotionId == sendmailviewmodel.PromotionId);
+			var x = _context.Promotions.Include(x => x.Level).ThenInclude(x => x.Customers).FirstOrDefault(s => s.PromotionId == sendmailviewmodel.PromotionId);
 			if (x != null)
 			{
 				var y = x.Level.Customers.Select(x => x.Email).ToList();
@@ -143,6 +142,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 				}
 			}
 		}
+
 		// POST: Admin/Promotions/Edit/5
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
