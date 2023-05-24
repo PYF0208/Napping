@@ -11,6 +11,8 @@
 
 <div id="app" class="container">
 
+    
+
     <div class="table-responsive">
         <div class="table-wrapper">
             @*藍藍綠綠那一塊*@
@@ -28,7 +30,7 @@
                 <thead>
                     <tr>
                         <td>訂單ID</td>
-                        <td>會員ID</td>
+                        <td>會員帳號</td>
                         <td>付款方式ID</td>
                         <td>日期</td>
                         <td>操作</td>
@@ -40,10 +42,10 @@
                     <tr v-for="item in OrdersViewModel ">
                         @*v-for="item in FeatureVMs"*@
                         <td>{{item.orderId}}</td>
+                        <td>{{ item.customerName,}},ID:{{item.customerId}}</td>
                         <td>{{item.customerId}}</td>
                         <td>{{item.paymentId}}</td>
                         <td>{{item.date}}</td>
-
                         <td>
                             <a class="btn edit"><i class="fa-solid fa-pen" title="Edit"></i></a>
                             <a class="btn delete"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
@@ -95,12 +97,10 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <select class="form-control" v-model="customerId">
-                                <option v-for="item in MemberViewModel">{{item.name}}</option>
+                            <select class="form-control" v-model="customerId" >
+                                <option v-for="item in MemberViewModel ">{{item.name}}</option>
                             </select>
-                            <select class="form-control" v-model="currencyId">
-                                <option v-for="item in CurrencyViewModel">{{item.name}}</option>
-                            </select>
+                        
                             <div class="form-group">
                                 <label class="form-label">日期</label>
                                 <input class="form-control" type="datetime-local" />
@@ -135,6 +135,7 @@
                 customerId: "",
                 orderId: "",
                 paymentId: "",
+                customerName:[],
             },
             mounted: function () {
                 let _this = this;

@@ -32,16 +32,17 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		[HttpGet]
 		public async Task<IEnumerable<OrdersViewModel>> GetOrder()
 		{
-			var ord = _context.Orders.Include(x=>x.Customer).Include(x=>x.Payment).Select(o => new OrdersViewModel
+			var ord = _context.Orders.Include(o=>o.OrderDetails).Include(x=>x.Customer).Include(x=>x.Payment).Select(o => new OrdersViewModel
 			{
 				
 				CustomerId = o.CustomerId,
 				OrderId = o.OrderId,
 				PaymentId = o.PaymentId,
 				Date = o.Date,
-				
+                CustomerName = o.Customer.Name,
 			
 			});
+			
 			return ord;
 		}
 		[HttpGet]

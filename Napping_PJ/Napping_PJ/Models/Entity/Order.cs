@@ -5,6 +5,11 @@ namespace Napping_PJ.Models.Entity
 {
     public partial class Order
     {
+        public Order()
+        {
+            OrderDetails = new HashSet<OrderDetail>();
+        }
+
         public int OrderId { get; set; }
         public int CustomerId { get; set; }
         public DateTime Date { get; set; }
@@ -12,5 +17,6 @@ namespace Napping_PJ.Models.Entity
 
         public virtual Customer Customer { get; set; } = null!;
         public virtual Payment Payment { get; set; } = null!;
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
