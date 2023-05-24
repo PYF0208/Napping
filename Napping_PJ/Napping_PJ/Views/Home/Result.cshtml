@@ -19,7 +19,7 @@
 			<div class="logo-box">
 				<div class="logo">
 					<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-						<h3>Napping</h3>
+						<h3 style="color: red;">Napping</h3>
 					</a>
 				</div>
 			</div>
@@ -59,229 +59,54 @@
 		<div class="row clearfix">
 
 			<!--Content Side-->
-			<div class="content-side col-lg-8 col-md-12 col-sm-12">
+			<div id="app" class="content-side col-lg-8 col-md-12 col-sm-12">
 				<div class="blog-content">
 					<div class="row">
 						<!--Feature Box-->
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
-									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-										</div>
-									</a>
-								</div>
-
-							</div>
+						@*<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
+						data-wow-delay="0ms" data-wow-duration="1500ms">
+						<div class="inner-box">
+						<div class="icon-box">
+						<div class="heart-box">
+						<button><i class="fa-regular fa-heart"></i></button>
+						</div>
+						<img src="https://taiwan.taiwanstay.net.tw/twpic/9215.jpg" />
+						</div>
+						<div class="text-box">
+						<a href="index-5.html">
+						<h3>凱旋新宿商旅</h3>
+						<h6><span>臺東縣</span> <span>臺東市</span></h6>
+						<div>
+						<h4>NT 2000/晚</h4>
+						</div>
+						</a>
 						</div>
 
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
-									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-										</div>
-									</a>
-								</div>
-
-							</div>
 						</div>
+						</div>*@
 
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
-									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
+						<template v-for="item in resultVM">
+							<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+								<div class="inner-box">
+									<div class="icon-box">
+										<div class="heart-box">
+											<button><i class="fa-regular fa-heart"></i></button>
 										</div>
-									</a>
-								</div>
-
-							</div>
-						</div>
-
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
+										<img :src="item.image" />
 									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-										</div>
-									</a>
-								</div>
-
-							</div>
-						</div>
-
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
+									<div class="text-box">
+										<a href="index-5.html">
+											<h3>{{item.name}}</h3>
+											<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
+											<div>
+												<h4>NT 2000/晚</h4>
+											</div>
+										</a>
 									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-										</div>
-									</a>
-								</div>
 
+								</div>
 							</div>
-						</div>
-
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
-									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-										</div>
-									</a>
-								</div>
-
-							</div>
-						</div>
-
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
-									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-										</div>
-									</a>
-								</div>
-
-							</div>
-						</div>
-
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
-									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-										</div>
-									</a>
-								</div>
-
-							</div>
-						</div>
-
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
-									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-										</div>
-									</a>
-								</div>
-
-							</div>
-						</div>
-
-						<div class="result-box col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-							 data-wow-delay="0ms" data-wow-duration="1500ms">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button><i class="fa-regular fa-heart"></i></button>
-									</div>
-									<img src="https://picsum.photos/id/1020/600/400" alt="">
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>Restaurant & Bear</h3>
-										<h6>位於北極的特色民宿</h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-										</div>
-									</a>
-								</div>
-
-							</div>
-						</div>
+						</template>
 
 					</div>
 
@@ -313,20 +138,54 @@
 
 @section Scripts {
 
-	<a href="~/lib/jquery/dist/jquery.min.map">~/lib/jquery/dist/jquery.min.map</a>
+	<a href="~/lib/jquery/dist/jquery.min.map"></a>
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
+	<script src="~/lib/vue/vue.min.js"></script>
+	<script src="~/lib/axios/axios.min.js"></script>
 
 	<script>
 		let map;
-
 		function initMap() {
 			map = new google.maps.Map(document.getElementById("map"), {
 				center: { lat: 25.105497, lng: 121.597366 },
 				zoom: 14,
 			});
 		}
-
 		window.initMap = initMap;
+	</script>
+
+	<script>
+		const vm = new Vue({
+			el: "#app",
+			data: {
+				resultVM: [],
+
+
+
+
+
+			},
+			mounted: function () {
+				let _this = this;
+				_this.filterResultVM();
+			},
+			methods: {
+				filterResultVM: function () {
+					let _this = this;
+					var request = {};
+					axios.get(`/api/Result/Get`).then(response => {
+
+						_this.resultVM = response.data;
+
+					})
+
+				},
+
+			}
+
+		});
+
+
 	</script>
 }
