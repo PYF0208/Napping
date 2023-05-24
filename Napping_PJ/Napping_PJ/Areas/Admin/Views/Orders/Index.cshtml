@@ -6,6 +6,7 @@
 
 @section Styles{
     <link href="~/css/table.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css%22%3E">
 }
 <h1 class="mt-3">訂單管理</h1>
 
@@ -33,6 +34,7 @@
                         <td>會員帳號</td>
                         <td>付款方式ID</td>
                         <td>日期</td>
+                        <td>訂單明細</td>
                         <td>操作</td>
                     </tr>
                 </thead>
@@ -43,13 +45,15 @@
                         @*v-for="item in FeatureVMs"*@
                         <td>{{item.orderId}}</td>
                         <td>{{ item.customerName,}},ID:{{item.customerId}}</td>
-                        <td>{{item.customerId}}</td>
+                   
                         <td>{{item.paymentId}}</td>
-                        <td>{{item.date}}</td>
+                        <td><input type="datetime-local" class="form-control" v-model="item.date"  disabled/></td>
+                        <td><i class="fa-brands fa-github fa-2xl" @@click="showInsertPage"></i></td>
                         <td>
-                            <a class="btn edit"><i class="fa-solid fa-pen" title="Edit"></i></a>
-                            <a class="btn delete"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
+                            <a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
+                            <a class="btn delete" @@click="deleteOrderIdService(item.orderId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
                         </td>
+                        
                     </tr>
                 </tbody>
                 @*表格內容*@
@@ -65,23 +69,30 @@
                             <h5 class="modal-title" id="modalTitleId">編輯</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" >
                             <div class="form-group">
-                                <label class="form-label">ID</label>
-                                <input class="form-control" readonly />
+                                <label class="form-label">訂單ID:</label>
+                                
+                                <input class="form-control"  v-model="orderId" disabled/>
+                            </div>
+                            <div class="form-group" v-for="item in OrdersViewModel ">
+                                <label class="form-label">會員名稱:</label>
+                                <span>{{item.customerName}}</span>
+                                <input class="form-control" v-model="customerId" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">付款方式:</label>
+                                <span v-for="item in PaymentViewModel ">{{item.type}}</span>
+                                <input class="form-control" v-model="paymentId" disabled />
                             </div>
                             <div class="form-group">
                                 <label class="form-label">日期</label>
-                                <input class="form-control" type="date" />
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">數字</label>
-                                <input class="form-control" />
+                                <input class="form-control" type="datetime-local" v-model="date" />
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                            <button type="button" class="btn btn-primary">儲存</button>
+                            <button type="button" class="btn btn-primary" @@click="update">儲存</button>
                         </div>
                     </div>
                 </div>
@@ -97,26 +108,38 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+                            
+                           <div>
+                            <label>會員:</label>
                             <select class="form-control" v-model="customerId" >
-                                <option v-for="item in MemberViewModel ">{{item.name}}</option>
+                                <option v-for="item in MemberViewModel" :value="item.customerId" >{{item.name}}</option>
                             </select>
-                        
+                            </div>
+
+                            <div>
+                                <label>付款類型:</label>
+                                <select class="form-control" v-model="paymentId">
+                                    <option v-for="item in PaymentViewModel" :value="item.paymentId">{{item.type}}</option>
+                                </select>
+                            </div>
+                             <div>
                             <div class="form-group">
                                 <label class="form-label">日期</label>
-                                <input class="form-control" type="datetime-local" />
+                                <input class="form-control" type="datetime-local" v-model="date" />
                             </div>
 
 
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer" >
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                            <button type="button" class="btn btn-primary">新增</button>
+                                <button type="button" class="btn btn-primary" @@click="createProfit">新增</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @section Scripts
@@ -128,28 +151,42 @@
             el: "#app",
             data: {
                 OrdersViewModel: [],
+                OrderDetailsViewModel: [],
                 MemberViewModel: [],
-                CurrencyViewModel: [],
-                date: "",
-                currencyId: "",
+                PaymentViewModel:[],
+                date: "",  
                 customerId: "",
                 orderId: "",
                 paymentId: "",
-                customerName:[],
+                orderDetailId:"",
             },
             mounted: function () {
                 let _this = this;
                 _this.getOrder();
                 _this.getMember();
+                _this.getPayment();
+                _this.getOrderDetails();
             },
             methods: {
-                getCurrency: function () {
+                getOrderDetails: function () {
                     let _this = this;
-                    axios.get("Orders/GetCurrency")
+                    axios.get("Orders/GetOrderDetails")
                         .then(function (response) {
 
                             //alert(JSON.stringify(response.data))
-                            _this.MemberViewModel = response.data;
+                            _this.OrderDetailsViewModel = response.data;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                getPayment: function () {
+                    let _this = this;
+                    axios.get("Orders/GetPayment")
+                        .then(function (response) {
+
+                            //alert(JSON.stringify(response.data))
+                            _this.PaymentViewModel = response.data;
                         })
                         .catch(function (error) {
                             console.log(error);
@@ -182,15 +219,15 @@
                 showInsertPage: function () {
                     $('#insertPage').modal('show');
                 },
-                createProfit: function (item) {
+                createProfit: function () {
 
+                    
                     let _this = this;
                     var request = {
                         orderId: 0,
-                        currencyId: 0,
-                        customerId: 0,
-                        paymentId: 0,
-                        date: _this.date,
+                        customerId: _this.customerId,
+                        paymentId: _this.paymentId,
+                        date: new Date(_this.date).toISOString(),
                     };
                     axios.post("Orders/Create", request)
                         .then(res => {
@@ -207,7 +244,7 @@
                     for (var i = 0; i < _this.OrdersViewModel.length; i++) {
                         var item = _this.OrdersViewModel[i];
                         if (item.Edit == true) {
-                            item.Edit = false;
+                            
                             item.date = _this.date;
                             item.number = _this.number;
                         }
@@ -215,43 +252,21 @@
                     }
                     _this.OrdersViewModel = request;
                 },
-                filter: function () {
-                    let _this = this;
-                    var request = {};
-                    request.HotelId = parseInt(Number(_this.filter)) ? -1 : Number(_this.filter);
-                    request.Name = _this.filter,
-                        request.Star = _this.filter,
-                        request.Image = _this.filter,
-                        request.ContactName = _this.filter,
-                        request.Phone = _this.filter,
-                        request.Email = _this.filter,
-                        request.City = _this.filter,
-                        request.Region = _this.filter,
-                        request.Address = _this.filter;
-                    axios.post("Hotels/FilterExtraServices", request)
-                        .then(function (response) {
-                            _this.HotelsViewModel = response.data;
-                            var HotelsViewModelList = [];
-                            for (var i = 0; i < _this.HotelsViewModel.length; i++) {
-                                var item = _this.HotelsViewModel[i];
-                                item.Edit = false;
-                                HotelsViewModelList.push(item);
-                            }
-                            _this.HotelsViewModelList = HotelsViewModelList;
-                        });
-                },
+                
                 update: function () {
                     //alert("update");
                     let _this = this;
                     var request = {
-                        profitId: _this.profitId,
+                        paymentId: _this.paymentId,
+                        customerId: _this.customerId,
+                        orderId:_this.orderId,
                         date: _this.date,
-                        number: _this.number,
+                        
                     };
-                    axios.put(`Profits/Edit?ID=${_this.profitId}`, request)
+                    axios.post(`Orders/Edit?ID=${_this.orderId}`, request)
                         .then(response => {
                             alert(response.data);
-                            _this.getProfit();
+                                _this.getOrder();
                             $("#editModal").modal("hide");
                         });
                 },
@@ -259,21 +274,22 @@
                     //alert("edit");
                     $("#editModal").modal("show");
                     let _this = this;
-                    _this.profitId = item.profitId;
-                    _this.date = item.date;
-                    _this.number = item.number;
+                        _this.paymentId = item.paymentId;
+                        _this.customerId = item.customerId;
+                        _this.orderId = item.orderId;
+                        _this.date = item.date;
                 },
-                deleteProfitService: function (profitId) {
+                deleteOrderIdService: function (orderId) {
                     //alert("delete");
                     let _this = this;
-                    var x = _this.ProfitViewModel.find(h => h.profitId == profitId)
+                        var x = _this.OrdersViewModel.find(h => h.orderId == orderId)
 
-                    var ret = confirm(`您確定要將ID:${x.profitId}刪除嗎?`);
+                        var ret = confirm(`您確定要將ID:${x.orderId}刪除嗎?`);
                     if (ret == true) {
-                        axios.delete(`Profits/DeleteConfirmed?ID=${profitId}`)
+                        axios.delete(`Orders/DeleteConfirmed?ID=${orderId}`)
                             .then(response => {
-                                var y = _this.ProfitViewModel.findIndex(h => h.profitId == profitId)
-                                _this.ProfitViewModel.splice(y, 1)
+                                    var y = _this.OrdersViewModel.findIndex(h => h.orderId == orderId)
+                                    _this.OrdersViewModel.splice(y, 1)
                             });
                     }
                 },

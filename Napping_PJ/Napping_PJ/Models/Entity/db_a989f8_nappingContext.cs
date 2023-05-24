@@ -170,7 +170,6 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.ContactName).HasMaxLength(50);
 
-
                 entity.Property(e => e.Email)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -180,13 +179,6 @@ namespace Napping_PJ.Models.Entity
                 entity.Property(e => e.Phone)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Email).HasMaxLength(50);
-
-                entity.Property(e => e.Name).HasMaxLength(50);
-
-                entity.Property(e => e.Phone).HasMaxLength(50);
-
 
                 entity.Property(e => e.Region).HasMaxLength(50);
 
