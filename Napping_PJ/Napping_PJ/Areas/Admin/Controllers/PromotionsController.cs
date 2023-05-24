@@ -337,7 +337,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 							sm.Credentials = new NetworkCredential("tibameth101team3@gmail.com", "glyirsixoioagwmh");
 							sm.Send(mail);
 						}
-						return "寄送成功";
+						
 					}
 					catch (Exception)
 					{
@@ -346,7 +346,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
 					}
 				}
-
+				return "寄送成功";
 			}
 			return "寄送失敗";
 		}
