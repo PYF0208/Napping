@@ -23,9 +23,12 @@
       "destination": "wwwroot/lib/animate.css/"
     },
     {
-      "provider": "cdnjs",
       "library": "jqueryui@1.13.2",
       "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
+      "library": "element-ui@2.15.13",
+      "destination": "wwwroot/lib/element-ui/"
     }
   ]
 }
