@@ -114,7 +114,6 @@
 
 
 @section Scripts{
-
 	<script src="~/lib/vue/vue.min.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
 	<script>
@@ -135,9 +134,6 @@
 				let _this = this;
 				_this.filterFeatureVMs();
 			},
-			computed: {
-				
-			},
 			methods: {
 				filterFeatureVMs: function () {
 					//alert("有！！");
@@ -145,7 +141,7 @@
 					var request = {};
 					request.FeatureId = isNaN(Number(_this.Filter)) ? -1 : Number(_this.Filter);
 					request.FeatureId = request.Name = request.Image = _this.Filter;
-					axios.post(`https://localhost:7265/Admin/Feature/FilterFeature`, request).then(response => {
+					axios.post(`Feature/FilterFeature`, request).then(response => {
 
 						_this.FeatureVMs = response.data;
 						var FList = [];
@@ -211,8 +207,8 @@
 							_this.filterFeatureVMs();
 						});
 					}
-				},
-				
+				}
+			}
 		})
 	</script>
 }
