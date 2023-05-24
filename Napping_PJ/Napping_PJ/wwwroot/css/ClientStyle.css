@@ -64,6 +64,8 @@
 
  ***/
 
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Noto+Serif+TC:wght@700&display=swap');
+@import url('animate.css/animate.min.css');
 /*** 
 
 ====================================================================
@@ -71,15 +73,11 @@
 ====================================================================
 
  ***/
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Yeseva+One&display=swap');
-
 /*
 	font-family: 'Roboto', sans-serif;
 	font-family: 'Yeseva One', cursive;
 */
-
-
 /*** 
 
 ====================================================================
@@ -87,7 +85,6 @@
 ====================================================================
 
  ***/
-
 * {
     margin: 0px;
     padding: 0px;
@@ -3156,64 +3153,6 @@ img.lazy-image {
         width: 100%;
     }
 
-/*** 
-
-====================================================================
-	Video Section
-====================================================================
-
-***/
-
-.video-section {
-    position: relative;
-    padding: 210px 0px;
-    background: #1b1c1e;
-    color: #ffffff;
-    text-align: center;
-}
-
-    .video-section .image-layer {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-        background-attachment: fixed;
-        opacity: 0.40;
-    }
-
-    .video-section .content-box {
-        position: relative;
-        max-width: 840px;
-        margin: 0 auto;
-    }
-
-    .video-section h1 {
-        font-size: 60px;
-        line-height: 1.2em;
-    }
-
-    .video-section .play-link {
-        position: relative;
-        margin-top: 40px;
-    }
-
-        .video-section .play-link a {
-            position: relative;
-            display: inline-block;
-            vertical-align: top;
-            width: 80px;
-            height: 60px;
-            line-height: 50px;
-            font-size: 20px;
-            color: #ffffff;
-            font-weight: 700;
-            border: 5px solid #ffffff;
-            border-radius: 10px;
-        }
 
 /*** 
 
@@ -3626,7 +3565,7 @@ img.lazy-image {
 
     .main-footer .widgets-section {
         position: relative;
-        padding: 120px 0px 80px;
+        padding: 60px 0px 0px;
     }
 
     .main-footer .footer-widget {
@@ -3842,7 +3781,7 @@ img.lazy-image {
     .main-footer .footer-bottom a {
         position: relative;
         display: inline-block;
-        vertical-align: top;
+        vertical-align: middle;
         text-transform: capitalize;
         color: #999ea5;
         transition: all 0.4s ease;
@@ -9182,7 +9121,6 @@ img.lazy-image {
 
 .sidebar-page-container .sidebar {
     position: relative;
-    padding-left: 20px;
 }
 
 .sidebar .sidebar-widget {
@@ -9914,21 +9852,29 @@ img.lazy-image {
         line-height: 80px;
         color: #aaaaaa;
         width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .result-box .icon-box {
-        position: relative;
+        margin-bottom: 10px;
+        overflow: hidden;
+        width: 100%;
+        height: 320px;
         z-index: 2;
     }
 
+    .result-box img {
+        width: 100%;
+        min-height: 320px;
+        object-fit: cover;
+    }
+
     .result-box h3 {
+        font-family: 'Dancing Script', cursive;
+        font-family: 'Noto Serif TC', serif;
+        font-size: 28px;
         text-transform: capitalize;
         margin-bottom: 10px;
     }
 
     .result-box h4 {
-        font-size: 28px;
+        font-size: 24px;
         text-transform: capitalize;
         text-align: left;
         margin-bottom: 0px;
@@ -9936,7 +9882,7 @@ img.lazy-image {
 
     .result-box h6 {
         color: #9b9fa6;
-        font-size: 16px;
+        font-size: 14px;
         text-transform: capitalize;
         text-align: left;
         margin-bottom: 0px;
@@ -9965,3 +9911,9 @@ img.lazy-image {
             font-size: 34px;
             line-height: 1.7em;
         }
+
+    .result-box a:hover {
+        color: #000000;
+        text-decoration: none;
+    }
+
