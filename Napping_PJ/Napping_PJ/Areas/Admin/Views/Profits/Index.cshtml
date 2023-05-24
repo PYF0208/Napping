@@ -137,6 +137,10 @@
 							
 							//alert(JSON.stringify(response.data))
 							_this.ProfitViewModel = response.data;
+							for (i = 0; i < _this.ProfitViewModel.length;i++){
+								var Profit = _this.ProfitViewModel[i];
+								Profit.date = new Date(Profit.date).toISOString().slice(0, 10);
+							}
 						})
 						.catch(function (error) {
 							console.log(error);
