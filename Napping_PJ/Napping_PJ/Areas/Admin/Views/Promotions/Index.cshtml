@@ -9,7 +9,7 @@
 
 <div id="app" class="container">
 
-	
+
 	<div class="form-group">
 		@*篩選欄位*@
 		<div class="row" style="width:50%;margin-left:auto;margin-right:0px">
@@ -30,7 +30,7 @@
 			<thead>
 				<tr>
 					<td>編輯</td>
-					
+
 					<td>LevelName</td>
 					<td>Name</td>
 					<td>StartDate</td>
@@ -46,7 +46,7 @@
 							<button class="btn btn-success" @@click="update(item)">修改</button>
 							<button class="btn btn-warning" @@click="cancel">取消</button>
 						</td>
-						
+
 						<td>{{item.levelName}}</td>
 						<td><input v-model="item.name" /></td>
 						<td><input type="datetime-local" class="form-control" v-model="item.startDate" /></td>
@@ -59,14 +59,14 @@
 							<button class="btn btn-primary" @@click="edit(item.promotionId)">編輯</button>
 							<button class="btn btn-danger" @@click="deletePromotion(item.promotionId)">刪除</button>
 						</td>
-						
+
 						<td>{{item.levelName}}</td>
 						<td>{{item.name}}</td>
 						<td><input type="datetime-local" class="form-control" v-model="item.startDate" disabled="true" /></td>
 						<td><input type="datetime-local" class="form-control" v-model="item.endDate" disabled="true" /></td>
 						<td>{{item.discount}}</td>
 						<td>
-							<button class="btn btn-danger" @@click="sendemail(item.promotionId)">寄送</button>
+							<button class="btn btn-danger" @@click="sendemail(item)">寄送</button>
 						</td>
 					</template>
 				</tr>
@@ -124,7 +124,7 @@
 			el: '#app',
 			data: {
 				PromotionViewModel: [],
-				LevelViewModel:[],
+				LevelViewModel: [],
 				filter: "",
 				promotionId: "",
 				levelId: "",
@@ -132,8 +132,8 @@
 				startDate: "",
 				endDate: "",
 				discount: "",
-				date:"",
-				levelName:""
+				date: "",
+				levelName: ""
 			},
 			mounted: function () {
 				let _this = this;
@@ -141,22 +141,27 @@
 				_this.getLevel();
 			},
 			methods: {
-				sendemail: function (id) {
+				sendemail: function (item) {
 					//var request = {};
 					//axios.get('Promotions/promotionId', request)
 					//	.then()
 					var request = {
-						PromotionId: id
+						PromotionId: item.promotionId,
+						PromotionName: item.name,
+						LevelName: item.levelName,
+						StartDate: item.startDate,
+						EndDate: item.endDate,
+						Discount: item.discount
 					};
-					axios.post('Promotions/SendMailByPromotionId', request).then(response=>{
+					axios.post('Promotions/SendMailByPromotionId', request).then(response => {
 						alert(response.data);
 					});
-					
+
 				},
 				filterPromotions: function () {
 					let _this = this;
 					var request = {};
-				
+
 					request.Discount = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
 					request.Name = request.LevelName = _this.filter;
 					axios.post('Promotions/FilterPromotions', request)
@@ -172,13 +177,13 @@
 							_this.PromotionViewModel = PromotionList;
 						});
 				},
-				getLevel: function(){
-					let _this=this;
+				getLevel: function () {
+					let _this = this;
 					axios.get('Promotions/GetLevel')
 						.then(function (response) {
 							//alert(JSON.stringify(response.data));
 							_this.LevelViewModel = response.data;
-							
+
 						});
 				},
 
@@ -192,7 +197,7 @@
 						StartDate: item.startDate,
 						Enddate: item.endDate,
 						Discount: item.discount,
-						LevelName:item.levelName
+						LevelName: item.levelName
 					};
 					axios.put(`Promotions/PutPromotions?Id=${item.promotionId}`, request).then(response => {
 						alert(response.data);
@@ -272,8 +277,8 @@
 						_this.filterPromotions();
 					});
 				},
-			
-						
+
+
 
 			}
 		});
