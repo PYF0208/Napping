@@ -254,6 +254,12 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.TravelType).HasMaxLength(50);
 
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderDetails_Orders");
+
                 entity.HasOne(d => d.Profit)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ProfitId)
