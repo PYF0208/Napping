@@ -18,7 +18,6 @@ namespace Napping_PJ.Models.Entity
 
         public virtual DbSet<BellEvent> BellEvents { get; set; } = null!;
         public virtual DbSet<Comment> Comments { get; set; } = null!;
-        public virtual DbSet<Currency> Currencies { get; set; } = null!;
         public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<CustomerGift> CustomerGifts { get; set; } = null!;
         public virtual DbSet<ExtraService> ExtraServices { get; set; } = null!;
@@ -78,15 +77,6 @@ namespace Napping_PJ.Models.Entity
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Hotel");
-            });
-
-            modelBuilder.Entity<Currency>(entity =>
-            {
-                entity.Property(e => e.CurrencyId).ValueGeneratedNever();
-
-                entity.Property(e => e.Name).HasMaxLength(50);
-
-                entity.Property(e => e.Symbol).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -180,11 +170,15 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.ContactName).HasMaxLength(50);
 
-                entity.Property(e => e.Email).HasMaxLength(50);
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.Property(e => e.Phone).HasMaxLength(50);
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Region).HasMaxLength(50);
 
@@ -239,12 +233,6 @@ namespace Napping_PJ.Models.Entity
             {
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Currency)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.CurrencyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Currencuies");
-
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CustomerId)
@@ -255,7 +243,7 @@ namespace Napping_PJ.Models.Entity
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.PaymentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Payment");
+                    .HasConstraintName("FK_Orders_Payments");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -266,13 +254,13 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.TravelType).HasMaxLength(50);
 
-                entity.HasOne(d => d.Profit)
+                entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
-                    .HasForeignKey(d => d.ProfitId)
+                    .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Detail_Order");
+                    .HasConstraintName("FK_OrderDetails_Orders");
 
-                entity.HasOne(d => d.ProfitNavigation)
+                entity.HasOne(d => d.Profit)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ProfitId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -309,18 +297,6 @@ namespace Napping_PJ.Models.Entity
                 entity.Property(e => e.Status).HasMaxLength(50);
 
                 entity.Property(e => e.Type).HasMaxLength(50);
-
-                entity.HasOne(d => d.Currency)
-                    .WithMany(p => p.Payments)
-                    .HasForeignKey(d => d.CurrencyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Payment_Currencuies");
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.Payments)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Payment_Order");
             });
 
             modelBuilder.Entity<Profit>(entity =>

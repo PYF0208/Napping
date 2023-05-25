@@ -39,7 +39,7 @@
 					<tr v-for="item in FeatureVMs">
 						<td>{{item.featureId}}</td>
 						<td>{{item.name}}</td>
-						<td><i :class="item.image"></i> &nbsp {{item.image}}</td>
+						<td>{{item.image}}</td>
 						<td>
 							<a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
 							<a class="btn delete" @@click="deleteFeature(item.featureId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
@@ -114,6 +114,7 @@
 
 
 @section Scripts{
+	
 	<script src="~/lib/vue/vue.min.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
 	<script>
@@ -141,7 +142,7 @@
 					var request = {};
 					request.FeatureId = isNaN(Number(_this.Filter)) ? -1 : Number(_this.Filter);
 					request.FeatureId = request.Name = request.Image = _this.Filter;
-					axios.post(`Feature/FilterFeature`, request).then(response => {
+					axios.post(`https://localhost:7265/Admin/Feature/FilterFeature`, request).then(response => {
 
 						_this.FeatureVMs = response.data;
 						var FList = [];
@@ -149,6 +150,7 @@
 						_this.FeatureVMs.forEach(
 							item => {
 
+								//item.Edit = false;
 								FList.push(item);
 
 							}
@@ -207,7 +209,7 @@
 							_this.filterFeatureVMs();
 						});
 					}
-				}
+				},
 			}
 		})
 	</script>

@@ -30,17 +30,18 @@ namespace Napping_PJ.Areas.Admin.Controllers
         public async Task<IEnumerable<ProfitViewModel>> GetProfit()
         {
 
-            var Profit =  _context.Profits.Select(Profit=>new ProfitViewModel
+            var Profits = _context.Profits.Select(profit => new ProfitViewModel
 
-			{
-                Number = Profit.Number,
-                ProfitId = Profit.ProfitId,
-                Date = Profit.Date,
+            {
+                Number = profit.Number,
+                ProfitId = profit.ProfitId,
+                Date = profit.Date
+			});
 
-            });
+			return Profits;
+		} 
 
-			return Profit;
-        }
+        
         // GET: Admin/Profits/Details/5
         public async Task<IActionResult> Details(int? id)
         {
