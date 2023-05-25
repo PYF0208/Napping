@@ -44,11 +44,14 @@
                     <tr v-for="item in OrdersViewModel ">
                         @*v-for="item in FeatureVMs"*@
                         <td>{{item.orderId}}</td>
-                        <td>{{ item.customerName,}},ID:{{item.customerId}}</td>
+                        <td>{{ item.customerName}}</td>
                    
                         <td>{{item.paymentId}}</td>
                         <td><input type="datetime-local" class="form-control" v-model="item.date"  disabled/></td>
-                        <td><i class="fa-brands fa-github fa-2xl" @@click="showInsertPage"></i></td>
+                        
+                        <td>
+                            <a class="btn edit" @@click="getOrderDetails(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
+                         </td>
                         <td>
                             <a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
                             <a class="btn delete" @@click="deleteOrderIdService(item.orderId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
@@ -59,6 +62,57 @@
                 @*表格內容*@
             </table>
 
+        </div>
+        @*訂單明細用的互動視窗*@
+        <div class="form-group" v-for="item in OrderDetailsViewModel">
+            <div class="modal fade" id="orderDetailsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document" >
+                    <div class="modal-content" >
+                        <div class="modal-header" >
+                            <h5 class="modal-title" id="modalTitleId" >訂單明細</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" >
+                            <div class="form-group">
+                                <label class="form-label" >訂單ID: {{item.orderId}}</label>
+                                <input class="form-control" v-model="orderId" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">訂單明細ID:{{item.orderDetailId}}</label>
+                                <input class="form-control" v-model="orderDetailId" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">房型ID:{{item.roomId}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">入住時間:{{item.checkIn}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">退房時間:{{item.checkOut}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">客人人數:{{item.numberOfGuests}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">旅行類型:{{item.travelType}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">筆記:{{item.note}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">日期:{{item.date}}</label>
+                                <input class="form-control" v-model="note" disabled />
+                            </div>
+                           
+                           
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" @@click="update">儲存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         @*編輯用的互動視窗*@
         <div class="form-group">
@@ -71,18 +125,17 @@
                         </div>
                         <div class="modal-body" >
                             <div class="form-group">
-                                <label class="form-label">訂單ID:</label>
-                                
+                                <label class="form-label">訂單ID:</label>    
                                 <input class="form-control"  v-model="orderId" disabled/>
                             </div>
-                            <div class="form-group" v-for="item in OrdersViewModel ">
-                                <label class="form-label">會員名稱:</label>
-                                <span>{{item.customerName}}</span>
+                            <div class="form-group" v-for="item in OrdersViewModel">
+                                <label class="form-label">會員名稱:{{item.customerName}}</label>
+                                <span></span>
                                 <input class="form-control" v-model="customerId" disabled />
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" v-for="item in PaymentViewModel ">
                                 <label class="form-label">付款方式:</label>
-                                <span v-for="item in PaymentViewModel ">{{item.type}}</span>
+                                <span >{{item.type}}</span>
                                 <input class="form-control" v-model="paymentId" disabled />
                             </div>
                             <div class="form-group">
@@ -159,6 +212,7 @@
                 orderId: "",
                 paymentId: "",
                 orderDetailId:"",
+                
             },
             mounted: function () {
                 let _this = this;
@@ -168,8 +222,12 @@
                 _this.getOrderDetails();
             },
             methods: {
-                getOrderDetails: function () {
+                getOrderDetails: function (item) {
                     let _this = this;
+                    _this.orderId = item.orderId;
+                    _this.orderDetailId = item.orderDetailId;
+                    _this.note = item.note;
+                    $("#orderDetailsModal").modal("show");
                     axios.get("Orders/GetOrderDetails")
                         .then(function (response) {
 

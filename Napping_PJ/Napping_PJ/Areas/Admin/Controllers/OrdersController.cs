@@ -41,7 +41,10 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 Date = o.Date,
                 CustomerName = o.Customer.Name,
 
-            });
+                /* 訂單明細*/
+                
+
+            }) ;
 
             return ord;
         }
@@ -79,17 +82,19 @@ namespace Napping_PJ.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IEnumerable<OrderDetailsViewModel>> GetOrderDetails()
         {
-            var od = _context.OrderDetails.Select(od => new OrderDetailsViewModel
+            var od = _context.OrderDetails.Include(o=>o.Order).Select(od => new OrderDetailsViewModel
             {
+
                 OrderDetailId = od.OrderDetailId,
-                OrderId = od.OrderDetailId,
                 RoomId = od.RoomId,
-                ProfitId = od.ProfitId,
+                
                 CheckIn = od.CheckIn,
                 CheckOut = od.CheckOut,
                 NumberOfGuests = od.NumberOfGuests,
                 TravelType = od.TravelType,
                 Note = od.Note,
+                OrderId = od.OrderId,
+                Date=od.Order.Date
             });
             return od;
         }
