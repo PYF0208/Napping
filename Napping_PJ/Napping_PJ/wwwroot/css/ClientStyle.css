@@ -531,7 +531,7 @@ img {
     display: block;
     width: 100%;
     z-index: 9999;
-    background: none;
+
 }
 
 /*=== Header Main Box ===*/
@@ -565,13 +565,17 @@ img {
 .header-style-one .header-upper .logo-box {
     position: relative;
     float: left;
-    padding: 20px 0px;
     margin-right: 50px;
 }
 
     .header-style-one .header-upper .logo-box .logo {
         position: relative;
         display: block;
+        color: #ffffff;
+    }
+
+    .header-style-one .header-upper .logo-box .logo h3 {
+        color: #ffffff;
     }
 
         .header-style-one .header-upper .logo-box .logo img {
@@ -591,7 +595,7 @@ img {
     .header-style-one .other-links .info {
         position: relative;
         float: left;
-        padding-top: 15px;
+
     }
 
     .header-style-one .other-links .link-box {
@@ -880,7 +884,7 @@ img {
     }
 
     .header-style-one.alternate .header-upper {
-        background: none;
+        
     }
 
 .fixed-header.header-style-one.alternate .header-upper {
@@ -890,7 +894,6 @@ img {
 
 .header-style-one.alternate .header-upper .logo-box {
     padding-top: 15px;
-    padding-bottom: 15px;
 }
 
 .header-style-one.alternate .other-links .info li a {
@@ -898,7 +901,7 @@ img {
 }
 
 .header-style-one.alternate .nav-outer .main-menu {
-    display: none;
+    
 }
 
 
