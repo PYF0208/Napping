@@ -40,7 +40,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 PaymentId = o.PaymentId,
                 Date = o.Date,
                 CustomerName = o.Customer.Name,
-
+                PaymentType=o.Payment.Type,
                 /* 訂單明細*/
                 
 
@@ -80,9 +80,9 @@ namespace Napping_PJ.Areas.Admin.Controllers
             return Mem;
         }
         [HttpGet]
-        public async Task<IEnumerable<OrderDetailsViewModel>> GetOrderDetails()
+        public async Task<IEnumerable<OrderDetailsViewModel>> GetOrderDetails(int id)
         {
-            var od = _context.OrderDetails.Include(o=>o.Order).Select(od => new OrderDetailsViewModel
+            var od = _context.OrderDetails.Include(o=>o.Order).Include(r=>r.Room).Where(c => c.Room.RoomId == id).Select(od => new OrderDetailsViewModel
             {
 
                 OrderDetailId = od.OrderDetailId,

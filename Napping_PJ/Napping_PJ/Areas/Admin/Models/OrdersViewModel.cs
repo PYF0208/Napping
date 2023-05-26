@@ -8,8 +8,8 @@ namespace Napping_PJ.Areas.Admin.Models
 		public int CustomerId { get; set; }
 		public DateTime Date { get; set; }
 		public int PaymentId { get; set; }
-
-		public string? CustomerName { get; set; }
+        public string PaymentType { get; set; } = null!;
+        public string? CustomerName { get; set; }
         public virtual Customer Customer { get; set; } = null!;
 		public virtual Payment Payment { get; set; } = null!;
 
