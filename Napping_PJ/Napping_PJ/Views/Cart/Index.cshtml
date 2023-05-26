@@ -28,8 +28,8 @@
 </body>
 </html>
 @section Scripts{
-    <script src="lib\axios\axios.min.js"></script>
-    <script src="lib\vue\vue.min.js"></script>
+    @*<script src="lib\axios\axios.min.js"></script>*@
+    @*<script src="lib\vue\vue.min.js"></script>*@
     <script>
         var VueApp = new Vue({
             el: '#app',
@@ -56,8 +56,12 @@
                     var cookieName = 'cartItem';
                     //將房間物件加入cookie
                     var cartList = _this.getCartList(cookieName);
+                    var findRoomIndex = cartList.findIndex(r => r.roomId == room.roomId);
+                    if (findRoomIndex >= 0) {
+                        return;
+                    }
                     cartList.push(room);
-                    console.log(cartList);
+                    //console.log(cartList);
                     _this.setCookie(cookieName, cartList, 365);
                 },
                 removeFromCart: function (name, idx) {

@@ -1,0 +1,55 @@
+﻿<div id="cartVue">
+    <button class=" btn-info cartBtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @@click="freshCart"><i class="fa-solid fa-cart-shopping fa-2xl"></i></button>
+    <div class="offcanvas offcanvas-start cartoffcanvas" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-12 cart">
+                    <div class="title">
+                        <div class="row">
+                            <div class="col"><h4><b>Shopping Cart</b></h4></div>
+                            <div class="col align-self-center text-right text-muted">{{rooms.length}} items</div>
+                        </div>
+                    </div>
+                    <div v-for="room in rooms" class="row border-top cartItem">
+                        <div class="row"><img class="img-fluid" :src="room.hotelImageSrc"></div>
+                        <div class="row main align-items-center">
+                            <div class="col">
+                                <div class="row text-muted">{{room.hotelName}}</div>
+                                <div class="row">{{room.roomType}}</div>
+                            </div>
+                            <div class="col">&euro; 44.00 </div>                            
+                        </div>                        
+                        <div class="row">
+                            <div class="col" v-for="service in room.selectedExtraServices">
+                                <label>{{service.name}}</label><a href="#">-</a><a href="#" class="border">{{service.serviceQuantity}}</a><a href="#">+</a>
+                            </div>
+                        </div>
+                        <div>
+                            <a class="close" @@click="removeFromCart(room)"><i class="fa-regular fa-trash-can"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 summary">
+                    <div><h5><b>Summary</b></h5></div>
+                    <hr>
+                    <div class="row">
+                        <div class="col" style="padding-left:0;">ITEMS {{rooms.length}}</div>
+                        <div class="col text-right">&euro; 132.00</div>
+                    </div>
+                    <form>
+                        <p>SHIPPING</p>
+                        <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>
+                        <p>GIVE CODE</p>
+                        <input id="code" placeholder="Enter your code">
+                    </form>
+                    <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                        <div class="col">TOTAL PRICE</div>
+                        <div class="col text-right">&euro; 137.00</div>
+                    </div>
+                    <button class="btn">CHECKOUT</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

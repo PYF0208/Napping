@@ -23,7 +23,7 @@ namespace Napping_PJ.Controllers
         public async Task<IActionResult> GetRooms()
         {
             List<CartViewModel> cartViewModels = new List<CartViewModel>();
-            List<Room> rooms = await _context.Rooms.Take(5).ToListAsync();
+            List<Room> rooms = await _context.Rooms.Include(r => r.Hotel).Include(r => r.RoomImages).Take(5).ToListAsync();
 
             foreach (Room room in rooms)
             {
@@ -31,6 +31,8 @@ namespace Napping_PJ.Controllers
                 {
                     RoomId = room.RoomId,
                     RoomType = room.Type,
+                    HotelName = room.Hotel.Name,
+                    HotelImageSrc = room.RoomImages.First().Image,
                     CheckIn = DateTime.Now,
                     CheckOut = DateTime.Now,
                     MaxGuests = room.MaxGuests,
@@ -45,7 +47,7 @@ namespace Napping_PJ.Controllers
         {
             List<SelectedExtraServiceViewModel> selectedExtraServiceViewModels = new List<SelectedExtraServiceViewModel>();
             IQueryable<ExtraService> extraServices = _context.ExtraServices.Where(es => es.HotelId == HotelId);
-            List<ExtraService> extraServiceList = await extraServices.ToListAsync(); // 获取结果集
+            List<ExtraService> extraServiceList = await extraServices.ToListAsync();
 
             foreach (ExtraService extraService in extraServiceList)
             {

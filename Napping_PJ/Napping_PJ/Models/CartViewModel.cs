@@ -6,6 +6,8 @@ namespace Napping_PJ.Models
     {
         public int RoomId { get; set; }
         public string RoomType { get; set; }
+        public string HotelName { get; set; }
+        public string HotelImageSrc { get; set; }
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
         public int MaxGuests { get; set; }
