@@ -234,7 +234,7 @@
 					_this.orderId = item.orderId;
 					_this.orderDetailId = item.orderDetailId;
 					$("#orderDetailsModal").modal("show");
-					axios.get(`Orders/GetOrderDetails?ID=${item.customerId}`,)
+					axios.get(`Orders/GetOrderDetails?ID=${item.orderId}`,)
 						.then(function (response) {
 
 							//alert(JSON.stringify(response.data))

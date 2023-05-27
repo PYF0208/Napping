@@ -82,7 +82,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IEnumerable<OrderDetailsViewModel>> GetOrderDetails(int id)
         {
-            var od = _context.OrderDetails.Include(o=>o.Order).Include(r=>r.Room).Where(c => c.Room.RoomId == id).Select(od => new OrderDetailsViewModel
+            var od = _context.OrderDetails.Include(o=>o.Order).Include(r=>r.Room).Where(c => c.Order.OrderId == id).Select(od => new OrderDetailsViewModel
             {
 
                 OrderDetailId = od.OrderDetailId,
