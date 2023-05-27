@@ -64,8 +64,9 @@
 
  ***/
 
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Noto+Serif+TC:wght@700&display=swap');
-@import url('animate.css/animate.min.css');
+
+@import url(../lib/animate.css/animate.min.css);
+
 /*** 
 
 ====================================================================
@@ -210,7 +211,6 @@ p {
     margin: 0 auto;
     width: 100%;
     min-width: 300px;
-    z-index: 9;
     overflow: hidden;
 }
 
@@ -530,7 +530,7 @@ img {
     top: 0;
     display: block;
     width: 100%;
-    z-index: 9999;
+    z-index: 1000;
 
 }
 
@@ -1408,42 +1408,26 @@ img.lazy-image {
         width: 100%;
         font-size: 16px;
         font-style: normal;
-        height: 62px;
-        padding: 15px 20px;
+        height: 40px;
+        padding: 2px 32px 2px 20px;
         line-height: 30px;
         font-family: 'Roboto', sans-serif;
         color: #25283a;
-        border-radius: 0px;
+        border-radius: 5px;
         background-color: #ffffff;
         border: 1px solid #e5e5e5;
         cursor: pointer;
         z-index: 5;
     }
 
-.filter-form .check-sel-box .check-sel-btn {
-    height: 82px;
-    padding: 25px 20px;
-}
 
-.filter-form-two .check-sel-box .check-sel-btn {
-    padding-left: 50px;
-    background: none;
-}
-
-.filter-form-three .check-sel-box .check-sel-btn {
-    padding: 9px 25px;
-    padding-left: 45px;
-    line-height: 30px;
-    height: 50px;
-    background: none;
-}
 
 .check-sel-box .check-sel-btn:before {
     font-family: 'Flaticon';
     content: "\f106";
     position: absolute;
-    right: 20px;
-    top: 15px;
+    right: 5%;
+    top: 5px;
     height: 30px;
     line-height: 30px;
     display: block;

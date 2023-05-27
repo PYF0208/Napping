@@ -26,7 +26,7 @@ namespace Napping_PJ.Controllers
                 new AuthenticationProperties
                 {
                     // 設定 google responds 後調用的Action Method
-                    RedirectUri = Url.Action("GoogleResponse", "Register")
+                    RedirectUri = Url.Action("GoogleResponse", "ThirdPartyLogin")
                 });
         }
         public async Task<IActionResult> GoogleResponse()

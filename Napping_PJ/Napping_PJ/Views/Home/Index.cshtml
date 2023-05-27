@@ -1,3 +1,49 @@
+@section Styles{
+	<link href="lib\element-ui\theme-chalk\index.min.css" rel="stylesheet" />
+	<style>
+		.el-date-editor .el-range-separator {
+			width: auto;
+		}
+
+		.filters-section.style-four .form-box {
+			max-width: 400px;
+		}
+
+		.demo-date-picker {
+			display: flex;
+			width: 100%;
+			padding: 0;
+			flex-wrap: wrap;
+			z-index: 9999;
+		}
+
+			.demo-date-picker .block {
+				padding: 30px 0;
+				text-align: center;
+				border-right: solid 1px var(--el-border-color);
+				flex: 1;
+			}
+
+				.demo-date-picker .block:last-child {
+					border-right: none;
+				}
+
+			.demo-date-picker .demonstration {
+				display: block;
+				color: var(--el-text-color-secondary);
+				font-size: 14px;
+				margin-bottom: 20px;
+			}
+	</style>
+	<style>
+		#map {
+			height: 800px;
+			width: auto;
+		}
+	</style>
+
+}
+
 ﻿@{
 	ViewBag.Title = "Simple Map";
 }
@@ -5,12 +51,7 @@
 
 <!-- Main Header -->
 <header class="main-header header-style-one alternate">
-	<style>
-		#map {
-			height: 800px;
-			width: auto;
-		}
-	</style>
+
 
 	<!-- Header Upper -->
 	<div class="header-upper">
@@ -24,96 +65,99 @@
 				</div>
 			</div>
 			<div class="nav-outer clearfix">
-
 				<!-- Main Menu -->
 				<nav class="main-menu navbar-expand-md navbar-light">
 					<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
-						<form class="d-flex " method="" action="">
-								<div class="form-group">
-									<div class="field-inner">
-										<input id="arrival-date" class="date-picker" type="text" name="field-name"
-											   value="" placeholder="入住日期">
-										<span class="alt-icon flaticon-calendar-2"></span>
-										<label for="arrival-date" class="icon flaticon-down-arrow"></label>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="field-inner">
-										<input id="depart-date" class="date-picker" type="text" name="field-name"
-											   value="" placeholder="退房日期">
-										<span class="alt-icon flaticon-calendar-2"></span>
-										<label for="depart-date" class="icon flaticon-down-arrow"></label>
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="field-label">Guests</div>
-									<div class="field-inner">
-										<span class="alt-icon flaticon-user-3"></span>
-										<div class="check-sel-box">
-											<div class="check-sel-btn">
-												<span class="adult-info">2 Adults.</span>
-												<span class="child-info">1 Children</span>
-											</div>
-											<ul class="check-sel-droplist">
-												<li>
-													<div class="sel-title">Select Adults:</div>
-													<div class="clearfix">
-														<div class="radio-block adult-block">
-															<input type="radio"
-																   name="adult-group" id="radio-1" value="1 Adults."><label for="radio-1">1</label>
-														</div>
-														<div class="radio-block adult-block">
-															<input type="radio"
-																   name="adult-group" id="radio-2" value="2 Adults."
-																   checked=""><label for="radio-2">2</label>
-														</div>
-														<div class="radio-block adult-block">
-															<input type="radio"
-																   name="adult-group" id="radio-3" value="3 Adults."><label for="radio-3">3</label>
-														</div>
-														<div class="radio-block adult-block">
-															<input type="radio"
-																   name="adult-group" id="radio-4" value="4 Adults."><label for="radio-4">4</label>
-														</div>
-													</div>
-												</li>
-												<li>
-													<div class="sel-title">Select Children:</div>
-													<div class="clearfix">
-														<div class="radio-block child-block">
-															<input type="radio"
-																   name="child-group" id="radio-5" value="1 Children"
-																   checked=""><label for="radio-5">1</label>
-														</div>
-														<div class="radio-block child-block">
-															<input type="radio"
-																   name="child-group" id="radio-6" value="2 Children"><label for="radio-6">2</label>
-														</div>
-														<div class="radio-block child-block">
-															<input type="radio"
-																   name="child-group" id="radio-7" value="3 Children"><label for="radio-7">3</label>
-														</div>
-														<div class="radio-block child-block">
-															<input type="radio"
-																   name="child-group" id="radio-8" value="4 Children"><label for="radio-8">4</label>
-														</div>
-													</div>
-												</li>
-											</ul>
+						<div class="d-flex" style="align-items: center; column-gap: 12px;">
+
+							<div id="vueApp" class="form-group">
+								<template>
+									<div class="demo-date-picker">
+										<div class="block">
+											<el-date-picker v-model="timeValue"
+															type="daterange"
+															range-separator="至"
+															start-placeholder="入住時間"
+															end-placeholder="退房時間"
+															:size="size" />
 										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<div class="field-inner">
-										<a class="theme-btn btn-style-one" asp-controller="Home" asp-action="Result">
-											<span class="btn-title">
-												Check
-												Availability
-											</span>
-										</a>
+								</template>
+							</div>
+
+							<div class="form-group">
+								<div class="field-inner">
+									<div class="check-sel-box">
+										<div class="check-sel-btn">
+											<span class="adult-info">2</span><span> 位成人</span>
+											<span class="child-info">0</span><span> 位兒童</span>
+										</div>
+										<ul class="check-sel-droplist">
+											<li>
+												<div class="sel-title">成人人數：</div>
+												<div class="clearfix">
+													<div class="radio-block adult-block">
+														<input type="radio"
+															   name="adult-group" id="radio-1" value="0"><label for="radio-1">0</label>
+													</div>
+													<div class="radio-block adult-block">
+														<input type="radio"
+															   name="adult-group" id="radio-2" value="1"><label for="radio-2">1</label>
+													</div>
+													<div class="radio-block adult-block">
+														<input type="radio"
+															   name="adult-group" id="radio-3" value="2" checked><label for="radio-3">2</label>
+													</div>
+													<div class="radio-block adult-block">
+														<input type="radio"
+															   name="adult-group" id="radio-4" value="3"><label for="radio-4">3</label>
+													</div>
+													<div class="radio-block adult-block">
+														<input type="radio"
+															   name="adult-group" id="radio-5" value="4"><label for="radio-5">4</label>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div class="sel-title">兒童人數：</div>
+												<div class="clearfix">
+
+													<div class="radio-block child-block">
+														<input type="radio"
+															   name="child-group" id="radio-6" value="0" checked><label for="radio-6">0</label>
+													</div>
+													<div class="radio-block child-block">
+														<input type="radio"
+															   name="child-group" id="radio-7" value="1"><label for="radio-7">1</label>
+													</div>
+													<div class="radio-block child-block">
+														<input type="radio"
+															   name="child-group" id="radio-8" value="2"><label for="radio-8">2</label>
+													</div>
+													<div class="radio-block child-block">
+														<input type="radio"
+															   name="child-group" id="radio-9" value="3"><label for="radio-9">3</label>
+													</div>
+													<div class="radio-block child-block">
+														<input type="radio"
+															   name="child-group" id="radio-10" value="4"><label for="radio-10">4</label>
+													</div>
+												</div>
+											</li>
+										</ul>
 									</div>
 								</div>
-						</form>
+							</div>
+
+							<div id="search" class="form-group">
+								<div class="field-inner">
+									<div class="btn btn-light" @@click="searchRoom()">
+										<i class="fa-solid fa-magnifying-glass"></i>
+										搜尋
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</nav>
 			</div>
@@ -125,12 +169,8 @@
 					</ul>
 				</div>
 			</div>
-
 		</div>
 	</div>
-	<!--End Header Upper-->
-
-
 </header>
 
 <div class="sidebar-page-container">
@@ -185,7 +225,7 @@
 											<h3>{{item.name}}</h3>
 											<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
 											<div>
-												<h4>NT 2000/晚</h4>
+												<h4><span>NT </span><span>{{item.price}}</span><span>/每晚</span></h4>
 											</div>
 										</a>
 									</div>
@@ -208,8 +248,6 @@
 						 data-wow-duration="1500ms">
 						<div class="widget-inner" id="map">
 							<div class="sidebar-title">
-								
-
 							</div>
 						</div>
 					</div>
@@ -229,6 +267,7 @@
 	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
 	<script src="~/lib/vue/vue.min.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
+	<script src="lib\element-ui\index.min.js"></script>
 
 	<script>
 		let map;
@@ -248,31 +287,67 @@
 				resultVM: [],
 
 
-
-
-
 			},
 			mounted: function () {
 				let _this = this;
-				_this.filterResultVM();
+				_this.filterResultVM(2);
 			},
 			methods: {
-				filterResultVM: function () {
-
+				filterResultVM: function (num) {
 					let _this = this;
-					var request = {};
-					axios.get(`/api/Result/Get`).then(response => {
+					axios.get(`/api/Result/Get/${num}`).then(response => {
 
 						_this.resultVM = response.data;
 
 					})
-
 				},
+
 
 			}
 
 		});
+	</script>
 
+	<script>
+		var app = new Vue({
+			el: '#vueApp',
+			data: {
+				size: 'default',
+				timeValue: null,
+			},
+			mounted: function () {
+
+			},
+			methods: {
+				submitForm() {
+					// 提交後想做什麼邏輯
+					console.log("開始日期:", this.timeValue[0]);
+					console.log("结束日期:", this.timeValue[1]);
+				},
+				
+			},
+		});
+
+	</script>
+
+	<script>
+		var searchApp = new Vue({
+			el: '#search',
+			data: {
+				
+			},
+			mounted: function () {
+
+			},
+			methods: {
+				searchRoom: function () {
+
+					var p = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
+					vm.filterResultVM(p);
+
+				},
+			},
+		});
 
 	</script>
 }

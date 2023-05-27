@@ -16,19 +16,32 @@ namespace Napping_PJ.Controllers
 		{
 			_context = context;
 		}
-		[HttpGet]
-		public IEnumerable<ResultViewModel> Get()
+		[HttpGet("{num}")]
+		public IEnumerable<ResultViewModel> Get(double num)
 		{
-
-			return _context.Hotels.Select(x => new ResultViewModel
+			var result = _context.Hotels.Join(_context.Rooms, h => h.HotelId, r => r.HotelId, (h, r) => new ResultViewModel
 			{
-				HotelId = x.HotelId,
-				Name = x.Name,
-				Image = x.Image,
-				City = x.City,
-				Region = x.Region,
+				HotelId = h.HotelId,
+				Name = h.Name,
+				Image = h.Image,
+				City = h.City,
+				Region = h.Region,
+				Price = r.Price,
+				MaxGuests = r.MaxGuests,
+			}).OrderBy(hr => hr.Price);
 
-			});
+
+			switch (num) {
+				
+				case >= 5:
+					return result.Where(hr => hr.MaxGuests == 6);
+				case >= 3:
+					return result.Where(hr => hr.MaxGuests == 4);
+				default:
+					return result.Where(hr => hr.MaxGuests == 2);
+				
+			}
+
 
 		}
 

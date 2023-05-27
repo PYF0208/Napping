@@ -56,6 +56,11 @@ namespace Napping_PJ.Controllers
             if (ModelState.IsValid)
             {
                 Customer? getCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == loginViewModel.Email);
+                if (getCustomer == null)
+                {
+                    error.mainError = "無此使用者";
+                    return BadRequest();
+                }
                 if (getCustomer.Locked == true)
                 {
                     error.mainError = "此帳號未啟用";
