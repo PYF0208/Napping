@@ -16,30 +16,86 @@
 </head>
 
 <body>
-	<div class="page-wrapper">
-		<!-- Preloader -->
-		<div class="preloader">
-			<div class="icon"></div>
-		</div>
+    <header class="main-header header-style-one alternate">
 
-		@RenderBody()
+        <!-- Header Upper -->
+        <div class="header-upper">
+            <div class="inner-container clearfix">
+                <!--Logo-->
+                <div class="logo-box">
+                    <div class="logo">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><h1 style="color: white;">Napping</h1></a>
+                    </div>
+                </div>
+                <div class="nav-outer clearfix">
 
-</div>
+                    <!-- Main Menu -->
+                    <nav class="main-menu navbar-expand-md navbar-light">
+                        <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
+                        </div>
+                    </nav>
+                </div>
 
-	
+                <div class="other-links clearfix">
+                    <div class="info">
+                        <ul class="clearfix">
+                            <partial name="_LoginPartial" />
+                        </ul>
+                    </div>
+                </div>
 
-	<footer class="main-footer">
-		<div class="top-pattern-layer-dark"></div>
+            </div>
+        </div>
+        <!--End Header Upper-->
+    </header>
+    <div class="page-wrapper">
+        <!-- Preloader -->
+        <div class="preloader">
+            <div class="icon"></div>
+        </div>
+
+        @RenderBody()
+
+    </div>
 
 
-		<div class="widgets-section">
-			<div class="auto-container">
-				<div class="row clearfix">
+
+    <footer class="main-footer">
+        <div class="top-pattern-layer-dark"></div>
+
+
+        <div class="widgets-section">
+            <div class="auto-container">
+                <div class="row clearfix">
+
 
 					<div class="column col-xl-3 col-lg-12 col-md-12 col-sm-12">
 						<div class="footer-widget about-widget">
 							<div class="logo">
 								<h3>Napping</h3>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="column col-xl-5 col-lg-8 col-md-12 col-sm-12">
+						<div class="footer-widget links-widget">
+							<div class="widget-content">
+								<div class="row clearfix">
+									<div class="col-lg-6 col-md-6 col-sm-12">
+										<div class="widget-title">
+											<h4>Services</h4>
+										</div>
+										<ul class="links">
+											<li><a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後端</a></li>
+											<li><a href="rooms-grid.html">Our Rooms</a></li>
+											<li><a href="restaurant.html">Restaurant</a></li>
+											<li><a href="about.html">About Hotera</a></li>
+											<li><a href="contact.html">Contact</a></li>
+										</ul>
+									</div>
+
+								</div>
 							</div>
 						</div>
 					</div>
@@ -52,23 +108,23 @@
 		<div class="footer-bottom">
 			<div class="auto-container">
 				<div class="inner clearfix">
-					<div class="copyright">本網站僅為教育練習使用</div>
+					<div class="copyright">本網站僅供教學使用</div>
 					<div class="bottom-links">
-						<a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後台</a>|<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+						<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 					</div>
 				</div>
 			</div>
 		</div>
 
-	</footer>
+    </footer>
 
 
-	<script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-	<script src="~/lib/jqueryui/jquery-ui.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-	<script src="~/js/site.js"></script>
-	<script src="~/js/appear.js"></script>
-	<script src="~/lib/wow/wow.min.js"></script>
-	@await RenderSectionAsync("Scripts", required: false)
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/js/appear.js"></script>
+    <script src="~/lib/wow/wow.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
