@@ -74,16 +74,13 @@
 						</div>
 						<div class="modal-body" v-for="item in OrderDetailsViewModel">
 							<div class="form-group">
-								<label class="form-label">訂單ID: {{item.orderId}}</label>
-								<input class="form-control" v-model="orderId" disabled />
+								<label class="form-label">訂單ID: {{item.orderId}}</label>								
 							</div>
 							<div class="form-group">
-								<label class="form-label">訂單明細ID:{{item.orderDetailId}}</label>
-								<input class="form-control" v-model="orderDetailId" disabled />
+								<label class="form-label">訂單明細ID:{{item.orderDetailId}}</label>								
 							</div>
 							<div class="form-group">
-								<label class="form-label">房型ID:{{item.roomId}}</label>
-								<input class="form-control" v-model="roomId" disabled />
+								<label class="form-label">房型ID:{{item.roomId}}</label>								
 							</div>
 							<div class="form-group">
 								<label class="form-label">入住時間:{{item.checkIn}}</label>
@@ -101,8 +98,7 @@
 								<label class="form-label">筆記:{{item.note}}</label>
 							</div>
 							<div class="form-group">
-								<label class="form-label">日期:{{item.date}}</label>
-								<input class="form-control" disabled />
+								<label class="form-label">日期:{{item.date}}</label>								
 							</div>
 
 
@@ -132,14 +128,12 @@
 								<input class="form-control" v-model="orderId" disabled />
 							</div>
 							<div class="form-group">
-								<label class="form-label">會員名稱:{{customerName}}</label>
-								<span></span>
+								<label class="form-label">會員名稱:{{customerName}}</label>								
 								<input class="form-control" v-model="customerId"  disabled />
 							</div>
 
 							<div class="form-group">
-								<label class="form-label">付款方式:{{paymentType}}</label>
-								<span></span>
+								<label class="form-label">付款方式:{{paymentType}}</label>								
 								<input class="form-control" v-model="paymentId" disabled />
 							</div>
 							<div class="form-group">
