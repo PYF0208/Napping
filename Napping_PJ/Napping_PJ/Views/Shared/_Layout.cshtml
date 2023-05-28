@@ -12,15 +12,47 @@
 	<link href="~/css/clientstyle.css" rel="stylesheet" />
     <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
 	<link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
-	@await RenderSectionAsync("Styles", required: false)	
+	@await RenderSectionAsync("Styles", required: false)
 </head>
 
 <body>
-	<div class="page-wrapper">
-		<!-- Preloader -->
-		<div class="preloader">
-			<div class="icon"></div>
-		</div>
+    <header class="main-header header-style-one alternate">
+
+        <!-- Header Upper -->
+        <div class="header-upper">
+            <div class="inner-container clearfix">
+                <!--Logo-->
+                <div class="logo-box">
+                    <div class="logo">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><h1 style="color: white;">Napping</h1></a>
+                    </div>
+                </div>
+                <div class="nav-outer clearfix">
+
+                    <!-- Main Menu -->
+                    <nav class="main-menu navbar-expand-md navbar-light">
+                        <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
+                        </div>
+                    </nav>
+                </div>
+
+                <div class="other-links clearfix">
+                    <div class="info">
+                        <ul class="clearfix">
+                            <partial name="_LoginPartial" />
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--End Header Upper-->
+    </header>
+    <div class="page-wrapper">
+        <!-- Preloader -->
+        <div class="preloader">
+            <div class="icon"></div>
+        </div>
 
 		@RenderBody()
 
@@ -59,7 +91,6 @@
 				</div>
 			</div>
 		</div>
-
 
 	</footer>
 

@@ -38,7 +38,7 @@
 					<tr v-for="item in ProfitViewModel">
 						@*v-for="item in FeatureVMs"*@
 						<td>{{item.profitId}}</td>
-						<td>{{item.date}}</td>
+						<td >{{item.date}}</td> 
 						<td>{{item.number}}</td>
 						<td>
 							<a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
@@ -126,6 +126,7 @@
 			},
 			mounted: function () {
 				let _this = this;
+				
 				_this.getProfit();
 			},
 			methods: {
@@ -133,8 +134,13 @@
 					let _this = this;
 					axios.get("Profits/GetProfit")
 						.then(function (response) {
+							
 							//alert(JSON.stringify(response.data))
 							_this.ProfitViewModel = response.data;
+							for (i = 0; i < _this.ProfitViewModel.length;i++){
+								var Profit = _this.ProfitViewModel[i];
+								Profit.date = new Date(Profit.date).toISOString().slice(0, 10);
+							}
 						})
 						.catch(function (error) {
 							console.log(error);
