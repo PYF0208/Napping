@@ -140,29 +140,21 @@
 
 	<a href="~/lib/jquery/dist/jquery.min.map"></a>
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
+	
 	<script src="~/lib/vue/vue.min.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
-
-	<script>
-		let map;
-		function initMap() {
-			map = new google.maps.Map(document.getElementById("map"), {
-				center: { lat: 25.105497, lng: 121.597366 },
-				zoom: 14,
-			});
-		}
-		window.initMap = initMap;
-	</script>
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
 
 	<script>
 		const vm = new Vue({
 			el: "#app",
 			data: {
 				resultVM: [],
-
-
-
+				markers: [],
+				selectLocation: null,
+				map: null,
+				infowindowAll: {},
+				infoWindow: "",
 
 
 			},
@@ -178,15 +170,37 @@
 					axios.get(`/api/Result/Get`).then(response => {
 
 						_this.resultVM = response.data;
-
+						_this.initMap();
 					})
 
 				},
+				initMap: function () {
+					let _this = this;
+					_this.map = new google.maps.Map(document.getElementById("map"), {
+						zoom: 14,
+						center: { lat: parseFloat(_this.resultVM[46].positionLat), lng: parseFloat(_this.resultVM[46].positionLon) },
+					});
 
-			}
+					_this.resultVM.forEach(location => {
+						const marker = new google.maps.Marker({
+							position: { lat: parseFloat(location.positionLat), lng: parseFloat(location.positionLon) },
+							map: _this.map,
+							icon: '/images/mapPin.png',
+							title: location.name,   //鼠標移至時顯示名稱
+						});
+						const infoWindow = new google.maps.InfoWindow({
+							content: `<button class="btn" onclick='showInfoWindow()'>${location.name}</button>`,
+						});
+
+						_this.markers.push(marker);
+						infoWindow.open(map, marker);
+					});
+
+				},
+				
+			},
 
 		});
-
 
 	</script>
 }

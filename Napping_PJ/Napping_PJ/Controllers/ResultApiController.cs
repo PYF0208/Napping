@@ -27,7 +27,8 @@ namespace Napping_PJ.Controllers
 				Image = x.Image,
 				City = x.City,
 				Region = x.Region,
-
+				PositionLat = (float)x.PositionLat,
+				PositionLon = (float)x.PositionLon,
 			});
 
 		}
