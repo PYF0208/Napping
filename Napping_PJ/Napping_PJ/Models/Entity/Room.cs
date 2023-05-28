@@ -7,7 +7,6 @@ namespace Napping_PJ.Models.Entity
     {
         public Room()
         {
-            Likes = new HashSet<Like>();
             OrderDetails = new HashSet<OrderDetail>();
             RoomImages = new HashSet<RoomImage>();
             Features = new HashSet<Feature>();
@@ -15,12 +14,12 @@ namespace Napping_PJ.Models.Entity
 
         public int RoomId { get; set; }
         public int HotelId { get; set; }
+        public int? Number { get; set; }
         public string Type { get; set; } = null!;
         public double Price { get; set; }
         public int MaxGuests { get; set; }
 
         public virtual Hotel Hotel { get; set; } = null!;
-        public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<RoomImage> RoomImages { get; set; }
 

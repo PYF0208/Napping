@@ -1,192 +1,277 @@
 ﻿@{
-	ViewBag.Title = "Simple Map";
+    ViewBag.Title = "Simple Map";
 }
+@section Styles{
+    <style>
+        .fa-solid.fa-heart {
+            color: white;
+            transition: color 0.3s ease-in-out;
+        }
+
+            .fa-heart:hover,
+            .fa-solid.fa-heart.is-Liked {
+                color: red;
+            }
+
+    </style>
+  }
+
+<div id="app">
+    <!-- Main Header -->
+    <header class="main-header header-style-one alternate">
+        <style>
+            #map {
+                height: 800px;
+                width: auto;
+            }
+        </style>
+
+        <!-- Header Upper -->
+        <div class="header-upper">
+            <div class="inner-container clearfix">
+                <!--Logo-->
+                <div class="logo-box">
+                    <div class="logo">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <h3 style="color: red;">Napping</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="nav-outer clearfix">
+
+                    <!-- Main Menu -->
+                    <nav class="main-menu navbar-expand-md navbar-light">
+                        <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
+                        </div>
+                    </nav>
+                </div>
+
+                <div class="other-links clearfix">
+                    <div class="info">
+                        <ul class="clearfix">
+                            <partial name="_LoginPartial" />
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--End Header Upper-->
+
+    </header>
 
 
-<!-- Main Header -->
-<header class="main-header header-style-one alternate">
-	<style>
-		#map {
-			height: 800px;
-			width: auto;
-		}
-	</style>
+    <div class="sidebar-page-container">
 
-	<!-- Header Upper -->
-	<div class="header-upper">
-		<div class="inner-container clearfix">
-			<!--Logo-->
-			<div class="logo-box">
-				<div class="logo">
-					<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-						<h3 style="color: red;">Napping</h3>
-					</a>
-				</div>
-			</div>
-			<div class="nav-outer clearfix">
+        <div class="circles-two">
+            <div class="c-1"></div>
+            <div class="c-2"></div>
+        </div>
+        <span class="dotted-pattern dotted-pattern-5"></span>
+        <span class="tri-pattern tri-pattern-8"></span>
 
-				<!-- Main Menu -->
-				<nav class="main-menu navbar-expand-md navbar-light">
-					<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
-					</div>
-				</nav>
-			</div>
+        <div class="result-container">
+            <div class="row clearfix">
 
-			<div class="other-links clearfix">
-				<div class="info">
-					<ul class="clearfix">
-						<partial name="_LoginPartial" />
-					</ul>
-				</div>
-			</div>
+                <!--Content Side-->
 
-		</div>
-	</div>
-	<!--End Header Upper-->
+                <div class="content-side col-lg-8 col-md-12 col-sm-12">
+                    <div class="blog-content">
+                        <div class="row">
+                            <!--Feature Box-->
+                            @*<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
+                            data-wow-delay="0ms" data-wow-duration="1500ms">
+                            <div class="inner-box">
+                            <div class="icon-box">
+                            <div class="heart-box">
+                            <button><i class="fa-regular fa-heart"></i></button>
+                            </div>
+                            <img src="https://taiwan.taiwanstay.net.tw/twpic/9215.jpg" />
+                            </div>
+                            <div class="text-box">
+                            <a href="index-5.html">
+                            <h3>凱旋新宿商旅</h3>
+                            <h6><span>臺東縣</span> <span>臺東市</span></h6>
+                            <div>
+                            <h4>NT 2000/晚</h4>
+                            </div>
+                            </a>
+                            </div>
 
+                            </div>
+                            </div>*@
 
-</header>
+                            <template v-for="item in resultVM">
+                                <div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                                    <div class="inner-box">
+                                        <div class="icon-box">
+                                            <div class="heart-box">
+                                                <button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
+                                            </div>
+                                            <img :src="item.image" />
+                                        </div>
+                                        <div class="text-box">
+                                            <a href="index-5.html">
+                                                <h3>{{item.name}}</h3>
+                                                <h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
+                                                <div>
+                                                    <h4>NT 2000/晚</h4>
+                                                </div>
+                                            </a>
+                                        </div>
 
-<div class="sidebar-page-container">
-	<div class="circles-two">
-		<div class="c-1"></div>
-		<div class="c-2"></div>
-	</div>
-	<span class="dotted-pattern dotted-pattern-5"></span>
-	<span class="tri-pattern tri-pattern-8"></span>
+                                    </div>
+                                </div>
+                            </template>
 
-	<div class="result-container">
-		<div class="row clearfix">
-
-			<!--Content Side-->
-			<div id="app" class="content-side col-lg-8 col-md-12 col-sm-12">
-				<div class="blog-content">
-					<div class="row">
-						<!--Feature Box-->
-						@*<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-						data-wow-delay="0ms" data-wow-duration="1500ms">
-						<div class="inner-box">
-						<div class="icon-box">
-						<div class="heart-box">
-						<button><i class="fa-regular fa-heart"></i></button>
-						</div>
-						<img src="https://taiwan.taiwanstay.net.tw/twpic/9215.jpg" />
-						</div>
-						<div class="text-box">
-						<a href="index-5.html">
-						<h3>凱旋新宿商旅</h3>
-						<h6><span>臺東縣</span> <span>臺東市</span></h6>
-						<div>
-						<h4>NT 2000/晚</h4>
-						</div>
-						</a>
-						</div>
-
-						</div>
-						</div>*@
-
-						<template v-for="item in resultVM">
-							<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-								<div class="inner-box">
-									<div class="icon-box">
-										<div class="heart-box">
-											<button><i class="fa-regular fa-heart"></i></button>
-										</div>
-										<img :src="item.image" />
-									</div>
-									<div class="text-box">
-										<a href="index-5.html">
-											<h3>{{item.name}}</h3>
-											<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
-											<div>
-												<h4>NT 2000/晚</h4>
-											</div>
-										</a>
-									</div>
-
-								</div>
-							</div>
-						</template>
-
-					</div>
+                        </div>
+                    </div>
+                </div>
 
 
-				</div>
-			</div>
+                <!--Sidebar Side-->
+                <div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
+                    <aside class="sidebar blog-sidebar">
+                        <!--Sidebar Widget-->
+                        <div class="sidebar-widget search-box wow fadeInUp" data-wow-delay="0ms"
+                             data-wow-duration="1500ms">
+                            <div class="widget-inner" id="map">
+                                <div class="sidebar-title">
+                                    <h1>這裡會是地圖</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
 
-			<!--Sidebar Side-->
-			<div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
-				<aside class="sidebar blog-sidebar">
-					<!--Sidebar Widget-->
-					<div class="sidebar-widget search-box wow fadeInUp" data-wow-delay="0ms"
-						 data-wow-duration="1500ms">
-						<div class="widget-inner" id="map">
-							<div class="sidebar-title">
-								<h1>這裡會是地圖</h1>
+            </div>
 
-							</div>
-						</div>
-					</div>
+        </div>
 
-				</aside>
-			</div>
-		</div>
+    </div>
 
-	</div>
+    <!-- Like Modal -->
+    <div class="modal fade" id="likeList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="staticBackdropLabel" style="color: red;">喜愛清單</h3>
+                    @*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
+                </div>
+                <div class="modal-body">
+
+                    <template v-for="item in likeVM">
+                        <div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                            <div class="inner-box">
+                                <div class="icon-box">
+                                    @*<div class="heart-box">
+                                        <i class="fa-solid fa-heart is-Liked"></i>
+                                    </div>*@
+                                    <div class="heart-box">
+                                        <button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
+                                    </div>
+                                    <img :src="item.hotelImage" />
+                                </div>
+                                <div class="text-box">
+                                    <a href="index-5.html">
+                                        <h3>{{item.hotelName}}</h3>
+                                        <h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
+                                        <div>
+                                            <h4>NT 2000/晚</h4>
+                                            <h4>建立時間:{{item.createDate | formatDateTime }}</h4>
+                                        </div>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-primary">修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
 
 @section Scripts {
 
-	<a href="~/lib/jquery/dist/jquery.min.map"></a>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
-	<script src="~/lib/vue/vue.min.js"></script>
-	<script src="~/lib/axios/axios.min.js"></script>
+    <a href="~/lib/jquery/dist/jquery.min.map"></a>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
+    <script src="~/lib/vue/vue.min.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
 
-	<script>
-		let map;
-		function initMap() {
-			map = new google.maps.Map(document.getElementById("map"), {
-				center: { lat: 25.105497, lng: 121.597366 },
-				zoom: 14,
-			});
-		}
-		window.initMap = initMap;
-	</script>
+    <script>
+        let map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 25.105497, lng: 121.597366 },
+                zoom: 14,
+            });
+        }
+        window.initMap = initMap;
 
-	<script>
-		const vm = new Vue({
-			el: "#app",
-			data: {
-				resultVM: [],
-
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                resultVM: [],
+                likeVM: [],
 
 
 
 
-			},
-			mounted: function () {
-				let _this = this;
-				_this.filterResultVM();
-			},
-			methods: {
-				filterResultVM: function () {
+            },
+            filters: {
+                formatDateTime(value) {
+                    const date = new Date(value);
+                    const year = date.getFullYear();
+                    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+                    const day = ("0" + date.getDate()).slice(-2);
+                    const hours = ("0" + date.getHours()).slice(-2);
+                    const minutes = ("0" + date.getMinutes()).slice(-2);
+                    return `${year}-${month}-${day} ${hours}:${minutes}`;
+                }
+            },
+            mounted: function () {
+                let _this = this;
+                _this.filterResultVM();
 
-					let _this = this;
-					var request = {};
-					axios.get(`/api/Result/Get`).then(response => {
+            },
+            methods: {
+                filterResultVM: function () {
 
-						_this.resultVM = response.data;
+                    let _this = this;
+                    var request = {};
+                    axios.get(`/api/Result/Get`).then(response => {
 
-					})
+                        _this.resultVM = response.data;
 
-				},
+                    });
+                },
+                getLikes: function () {
+                    let _this = this;
+                    axios.get(`/Like/GetLikes`).then(response => {
+                        //alert(JSON.stringify(response.data));
+                        _this.likeVM = response.data;
+                    });
+                },
+                clickLike: function (id) {
+                    let _this = this;
+                    var request = { params: { hotelId: id } };
+                    axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
+                        _this.filterResultVM();
+                        _this.getLikes();
+                    });
+                },
 
-			}
+            }
 
-		});
+        });
 
 
-	</script>
+    </script>
 }
