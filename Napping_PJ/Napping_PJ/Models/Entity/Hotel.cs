@@ -9,6 +9,7 @@ namespace Napping_PJ.Models.Entity
         {
             Comments = new HashSet<Comment>();
             ExtraServices = new HashSet<ExtraService>();
+            Likes = new HashSet<Like>();
             Rooms = new HashSet<Room>();
         }
 
@@ -29,6 +30,7 @@ namespace Napping_PJ.Models.Entity
 
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ExtraService> ExtraServices { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
     }
 }
