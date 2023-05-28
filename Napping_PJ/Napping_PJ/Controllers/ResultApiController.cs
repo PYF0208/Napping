@@ -16,10 +16,12 @@ namespace Napping_PJ.Controllers
 		{
 			_context = context;
 		}
+		
+		
 		[HttpGet("{num}")]
 		public IEnumerable<ResultViewModel> Get(double num)
 		{
-			var result = _context.Hotels.Join(_context.Rooms, h => h.HotelId, r => r.HotelId, (h, r) => new ResultViewModel
+			var result = _context.Hotels.AsNoTracking().Join(_context.Rooms, h => h.HotelId, r => r.HotelId, (h, r) => new ResultViewModel
 			{
 				HotelId = h.HotelId,
 				Name = h.Name,
@@ -44,9 +46,6 @@ namespace Napping_PJ.Controllers
 
 
 		}
-
-
-
 
 	};
 }

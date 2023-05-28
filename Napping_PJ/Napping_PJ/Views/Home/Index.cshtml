@@ -189,27 +189,6 @@
 				<div class="blog-content">
 					<div class="row">
 						<!--Feature Box-->
-						@*<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
-						data-wow-delay="0ms" data-wow-duration="1500ms">
-						<div class="inner-box">
-						<div class="icon-box">
-						<div class="heart-box">
-						<button><i class="fa-regular fa-heart"></i></button>
-						</div>
-						<img src="https://taiwan.taiwanstay.net.tw/twpic/9215.jpg" />
-						</div>
-						<div class="text-box">
-						<a href="index-5.html">
-						<h3>凱旋新宿商旅</h3>
-						<h6><span>臺東縣</span> <span>臺東市</span></h6>
-						<div>
-						<h4>NT 2000/晚</h4>
-						</div>
-						</a>
-						</div>
-
-						</div>
-						</div>*@
 
 						<template v-for="item in resultVM">
 							<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
@@ -221,7 +200,7 @@
 										<img :src="item.image" />
 									</div>
 									<div class="text-box">
-										<a href="index-5.html">
+										<a :href="'Home/HotelPage/'+item.hotelId">
 											<h3>{{item.name}}</h3>
 											<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
 											<div>
@@ -285,7 +264,7 @@
 			el: "#app",
 			data: {
 				resultVM: [],
-
+				homePage:``,
 
 			},
 			mounted: function () {
@@ -343,8 +322,15 @@
 				searchRoom: function () {
 
 					var p = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
-					vm.filterResultVM(p);
-
+					
+					if(p > 6 || p == 0){
+					
+						alert("合計人數必須在1～6人之間")
+					
+					}else{
+						vm.filterResultVM(p);
+					}
+					
 				},
 			},
 		});
