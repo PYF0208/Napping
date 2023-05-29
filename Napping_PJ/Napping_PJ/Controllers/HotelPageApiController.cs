@@ -15,7 +15,7 @@ namespace Napping_PJ.Controllers
 			_context = context;
 		}
 
-		[HttpGet("{q}")]
+		[HttpGet("{id}")]
 		public IEnumerable<HotelPageViewModel> Get(int id)
 		{
 

@@ -226,7 +226,8 @@
 
 					let _this = this;
 
-					var id = @TempData["id"];
+					var parts = window.location.href.split('/');
+					var id = parts[parts.length - 1];
 
 					axios.get(`/api/HotelPage/Get/${id}`).then(response => {
 						//alert(JSON.stringify(response.data))

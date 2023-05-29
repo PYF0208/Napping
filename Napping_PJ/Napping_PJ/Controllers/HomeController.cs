@@ -30,7 +30,7 @@ namespace Napping_PJ.Controllers
 
 		public IActionResult HotelPage(int id)
 		{
-            TempData["id"] = id;
+
 			return View();
 		}
 
