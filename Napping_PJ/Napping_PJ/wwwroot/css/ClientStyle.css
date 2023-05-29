@@ -531,8 +531,8 @@ img {
     top: 0;
     display: block;
     width: 100%;
-    z-index: 9999;
-    background: none;
+    z-index: 1000;
+
 }
 
 /*=== Header Main Box ===*/
@@ -566,13 +566,17 @@ img {
 .header-style-one .header-upper .logo-box {
     position: relative;
     float: left;
-    padding: 20px 0px;
     margin-right: 50px;
 }
 
     .header-style-one .header-upper .logo-box .logo {
         position: relative;
         display: block;
+        color: #ffffff;
+    }
+
+    .header-style-one .header-upper .logo-box .logo h3 {
+        color: #ffffff;
     }
 
         .header-style-one .header-upper .logo-box .logo img {
@@ -592,7 +596,7 @@ img {
     .header-style-one .other-links .info {
         position: relative;
         float: left;
-        padding-top: 15px;
+
     }
 
     .header-style-one .other-links .link-box {
@@ -881,7 +885,7 @@ img {
     }
 
     .header-style-one.alternate .header-upper {
-        background: none;
+        
     }
 
 .fixed-header.header-style-one.alternate .header-upper {
@@ -891,7 +895,6 @@ img {
 
 .header-style-one.alternate .header-upper .logo-box {
     padding-top: 15px;
-    padding-bottom: 15px;
 }
 
 .header-style-one.alternate .other-links .info li a {
@@ -899,7 +902,7 @@ img {
 }
 
 .header-style-one.alternate .nav-outer .main-menu {
-    display: none;
+    
 }
 
 
@@ -1406,42 +1409,26 @@ img.lazy-image {
         width: 100%;
         font-size: 16px;
         font-style: normal;
-        height: 62px;
-        padding: 15px 20px;
+        height: 40px;
+        padding: 2px 32px 2px 20px;
         line-height: 30px;
         font-family: 'Roboto', sans-serif;
         color: #25283a;
-        border-radius: 0px;
+        border-radius: 5px;
         background-color: #ffffff;
         border: 1px solid #e5e5e5;
         cursor: pointer;
         z-index: 5;
     }
 
-.filter-form .check-sel-box .check-sel-btn {
-    height: 82px;
-    padding: 25px 20px;
-}
 
-.filter-form-two .check-sel-box .check-sel-btn {
-    padding-left: 50px;
-    background: none;
-}
-
-.filter-form-three .check-sel-box .check-sel-btn {
-    padding: 9px 25px;
-    padding-left: 45px;
-    line-height: 30px;
-    height: 50px;
-    background: none;
-}
 
 .check-sel-box .check-sel-btn:before {
     font-family: 'Flaticon';
     content: "\f106";
     position: absolute;
-    right: 20px;
-    top: 15px;
+    right: 5%;
+    top: 5px;
     height: 30px;
     line-height: 30px;
     display: block;
@@ -6762,158 +6749,6 @@ img.lazy-image {
 ====================================================================
 
 ***/
-/*外面的月曆開始*/
-
-.calendar {
-    display: flex;
-    max-width: 635px;
-    height: 320px;
-    border: 1px solid #38470B;
-    box-shadow: 0px 2px 6px #0000000A;
-    text-align: center;
-    padding: 27px 5% 0px 5%;
-    box-sizing: border-box;
-    font-size: 12px;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 700;
-    color: #38470B;
-    position: relative;
-}
-
-    .calendar .leftCal, .calendar .rightCal {
-        width: 100%;
-    }
-
-    .calendar .leftCal {
-        margin-right: 3.4%;
-    }
-
-    .calendar .leftBar, .calendar .rightBar {
-        border-bottom: 1px solid rgba(56, 71, 11, 0.1);
-    }
-
-        .calendar .leftBar ul, .calendar .rightBar ul {
-            display: flex;
-            margin-top: 24px;
-            margin-bottom: 10px;
-            color: rgba(56, 71, 11, 0.5);
-        }
-
-            .calendar .leftBar ul li, .calendar .rightBar ul li {
-                width: 38px;
-            }
-
-    .calendar .lastBtn {
-        position: absolute;
-        top: 31px;
-        left: 3%;
-    }
-
-    .calendar .nextBtn {
-        position: absolute;
-        top: 31px;
-        right: 3%;
-    }
-
-    .calendar .leftDayList, .calendar .rightDayList {
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: 14px;
-    }
-
-        .calendar .leftDayList li, .calendar .rightDayList li {
-            width: 14%;
-            height: 30px;
-            margin-bottom: 6px;
-            line-height: 30px;
-            font-family: 'Open Sans', sans-serif;
-            font-weight: 400;
-        }
-
-        .calendar .leftDayList .emptyDay a, .calendar .rightDayList .emptyDay a {
-            display: block;
-            height: 100%;
-            width: 80%;
-            color: #38470B;
-            margin: 0 auto;
-        }
-
-            .calendar .leftDayList .emptyDay a:hover, .calendar .rightDayList .emptyDay a:hover {
-                background: #949C7C;
-                border-radius: 50%;
-                color: white;
-                font-family: 'Open Sans', sans-serif;
-                font-weight: 700;
-            }
-
-    .calendar .delDay {
-        text-decoration: line-through;
-        color: rgba(56, 71, 11, 0.3);
-    }
-
-        .calendar .delDay a {
-            color: rgba(56, 71, 11, 0.3);
-            cursor: default;
-        }
-
-    .calendar #start {
-        background: #38470B;
-        color: white;
-        font-weight: 700;
-        border-radius: 50%;
-        display: block;
-        height: 100%;
-        width: 30px;
-        margin: 0 auto;
-    }
-
-    .calendar #end {
-        background: #949C7C;
-        color: white;
-        font-weight: 700;
-        border-radius: 50%;
-        display: block;
-        height: 100%;
-        width: 30px;
-        margin: 0 auto;
-    }
-
-    .calendar #connection {
-        background: #949C7C;
-        color: white;
-        font-weight: 700;
-        border-radius: 50%;
-    }
-
-    .calendar #connectionLi {
-        background: rgba(56, 71, 11, 0.2);
-        color: white;
-        font-weight: 700;
-    }
-
-    .calendar #head {
-        background: rgba(56, 71, 11, 0.2);
-        border-radius: 50% 0 0 50%;
-        color: white;
-        width: 30px;
-        font-weight: 700;
-        padding-left: 0px;
-        padding-right: 1.4%;
-        margin-left: 1.4%;
-    }
-
-    .calendar #tail {
-        background: rgba(56, 71, 11, 0.2);
-        border-radius: 0 50% 50% 0;
-        width: 30px;
-        color: white;
-        font-weight: 700;
-        padding-left: 1.4%;
-        padding-right: 0px;
-        margin-right: 1.4%;
-    }
-
-/*月曆結束*/
 
 .page-banner {
     position: relative;
@@ -6944,8 +6779,8 @@ img.lazy-image {
     }
 
     .page-banner .inner-container {
+        max-width : 800px;
         position: relative;
-        left: 600px;
         padding: 290px 0px 230px;
     }
 
@@ -6959,7 +6794,17 @@ img.lazy-image {
         top: 0;
         width: 100%;
         height: 100%;
-        background-image: url('../images/13.jpg');
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .page-banner .hotelImage-layer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: 600px;
+        height: 100%;
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
