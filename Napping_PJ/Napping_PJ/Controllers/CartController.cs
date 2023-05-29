@@ -22,12 +22,12 @@ namespace Napping_PJ.Controllers
         }
         public async Task<IActionResult> GetRooms()
         {
-            List<CartViewModel> cartViewModels = new List<CartViewModel>();
+            List<RoomDetailViewModel> cartViewModels = new List<RoomDetailViewModel>();
             List<Room> rooms = await _context.Rooms.Include(r => r.Hotel).Include(r => r.RoomImages).Take(5).ToListAsync();
 
             foreach (Room room in rooms)
             {
-                cartViewModels.Add(new CartViewModel()
+                cartViewModels.Add(new RoomDetailViewModel()
                 {
                     RoomId = room.RoomId,
                     RoomType = room.Type,
