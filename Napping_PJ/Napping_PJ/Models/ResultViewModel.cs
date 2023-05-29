@@ -13,5 +13,7 @@ namespace Napping_PJ.Models
 		public string City { get; set; } = null!;
 		public string Region { get; set; } = null!;
 
-	}
+		public bool IsLike { get; set; }
+
+    }
 }

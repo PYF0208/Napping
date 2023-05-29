@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models;
 using Napping_PJ.Models.Entity;
+using System.Security.Claims;
 
 namespace Napping_PJ.Controllers
 {
@@ -16,24 +17,41 @@ namespace Napping_PJ.Controllers
         {
             _context = context;
         }
-        [HttpGet]
-        public IActionResult Get()
-        {
+        //[HttpGet]
+        //public IEnumerable<ResultViewModel> Get()
+        //{
 
-            return Ok(_context.Hotels.Select(x => new ResultViewModel
+        //	return _context.Hotels.Select(x => new ResultViewModel
+        //	{
+        //		HotelId = x.HotelId,
+        //		Name = x.Name,
+        //		Image = x.Image,
+        //		City = x.City,
+        //		Region = x.Region,
+
+        //	});
+
+        //}
+        [HttpGet]
+        public IEnumerable<ResultViewModel> Get()
+        {
+            HashSet<int> allHotel = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
+                allHotel = _context.Likes.AsNoTracking().Where(x => x.CustomerId == customer.CustomerId).Select(x => x.HotelId).ToHashSet();
+            }
+            return _context.Hotels.AsNoTracking().Select(x => new ResultViewModel
             {
                 HotelId = x.HotelId,
                 Name = x.Name,
                 Image = x.Image,
                 City = x.City,
                 Region = x.Region,
-
-            }));
+                IsLike = (allHotel != null && allHotel.Contains(x.HotelId)) ? true : false,
+            });
 
         }
 
-
-
-
-    };
+    }
 }
