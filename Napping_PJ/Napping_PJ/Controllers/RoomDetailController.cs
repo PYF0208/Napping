@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models.Entity;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 using Napping_PJ.Models;
+using Newtonsoft.Json;
 
 namespace Napping_PJ.Controllers
 {
@@ -21,30 +20,15 @@ namespace Napping_PJ.Controllers
             ViewBag.RoomId = roomId;
             return View();
         }
-        [Route("RoomDetail/GetImageList/{roomId}")]
-        public IActionResult GetImageList(int roomId)
-        {
-            Room getRoom = _context.Rooms.Include(x => x.RoomImages).FirstOrDefault(x => x.RoomId == roomId);
-            if (getRoom == null)
-            {
-                return BadRequest("無此Room");
-            }
-            //設置阻止循環引用
-            var options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve
-            };
-            return Ok(JsonSerializer.Serialize(getRoom.RoomImages, options));
-        }
         [Route("RoomDetail/GetRoomDetail/{roomId}")]
         public async Task<IActionResult> GetRoomDetail(int roomId)
         {
-            Room getRoom = await _context.Rooms.Include(x => x.Hotel).ThenInclude(x => x.ExtraServices).Include(x =>x.RoomImages).FirstOrDefaultAsync(x => x.RoomId == roomId);
+            Room getRoom = await _context.Rooms.Include(x => x.Hotel).ThenInclude(x => x.ExtraServices).Include(x => x.RoomImages).Include(x => x.Features).FirstOrDefaultAsync(x => x.RoomId == roomId);
             if (getRoom == null)
             {
                 return BadRequest("無此房型");
             }
-            CartViewModel CVM = new CartViewModel()
+            RoomDetailViewModel CVM = new RoomDetailViewModel()
             {
                 RoomId = getRoom.RoomId,
                 RoomType = getRoom.Type,
@@ -55,6 +39,15 @@ namespace Napping_PJ.Controllers
                 MaxGuests = getRoom.MaxGuests,
                 TravelType = 0,
                 Note = null,
+                RoomFeatures = getRoom.Features.Select(x =>
+                {
+                    return new RoomFeatureViewModel()
+                    {
+                        FeatureId = x.FeatureId,
+                        Name = x.Name,
+                        Image = x.Image,
+                    };
+                }),
                 //SelectedExtraServices = await GetExtraServices(getRoom.HotelId)
                 SelectedExtraServices = getRoom.Hotel.ExtraServices.Select(x =>
                 {
@@ -64,34 +57,15 @@ namespace Napping_PJ.Controllers
                         Name = x.Name,
                         ServiceQuantity = 0,
                     };
-                })
+                }).ToList()
             };
 
             //設置阻止循環引用
-            var options = new JsonSerializerOptions
+            JsonSerializerSettings settings = new JsonSerializerSettings
             {
-                ReferenceHandler = ReferenceHandler.Preserve
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
-            return Ok(JsonSerializer.Serialize(CVM,options));
-        }
-        public async Task<List<SelectedExtraServiceViewModel>> GetExtraServices(int HotelId)
-        {
-            List<SelectedExtraServiceViewModel> selectedExtraServiceViewModels = new List<SelectedExtraServiceViewModel>();
-            IQueryable<ExtraService> extraServices = _context.ExtraServices.Where(es => es.HotelId == HotelId);
-            List<ExtraService> extraServiceList = await extraServices.ToListAsync();
-
-            foreach (ExtraService extraService in extraServiceList)
-            {
-                selectedExtraServiceViewModels.Add(
-                    new SelectedExtraServiceViewModel()
-                    {
-                        ExtraServiceId = extraService.HotelId,
-                        Name = extraService.Name,
-                        ServiceQuantity = 0
-                    });
-            };
-
-            return selectedExtraServiceViewModels;
+            return Ok(JsonConvert.SerializeObject(CVM, settings));
         }
         public IActionResult GetBookingState(int roomId)
         {

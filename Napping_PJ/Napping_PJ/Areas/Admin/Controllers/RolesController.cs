@@ -25,7 +25,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         {
             _context = context;
         }
-        [Authorize]
+        
         //[Authorize(Roles = "1")]
         //[Authorize(Roles = "3")]
         public IActionResult Index()
@@ -67,7 +67,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
             });
             return Ok(json);
         }
-
+        [Authorize(Roles = "1")]
         [HttpPost]
         public async Task<IActionResult> AddRoleToUser([FromQuery] string userId, [FromQuery] string roleId)
         {

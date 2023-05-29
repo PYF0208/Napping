@@ -41,7 +41,7 @@ namespace Napping_PJ.Controllers
                 });
                 return Ok(likeViewModel);
             }
-            return NotFound();
+            return BadRequest("/Login/Index");
 
         }
         [HttpGet]
