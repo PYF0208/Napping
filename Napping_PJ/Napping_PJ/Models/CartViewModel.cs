@@ -7,13 +7,13 @@ namespace Napping_PJ.Models
         public int RoomId { get; set; }
         public string RoomType { get; set; }
         public string HotelName { get; set; }
-        public string HotelImageSrc { get; set; }
+        public ICollection<RoomImage>? RoomImages { get; set; }
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
         public int MaxGuests { get; set; }
         public int TravelType { get; set; }
         public string Note { get; set; }
-        public List<SelectedExtraServiceViewModel> SelectedExtraServices { get; set; }
+        public IEnumerable<SelectedExtraServiceViewModel> SelectedExtraServices { get; set; }
     }
     public class SelectedExtraServiceViewModel
     {

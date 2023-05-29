@@ -32,7 +32,7 @@ namespace Napping_PJ.Controllers
                     RoomId = room.RoomId,
                     RoomType = room.Type,
                     HotelName = room.Hotel.Name,
-                    HotelImageSrc = room.RoomImages.First().Image,
+                    RoomImages = room.RoomImages,
                     CheckIn = DateTime.Now,
                     CheckOut = DateTime.Now,
                     MaxGuests = room.MaxGuests,

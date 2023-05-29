@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="images/shortcut.ico" type="image/x-icon">
+    @section Styles
+        {
+    }
+    <title>MilkShop Hotel | Room</title>
+</head>
+
+<body>
+    <div id="roomDetailApp">
+        <div id="carouselCaptions" class="carousel slide w-50">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div v-for="(image,index) in RoomDetail.RoomImages.$values" :class="{'carousel-item' :'ture','active' : index === 0}">
+                    <img :src="image.Image" class="d-block w-100" alt="image.Image">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>First slide label</h5>
+                        <p>Some representative placeholder content for the first slide.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <div class="w-50">
+            <div class="roomTitle">
+                <h2>Single Room</h2>
+                <p><span class="Guest">1</span>人・<span class="Bed">單人床</span>・附早餐・衛浴1間・<span class="Footage">18</span>平方公尺</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+@section Scripts
+{
+    <script>
+        var roomDetailVue = new Vue({
+            el: '#roomDetailApp',
+            data: {
+                size: 'default',
+                timeValue: null,
+                ImageList: [],
+                RoomDetail: { RoomImages :[]},
+                RoomBookingState: [],
+                roomId: -1,
+            },
+            mounted: function() {
+                var _this = this;
+                _this.roomId = @ViewBag.RoomId;
+                //_this.getImageList(_this.roomId);
+                _this.getRoomDetail(_this.roomId);
+            },
+            methods: {
+                //getImageList: function(roomId) {
+                //    var _this = this;
+                //    _this.ImageList = [];
+                //    axios.get(`GetImageList/${roomId}`)
+                //        .then(response => {
+                //            //console.log(response.data);
+                //            _this.ImageList = response.data.$values;
+                //        })
+                //        .catch(error => { console.log(error.response.data); });
+                //},
+                getRoomDetail: function(roomId) {
+                    var _this = this;
+                    //_this.RoomDetail = {};
+                    axios.get(`GetRoomDetail/${roomId}`).then(response => {
+                         console.log(response.data);
+                         _this.RoomDetail = response.data;
+                    }).catch(
+                        error => {
+                            console.log(error.response.data);
+                        }
+                        );
+                },
+
+            },
+        });
+    </script>
+}

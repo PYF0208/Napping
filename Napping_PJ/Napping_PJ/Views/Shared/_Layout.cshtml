@@ -12,6 +12,7 @@
     <link href="~/css/clientstyle.css" rel="stylesheet" />
     <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/cart.css" rel="stylesheet" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 
@@ -53,13 +54,11 @@
         <div class="preloader">
             <div class="icon"></div>
         </div>
-
         @RenderBody()
 
     </div>
 
     <!--購物車-->
-
     <partial name="_CartPartial" />
     <!--購物車-->
 
@@ -121,6 +120,7 @@
 
     </footer>
     <script src="~/lib/vue/vue.min.js"></script>
+    <script src="~/lib/vue-cookies/vue-cookies.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>

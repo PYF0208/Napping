@@ -1,5 +1,5 @@
 ﻿<div id="cartVue">
-    <button class=" btn-info cartBtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @@click="freshCart"><i class="fa-solid fa-cart-shopping fa-2xl"></i></button>
+    <button class=" btn-info cartBtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><a class="cart-float">{{rooms.length}}</a><i class="fa-solid fa-cart-shopping fa-2xl"></i></button>
     <div class="offcanvas offcanvas-start cartoffcanvas" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
         <div class="card">
             <div class="row">
@@ -10,19 +10,19 @@
                             <div class="col align-self-center text-right text-muted">{{rooms.length}} items</div>
                         </div>
                     </div>
-                    <div v-for="room in rooms" class="row border-top cartItem">
-                        <div class="row"><img class="img-fluid" :src="room.hotelImageSrc"></div>
-                        <div class="row main align-items-center">
+                    <div v-for="room in rooms" class="row border-1 rounded border-opacity-25 p-1 m-1 cartItem">
+                        <div class="col"><img class="img-fluid" :src="room.hotelImageSrc"></div>
+                        <div class="col main align-items-center">
                             <div class="col">
                                 <div class="row text-muted">{{room.hotelName}}</div>
                                 <div class="row">{{room.roomType}}</div>
                             </div>
-                            <div class="col">&euro; 44.00 </div>                            
-                        </div>                        
+                            <div class="col">&euro; 44.00 </div>
+                        </div>
                         <div class="row">
-                            <div class="col" v-for="service in room.selectedExtraServices">
+                            <span class="optionDiv bg-info" v-for="service in room.selectedExtraServices">
                                 <label>{{service.name}}</label><a href="#">-</a><a href="#" class="border">{{service.serviceQuantity}}</a><a href="#">+</a>
-                            </div>
+                            </span>
                         </div>
                         <div>
                             <a class="close" @@click="removeFromCart(room)"><i class="fa-regular fa-trash-can"></i></a>
@@ -49,7 +49,7 @@
                     <button class="btn">CHECKOUT</button>
                 </div>
             </div>
-
+            <button type="button" class="top-0 end-0 position-absolute" data-bs-dismiss="offcanvas"><i class="fa-regular fa-circle-xmark fa-2xl"></i></button>
         </div>
     </div>
 </div>

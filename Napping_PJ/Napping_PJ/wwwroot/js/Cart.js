@@ -1,5 +1,4 @@
-﻿
-var cartVue = new Vue({
+﻿var cartVue = new Vue({
     el: '#cartVue',
     data: {
         rooms: [],
@@ -13,10 +12,10 @@ var cartVue = new Vue({
             var _this = this;
             _this.rooms = _this.getCartList('cartItem');
         },
-        getRooms: function () {
+        getRooms: async function () {
             var _this = this;
             _this.rooms = [];
-            axios.post(`Cart/GetRooms`)
+            await axios.post(`Cart/GetRooms`)
                 .then(response => {
                     //console.log(response.data);
                     _this.rooms = response.data;
@@ -45,26 +44,27 @@ var cartVue = new Vue({
         },
         setCookie: function (name, value, days) {
             var _this = this;
-            var expires = "";
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + encodeURIComponent(JSON.stringify(value)) + expires + "; path=/";
+            var jsonStr = JSON.stringify(value);
+            var encodeStr = encodeURIComponent(jsonStr);
+            _this.$cookies.set(name, encodeStr, { expires: days });
         },
         getCartList: function (name) {
+            var _this = this;
             var cartList = [];
 
             var cookies = document.cookie.split(';');
 
-            for (i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i];
-                if (cookie.startsWith(name + '=')) {
-                    cartList = JSON.parse(decodeURIComponent(cookie.substring(name.length + 1)));
-                }
+            var encodedValue = _this.$cookies.get(name);
+            if (encodedValue) {
+                var decodedValue = decodeURIComponent(encodedValue);
+                cartList = JSON.parse(decodedValue);
             }
             return cartList;
         },
+    },
+    watch: {
+        'rooms': function (newValue) {
+            //console.log('Cookie發生變化:', newValue);
+        }
     },
 });
