@@ -45,33 +45,21 @@ namespace Napping_PJ.Controllers
 
         }
         [HttpGet]
-        public ApiResponseDto ClickLike(int hotelId)
+        public IActionResult ClickLike(int hotelId)
         {
             if (User.Identity == null)
             {
-                return new ApiResponseDto
-                {
-                    Code = "A101",
-                    Message = "沒登入"
-                };
-            }
+				return BadRequest("/Login/Index");
+			}
             if (!User.Identity.IsAuthenticated)
             {
-                return new ApiResponseDto
-                {
-                    Code = "A101",
-                    Message = "沒登入"
-                };
-            }
+				return BadRequest("/Login/Index");
+			}
             var user = _context.Customers.Include(x => x.Likes).AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
             if (user == null)
             {
-                return new ApiResponseDto
-                {
-                    Code = "A102",
-                    Message = "找不到Customer"
-                };
-            }
+				return BadRequest("/Login/Index");
+			}
             var findResult = user.Likes.FirstOrDefault(x => x.HotelId == hotelId);
             if (findResult != null)
             {
@@ -87,11 +75,11 @@ namespace Napping_PJ.Controllers
                 });
             }
             _context.SaveChanges();
-            return new ApiResponseDto
+            return Ok(new ApiResponseDto
             {
                 Code = "A103",
                 Message = "修改成功"
-            };
+            });
 
 
             #region 原版本

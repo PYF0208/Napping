@@ -75,13 +75,13 @@
 					</a>
 				</div>
 			</div>
-			<div class="nav-outer clearfix">
+			<div id="vueApp" class="nav-outer clearfix">
 				<!-- Main Menu -->
 				<nav class="main-menu navbar-expand-md navbar-light">
 					<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
 						<div class="d-flex" style="align-items: center; column-gap: 12px;">
 
-							<div id="vueApp" class="form-group">
+							<div class="form-group">
 								<template>
 									<div class="demo-date-picker">
 										<div class="block">
@@ -159,14 +159,18 @@
 									</div>
 								</div>
 							</div>
-
-							<div id="search" class="form-group">
+							<div class="form-group">
 								<div class="field-inner">
 									<div class="btn btn-light" @@click="searchRoom()">
 										<i class="fa-solid fa-magnifying-glass"></i>
 										搜尋
 									</div>
 								</div>
+							</div>
+							<div>
+								<button type="button" class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#likeList" @@click="getLikes()">
+									喜愛清單
+								</button>
 							</div>
 						</div>
 					</div>
@@ -240,7 +244,6 @@
 								</div>
 							</div>
 						</div>
-
 					</aside>
 				</div>
 			</div>
@@ -255,14 +258,13 @@
 					@*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
 				</div>
 				<div class="modal-body">
-
-					<template v-for="item in likeVM">
-						<div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+					<template v-if="likeVM.length === 0">
+						<p>您還沒有收藏任何旅店唷!</p>
+					</template>
+					<template v-else>
+						<div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" v-for="item in likeVM">
 							<div class="inner-box">
 								<div class="icon-box">
-									@*<div class="heart-box">
-									<i class="fa-solid fa-heart is-Liked"></i>
-									</div>*@
 									<div class="heart-box">
 										<button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
 									</div>
@@ -286,7 +288,6 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-					<button type="button" class="btn btn-primary">修改</button>
 				</div>
 			</div>
 		</div>
@@ -321,6 +322,7 @@
 			data: {
 				resultVM: [],
 				likeVM: [],
+				baseURL: "",
 				//numOfGuests: ,
 			},
 			computed: {
@@ -344,6 +346,8 @@
 			mounted: function () {
 				let _this = this;
 				_this.filterResultVM();
+				_this.getLikes();
+				_this.baseURL = window.location.origin;
 			},
 			methods: {
 				filterResultVM: function () {
@@ -361,6 +365,9 @@
 					axios.get(`/Like/GetLikes`).then(response => {
 						//alert(JSON.stringify(response.data));
 						_this.likeVM = response.data;
+					}).catch(error => {
+						//console.log(error.response.data);
+						location.href = _this.baseURL + error.response.data;
 					});
 				},
 				clickLike: function (id) {
@@ -369,6 +376,9 @@
 					axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
 						_this.filterResultVM();
 						_this.getLikes();
+					}).catch(error => {
+						//console.log(error.response.data);
+						location.href = _this.baseURL + error.response.data;
 					});
 				},
 
@@ -384,9 +394,12 @@
 			data: {
 				size: 'default',
 				timeValue: null,
+				likeVM: [],
+				baseURL: "",
 			},
 			mounted: function () {
-
+				let _this=this;
+				_this.baseURL = window.location.origin;
 			},
 			methods: {
 				submitForm() {
@@ -394,22 +407,6 @@
 					console.log("開始日期:", this.timeValue[0]);
 					console.log("结束日期:", this.timeValue[1]);
 				},
-
-			},
-		});
-
-	</script>
-
-	<script>
-		var searchApp = new Vue({
-			el: '#search',
-			data: {
-
-			},
-			mounted: function () {
-
-			},
-			methods: {
 				searchRoom: function () {
 
 					var p = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
@@ -422,6 +419,16 @@
 						vm.filterResultVM(p);
 					}
 
+				},
+				getLikes: function () {
+					let _this = this;
+					axios.get(`/Like/GetLikes`).then(response => {
+						//alert(JSON.stringify(response.data));
+						_this.likeVM = response.data;
+					}).catch(error => {
+						//console.log(error.response.data);
+						location.href = _this.baseURL + error.response.data;
+					});
 				},
 			},
 		});
