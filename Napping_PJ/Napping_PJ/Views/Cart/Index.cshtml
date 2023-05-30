@@ -9,7 +9,7 @@
 <body>
     <div id="app" style="background-color:gray">
         <div style="padding-top:200px;display:flex;" class="container-fluid">
-            <div v-for="room in rooms" class="row m-1" style="width:400px">
+            <div v-for="room in allRooms" class="row m-1" style="width:400px">
                 <span v-model="room.roomId" class="form-control col-12">{{room.roomId}}</span>
                 <span v-model="room.roomType" class="form-control col-12">{{room.roomType}}</span>
                 <input v-model="room.checkIn" class="form-control col-5" type="date" />
@@ -28,13 +28,13 @@
 </body>
 </html>
 @section Scripts{
-    <script src="lib\axios\axios.min.js"></script>
-    <script src="lib\vue\vue.min.js"></script>
+    @*<script src="lib\axios\axios.min.js"></script>*@
+    @*<script src="lib\vue\vue.min.js"></script>*@
     <script>
         var VueApp = new Vue({
             el: '#app',
             data: {
-                rooms: [],
+                allRooms: [],                
             },
             mounted: function () {
                 var _this = this;
@@ -43,11 +43,11 @@
             methods: {
                 getRooms: function () {
                     var _this = this;
-                    _this.rooms = [];
+                    _this.allRooms = [];
                     axios.post(`Cart/GetRooms`)
                         .then(response => {
                             //console.log(response.data);
-                            _this.rooms = response.data;
+                            _this.allRooms = response.data;
                         })
                         .catch();
                 },
@@ -56,8 +56,13 @@
                     var cookieName = 'cartItem';
                     //將房間物件加入cookie
                     var cartList = _this.getCartList(cookieName);
+                    //var cartList = masterCartList;
+                    var findRoomIndex = cartList.findIndex(r => r.roomId == room.roomId);
+                    if (findRoomIndex >= 0) {
+                        return;
+                    }
                     cartList.push(room);
-                    console.log(cartList);
+                    //console.log(cartList);
                     _this.setCookie(cookieName, cartList, 365);
                 },
                 removeFromCart: function (name, idx) {
@@ -70,28 +75,26 @@
                 },
                 setCookie: function (name, value, days) {
                     var _this = this;
-                    var expires = "";
-                    if (days) {
-                        var date = new Date();
-                        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                        expires = "; expires=" + date.toUTCString();
-                    }
-                    document.cookie = name + "=" + encodeURIComponent(JSON.stringify(value)) + expires + "; path=/";
+                    var jsonStr = JSON.stringify(value);
+                    var encodeStr = encodeURIComponent(jsonStr);
+                    _this.$cookies.set(name, encodeStr, { expires: days });
+                    cartVue.freshCart();
                 },
                 getCartList: function (name) {
+                    var _this = this;
                     var cartList = [];
 
                     var cookies = document.cookie.split(';');
 
-                    for (i = 0; i < cookies.length; i++) {
-                        var cookie = cookies[i];
-                        if (cookie.startsWith(name + '=')) {
-                            cartList = JSON.parse(decodeURIComponent(cookie.substring(name.length + 1)));
-                        }
+                    var encodedValue = _this.$cookies.get(name);
+                    if (encodedValue) {
+                        var decodedValue = decodeURIComponent(encodedValue);
+                        cartList = JSON.parse(decodedValue);
                     }
                     return cartList;
                 },
             },
         });
+    
     </script>
 }

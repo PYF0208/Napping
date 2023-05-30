@@ -23,9 +23,13 @@
       "destination": "wwwroot/lib/animate.css/"
     },
     {
-      "provider": "cdnjs",
       "library": "jqueryui@1.13.2",
       "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "vue-cookies@1.8.3",
+      "destination": "wwwroot/lib/vue-cookies/"
     }
   ]
 }

@@ -1,0 +1,128 @@
+﻿@section Styles
+    {
+    <link href="~/lib/element-ui/theme-chalk/index.min.css" rel="stylesheet" />
+    <link href="~/css/datepicker.css" rel="stylesheet" />
+}
+<div id="roomDetailApp">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-5">
+                <div id="carouselCaptions" class="carousel slide">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div v-for="(image,index) in RoomDetail.RoomImages" :class="{'carousel-item' :'ture','active' : index === 0}">
+                            <img :src="image.Image" class="d-block w-100" alt="image.Image">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>First slide label</h5>
+                                <p>Some representative placeholder content for the first slide.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptions" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCaptions" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="p-5 col-7">
+                <div class="d-flex justify-content-between align-items-end mb-5">
+                    <h2>{{RoomDetail.RoomType}}</h2>
+                    <p><span>最大人數{{RoomDetail.MaxGuests}}</span>人・<span>單人床</span>・附早餐・衛浴1間・<span>18</span>平方公尺</p>
+                </div>
+                <div class="row">房型特徵</div>
+                <div class="row">
+                    <div class="col-2 p-1 m-1 text-center" v-for="feature in RoomDetail.RoomFeatures">
+                        <div class="mb-2 d-flex justify-content-center align-content-center flex-wrap" style="height: 50px">
+                            <i :class="feature.Image + ' fa-2xl'"></i>
+                        </div>
+                        <div class="overflow-wrap word-wrap-break-word">{{feature.Name}}</div>
+                    </div>
+                </div>
+                <div class="row">加購項目</div>
+                <div class="row">
+                    <div v-for="Service in RoomDetail.SelectedExtraServices" class="col-2 text-center">
+                        <div class="mb-2 d-flex justify-content-center align-content-center flex-wrap" style="height: 50px">
+                            <i class="fa-sharp fa-solid fa-spa fa-2xl"></i>
+                        </div>
+                        <div class="overflow-wrap word-wrap-break-word">
+                            {{Service.Name}}
+                        </div>
+                        <div>
+                            <input type="number" class="form-control" v-model="Service.ServiceQuantity" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">房間狀態</div>
+                <div class="row">
+                    <template>
+                        <div class="demo-date-picker">
+                            <div class="block">
+                                <span class="demonstration">daterange</span>
+                                <el-date-picker :class="{'is-active': 'true'}"
+                                                ref="picker"
+                                                v-model="timeValue"
+                                                type="daterange"
+                                                start-placeholder="Start Date"
+                                                end-placeholder="End Date"
+                                                :default-value="[new Date(), new Date()]"
+                                                :picker-options="setDisabled" />
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts
+{
+    <script src="~/lib/element-ui/index.min.js"></script>
+    <script>
+        var roomDetailVue = new Vue({
+            el: '#roomDetailApp',
+            data: {
+                size: 'default',
+                timeValue: null,
+                setDisabled: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                },
+                ImageList: [],
+                RoomDetail: { RoomImages: [], SelectedExtraServices: [] },
+                RoomBookingState: [],
+                roomId: -1,
+            },
+            mounted: function() {
+                var _this = this;
+                _this.roomId = @ViewBag.RoomId;
+                //_this.getImageList(_this.roomId);
+                _this.getRoomDetail(_this.roomId);
+            },
+            methods: {
+                getRoomDetail: function(roomId) {
+                    var _this = this;
+                    //_this.RoomDetail = {};
+                    axios.get(`GetRoomDetail/${roomId}`).then(response => {
+                        console.log(response.data);
+                        _this.RoomDetail = response.data;
+                    }).catch(
+                        error => {
+                            console.log(error.response.data);
+                        }
+                    );
+                },
+            },
+        });
+    </script>
+}

@@ -165,7 +165,7 @@
                             <div class="inner-box">
                                 <div class="icon-box">
                                     @*<div class="heart-box">
-                                        <i class="fa-solid fa-heart is-Liked"></i>
+                                    <i class="fa-solid fa-heart is-Liked"></i>
                                     </div>*@
                                     <div class="heart-box">
                                         <button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
@@ -220,7 +220,7 @@
             data: {
                 resultVM: [],
                 likeVM: [],
-
+                baseURL: "",
 
 
 
@@ -239,6 +239,7 @@
             mounted: function () {
                 let _this = this;
                 _this.filterResultVM();
+                _this.baseURL = window.location.origin;
 
             },
             methods: {
@@ -254,18 +255,25 @@
                 },
                 getLikes: function () {
                     let _this = this;
-                    axios.get(`/Like/GetLikes`).then(response => {
-                        //alert(JSON.stringify(response.data));
-                        _this.likeVM = response.data;
-                    });
+                    axios.get(`/Like/GetLikes`)
+                        .then(response => {
+                            //alert(JSON.stringify(response.data));
+                            _this.likeVM = response.data;
+                        })
+                        .catch(error => {
+                            //console.log(error.response.data);
+                            location.href = _this.baseURL + error.response.data;
+                        });;
                 },
                 clickLike: function (id) {
                     let _this = this;
                     var request = { params: { hotelId: id } };
-                    axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
-                        _this.filterResultVM();
-                        _this.getLikes();
-                    });
+                    axios.get(`/Like/ClickLike`, { params: { hotelId: id } })
+                        .then(() => {
+                            _this.filterResultVM();
+                            _this.getLikes();
+                        })
+                        .catch(error => { console.log(error.response.data); });
                 },
 
             }
