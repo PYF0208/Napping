@@ -532,7 +532,6 @@ img {
     display: block;
     width: 100%;
     z-index: 1000;
-
 }
 
 /*=== Header Main Box ===*/
@@ -575,9 +574,9 @@ img {
         color: #ffffff;
     }
 
-    .header-style-one .header-upper .logo-box .logo h3 {
-        color: #ffffff;
-    }
+        .header-style-one .header-upper .logo-box .logo h3 {
+            color: #ffffff;
+        }
 
         .header-style-one .header-upper .logo-box .logo img {
             position: relative;
@@ -596,7 +595,6 @@ img {
     .header-style-one .other-links .info {
         position: relative;
         float: left;
-
     }
 
     .header-style-one .other-links .link-box {
@@ -885,7 +883,6 @@ img {
     }
 
     .header-style-one.alternate .header-upper {
-        
     }
 
 .fixed-header.header-style-one.alternate .header-upper {
@@ -902,7 +899,6 @@ img {
 }
 
 .header-style-one.alternate .nav-outer .main-menu {
-    
 }
 
 
@@ -1219,17 +1215,17 @@ img.lazy-image {
         display: block;
     }
 
-.default-form .field-inner .alt-icon {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    margin-top: -15px;
-    line-height: 30px;
-    font-size: 18px;
-    color: #9b9fa6;
-    z-index: 1;
-    pointer-events: none;
-}
+        .default-form .field-inner .alt-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            margin-top: -15px;
+            line-height: 30px;
+            font-size: 18px;
+            color: #9b9fa6;
+            z-index: 1;
+            pointer-events: none;
+        }
 
     .default-form .form-group .field-label {
         position: relative;
@@ -1423,21 +1419,21 @@ img.lazy-image {
 
 
 
-.check-sel-box .check-sel-btn:before {
-    font-family: 'Flaticon';
-    content: "\f106";
-    position: absolute;
-    right: 5%;
-    top: 5px;
-    height: 30px;
-    line-height: 30px;
-    display: block;
-    color: #999999;
-    font-size: 16px;
-    font-weight: 400;
-    text-align: center;
-    z-index: 5;
-}
+        .check-sel-box .check-sel-btn:before {
+            font-family: 'Flaticon';
+            content: "\f106";
+            position: absolute;
+            right: 5%;
+            top: 5px;
+            height: 30px;
+            line-height: 30px;
+            display: block;
+            color: #999999;
+            font-size: 16px;
+            font-weight: 400;
+            text-align: center;
+            z-index: 5;
+        }
 
 .filter-form .check-sel-box .check-sel-btn:before {
     top: 25px;
@@ -1990,7 +1986,6 @@ img.lazy-image {
     height: 322px;
     display: block;
     background: url(../images/5.png) center center no-repeat;
-   
 }
 
 .dotted-pattern-6 {
@@ -2031,7 +2026,6 @@ img.lazy-image {
     height: 264px;
     display: block;
     background: url(../images/10.png) center center no-repeat;
-   
 }
 
 .dotted-pattern-11 {
@@ -2128,7 +2122,6 @@ img.lazy-image {
     height: 294px;
     display: block;
     background: url(../images/tri-8.png) center center no-repeat;
-  
 }
 
 .tri-pattern-9 {
@@ -6779,7 +6772,7 @@ img.lazy-image {
     }
 
     .page-banner .inner-container {
-        max-width : 800px;
+        max-width: 800px;
         position: relative;
         padding: 290px 0px 230px;
     }
@@ -6798,6 +6791,7 @@ img.lazy-image {
         background-repeat: no-repeat;
         background-size: cover;
     }
+
     .page-banner .hotelImage-layer {
         position: absolute;
         left: 0;
@@ -6812,16 +6806,16 @@ img.lazy-image {
 
 
 
-        .page-banner .image-layer:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: #171b27;
-            opacity: 0.50;
-        }
+    .page-banner .image-layer:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: #171b27;
+        opacity: 0.50;
+    }
 
     .page-banner h1 {
         position: relative;
@@ -9701,6 +9695,7 @@ img.lazy-image {
         line-height: 80px;
         color: #aaaaaa;
         width: 100%;
+        margin-bottom: 10px;
         overflow: hidden;
         width: 100%;
         height: 320px;
@@ -9713,55 +9708,55 @@ img.lazy-image {
         object-fit: cover;
     }
 
-    .result-box h3 {
-        font-family: 'Dancing Script', cursive;
-        font-family: 'Noto Serif TC', serif;
-        font-size: 28px;
-        text-transform: capitalize;
-        margin-bottom: 10px;
-    }
+.result-box h3 {
+    font-family: 'Dancing Script', cursive;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 28px;
+    text-transform: capitalize;
+    margin-bottom: 10px;
 
-    .result-box h4 {
-        font-size: 24px;
-        text-transform: capitalize;
-        text-align: left;
-        margin-bottom: 0px;
-    }
+}
 
-    .result-box h6 {
-        color: #9b9fa6;
-        font-size: 14px;
-        text-transform: capitalize;
-        text-align: left;
-        margin-bottom: 0px;
-    }
+.result-box h4 {
+    font-size: 24px;
+    text-transform: capitalize;
+    text-align: left;
+    margin-bottom: 0px;
+}
 
-    .result-box .text {
+.result-box h6 {
+    color: #9b9fa6;
+    font-size: 14px;
+    text-transform: capitalize;
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+.result-box .text {
+    position: relative;
+    display: block;
+    color: #9b9fa6;
+    font-size: 16px;
+    line-height: 1.7em;
+}
+
+.result-box .heart-box {
+    position: absolute;
+    display: block;
+    top: 2%;
+    left: 88%;
+}
+
+    .result-box .heart-box button {
         position: relative;
         display: block;
+        background-color: transparent;
         color: #9b9fa6;
-        font-size: 16px;
+        font-size: 34px;
         line-height: 1.7em;
     }
 
-    .result-box .heart-box {
-        position: absolute;
-        display: block;
-        top: 2%;
-        left: 88%;
-    }
-
-        .result-box .heart-box button {
-            position: relative;
-            display: block;
-            background-color: transparent;
-            color: #9b9fa6;
-            font-size: 34px;
-            line-height: 1.7em;
-        }
-
-    .result-box a:hover {
-        color: #000000;
-        text-decoration: none;
-    }
-
+.result-box a:hover {
+    color: #000000;
+    text-decoration: none;
+}

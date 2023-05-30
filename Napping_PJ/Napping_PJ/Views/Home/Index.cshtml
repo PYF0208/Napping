@@ -1,5 +1,5 @@
 @section Styles{
-		<link href="~/lib/element-ui/theme-chalk/index.min.css" rel="stylesheet" />
+	<link href="~/lib/element-ui/theme-chalk/index.min.css" rel="stylesheet" />
 	<style>
 		.el-date-editor .el-range-separator {
 			width: auto;
@@ -63,7 +63,6 @@
 <!-- Main Header -->
 <header class="main-header header-style-one alternate">
 
-
 	<!-- Header Upper -->
 	<div class="header-upper">
 		<div class="inner-container clearfix">
@@ -81,7 +80,7 @@
 					<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
 						<div class="d-flex" style="align-items: center; column-gap: 12px;">
 
-							<div id="vueApp" class="form-group">
+							<div class="form-group" id="vueApp">
 								<template>
 									<div class="demo-date-picker">
 										<div class="block">
@@ -95,7 +94,6 @@
 									</div>
 								</template>
 							</div>
-
 							<div class="form-group">
 								<div class="field-inner">
 									<div class="check-sel-box">
@@ -159,8 +157,7 @@
 									</div>
 								</div>
 							</div>
-
-							<div id="search" class="form-group">
+							<div class="form-group" id="search">
 								<div class="field-inner">
 									<div class="btn btn-light" @@click="searchRoom()">
 										<i class="fa-solid fa-magnifying-glass"></i>
@@ -168,11 +165,16 @@
 									</div>
 								</div>
 							</div>
-
+							<div id="likeButton">
+								<button type="button" class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
+									喜愛清單
+								</button>
+							</div>
 						</div>
 					</div>
 				</nav>
 			</div>
+
 
 			<div class="other-links clearfix">
 				<div class="info">
@@ -197,7 +199,6 @@
 
 		<div class="result-container">
 			<div class="row clearfix">
-
 				<!--Content Side-->
 				<div class="content-side col-lg-8 col-md-12 col-sm-12">
 					<div class="blog-content">
@@ -241,7 +242,6 @@
 								</div>
 							</div>
 						</div>
-
 					</aside>
 				</div>
 			</div>
@@ -256,25 +256,24 @@
 					@*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
 				</div>
 				<div class="modal-body">
-
-					<template v-for="item in likeVM">
-						<div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+					<template v-if="likeVM.length === 0">
+						<p>您還沒有收藏任何旅店唷!</p>
+					</template>
+					<template v-else>
+						<div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" v-for="item in likeVM">
 							<div class="inner-box">
 								<div class="icon-box">
-									@*<div class="heart-box">
-									<i class="fa-solid fa-heart is-Liked"></i>
-									</div>*@
 									<div class="heart-box">
 										<button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
 									</div>
 									<img :src="item.hotelImage" />
 								</div>
 								<div class="text-box">
-									<a href="index-5.html">
+									<a :href="'Home/HotelPage/'+item.hotelId">
 										<h3>{{item.hotelName}}</h3>
 										<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
 										<div>
-											<h4>NT 2000/晚</h4>
+											<h4>最低價格:<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span></h4>
 											<h4>建立時間:{{item.createDate | formatDateTime }}</h4>
 										</div>
 									</a>
@@ -287,13 +286,13 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-					<button type="button" class="btn btn-primary">修改</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
 </div>
+
 
 
 @section Scripts {
@@ -304,8 +303,6 @@
 	<script src="~/lib/vue/vue.min.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
 	<script src="~/lib/element-ui/index.min.js"></script>
-	
-
 	<script>
 		let map;
 		function initMap() {
@@ -323,10 +320,11 @@
 			data: {
 				resultVM: [],
 				likeVM: [],
+				baseURL: "",
 				numOfGuests: 2,
 			},
 			computed: {
-		
+
 			},
 			filters: {
 				formatDateTime(value) {
@@ -342,6 +340,7 @@
 			mounted: function () {
 				let _this = this;
 				_this.filterResultVM();
+				_this.baseURL = window.location.origin;
 			},
 			methods: {
 				filterResultVM: function () {
@@ -361,13 +360,16 @@
 						});
 
 					});
-					
+
 				},
 				getLikes: function () {
 					let _this = this;
 					axios.get(`/Like/GetLikes`).then(response => {
 						//alert(JSON.stringify(response.data));
 						_this.likeVM = response.data;
+					}).catch(error => {
+						//console.log(error.response.data);
+						location.href = _this.baseURL + error.response.data;
 					});
 				},
 				clickLike: function (id) {
@@ -376,15 +378,32 @@
 					axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
 						_this.filterResultVM();
 						_this.getLikes();
+					}).catch(error => {
+						//console.log(error.response.data);
+						location.href = _this.baseURL + error.response.data;
 					});
 				},
-
 
 			}
 
 		});
 	</script>
 
+	<script>
+		var likeapp = new Vue({
+			el: '#likeButton',
+			data: {
+
+			},
+			mounted: function () {
+
+			},
+			methods: {
+
+			},
+		});
+
+	</script>
 	<script>
 		var app = new Vue({
 			el: '#vueApp',
@@ -421,11 +440,9 @@
 
 					vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
 
-					vm.filterResultVM();
-
 				},
 			},
 		});
 
 	</script>
-}
+				}

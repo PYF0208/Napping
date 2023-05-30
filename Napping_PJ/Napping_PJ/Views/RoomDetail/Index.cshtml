@@ -3,19 +3,19 @@
     <link href="~/lib/element-ui/theme-chalk/index.min.css" rel="stylesheet" />
     <link href="~/css/datepicker.css" rel="stylesheet" />
 }
-<div id="roomDetailApp">
+<div id="roomDetailApp" style="margin-top: 150px;margin-bottom: 50px ">
     <div class="container-fluid">
         <div class="row">
             <div class="col-5">
-                <div id="carouselCaptions" class="carousel slide">
+                <div id="carouselCaptions" class="carousel slide  h-100">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                         <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
                         <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
                     </div>
-                    <div class="carousel-inner">
-                        <div v-for="(image,index) in RoomDetail.RoomImages" :class="{'carousel-item' :'ture','active' : index === 0}">
-                            <img :src="image.Image" class="d-block w-100" alt="image.Image">
+                    <div class="carousel-inner  h-100">
+                        <div v-for="(image,index) in RoomDetail.RoomImages" :class="{'carousel-item' :'ture','active' : index === 0,' h-100' : 'true'}">
+                            <img :src="image.Image" class="d-block w-100 h-100" alt="image.Image" style="object-fit: cover">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>First slide label</h5>
                                 <p>Some representative placeholder content for the first slide.</p>
@@ -63,18 +63,24 @@
                 <div class="row">房間狀態</div>
                 <div class="row">
                     <template>
-                        <div class="demo-date-picker">
-                            <div class="block">
-                                <span class="demonstration">daterange</span>
-                                <el-date-picker :class="{'is-active': 'true'}"
-                                                ref="picker"
-                                                v-model="timeValue"
-                                                type="daterange"
-                                                start-placeholder="Start Date"
-                                                end-placeholder="End Date"
-                                                :default-value="[new Date(), new Date()]"
-                                                :picker-options="setDisabled" />
-                            </div>
+                        <div class="row"></div>
+                        <div class="col">
+                            <span class="demonstration">入住日期</span>
+                            <el-date-picker v-model="startDay"
+                                            type="date"
+                                            placeholder="Pick a day"
+                                            :size="size"
+                                            :picker-options="startOption"
+                                            @@change="() => {roomDetailVue.endDay = null}" />
+
+                        </div>
+                        <div class="col">
+                            <span class="demonstration">退房日期</span>
+                            <el-date-picker v-model="endDay"
+                                            type="date"
+                                            placeholder="Pick a day"
+                                            :size="size"
+                                            :picker-options="endOption" />
                         </div>
                     </template>
 
@@ -85,32 +91,37 @@
 
 </div>
 @section Scripts
-{
+    {
     <script src="~/lib/element-ui/index.min.js"></script>
     <script>
         var roomDetailVue = new Vue({
             el: '#roomDetailApp',
             data: {
                 size: 'default',
-                timeValue: null,
-                setDisabled: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
+                startDay: null,
+                endDay: null,
+                startOption: {
+                    disabledDate: null,
+                },
+                endOption: {
+                    disabledDate: null,
                 },
                 ImageList: [],
                 RoomDetail: { RoomImages: [], SelectedExtraServices: [] },
                 RoomBookingState: [],
                 roomId: -1,
             },
-            mounted: function() {
+            mounted: function () {
                 var _this = this;
                 _this.roomId = @ViewBag.RoomId;
                 //_this.getImageList(_this.roomId);
                 _this.getRoomDetail(_this.roomId);
+                _this.getBookingState(_this.roomId);
+                _this.startOption.disabledDate = _this.disabledStartDate;
+                _this.endOption.disabledDate = _this.disabledEndDate;
             },
             methods: {
-                getRoomDetail: function(roomId) {
+                getRoomDetail: function (roomId) {
                     var _this = this;
                     //_this.RoomDetail = {};
                     axios.get(`GetRoomDetail/${roomId}`).then(response => {
@@ -122,7 +133,47 @@
                         }
                     );
                 },
+                getBookingState: function (roomId) {
+                    var self = this;
+                    axios.get(`GetBookingState/${roomId}`)
+                        .then(response => {
+                            //console.log(response.data);
+                            for (var i = 0; i < response.data.length; i++) {
+                                self.RoomBookingState.push((new Date(response.data[i])).getTime());
+                            }
+                            console.log(self.RoomBookingState);
+                        })
+                        .catch(error => { console.log(error.response.data); });
+                },
+                disabledStartDate(date) {
+                    // 获取被禁止的日期
+                    var dateNow = new Date();
+                    var yesterday = dateNow.setDate(dateNow.getDate() - 1);
+
+                    // 如果选择的日期早于被禁止的日期，则禁用
+                    if (date.getTime() <= yesterday) {
+                        return true;
+                    }
+                    var bookingState = roomDetailVue.RoomBookingState;
+                    if (bookingState.includes(date.getTime())) {
+                        return true;
+                    }
+                    // 其他情况可选择日期
+                    return false;
+                },
+                disabledEndDate(date) {
+                    var self = this;
+                    var startDayTime = self.startDay;
+                    var firstLokedDay = self.RoomBookingState.find(x => x > startDayTime) ?? null;
+                    var dateBetween = startDayTime < date.getTime() && date.getTime() < firstLokedDay;
+                    var dateAfter = startDayTime < date.getTime() && firstLokedDay == null;
+                    var starDayNotNull = startDayTime !== null;
+                    if (starDayNotNull && (dateBetween || dateAfter)) {
+                        return false;
+                    }
+                    return true;
+                },
             },
         });
     </script>
-}
+    }

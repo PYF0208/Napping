@@ -67,9 +67,22 @@ namespace Napping_PJ.Controllers
             };
             return Ok(JsonConvert.SerializeObject(CVM, settings));
         }
-        public IActionResult GetBookingState(int roomId)
+        [Route("RoomDetail/GetBookingState/{roomId}")]
+        public async Task<IActionResult> GetBookingState(int roomId)
         {
-            return Ok();
+            List<DateTime> bookedDate = new List<DateTime>();
+            await _context.OrderDetails.Where(x => x.RoomId == roomId && (x.CheckIn >= DateTime.Today && x.CheckOut >= DateTime.Today)).ForEachAsync(x =>
+            {
+                var startDay = x.CheckIn.Date;
+                var endDay = x.CheckOut.Date;
+                var currentDay = startDay;
+                while (currentDay <= endDay)
+                {
+                    bookedDate.Add(currentDay.Date);
+                    currentDay = currentDay.AddDays(1);
+                }
+            });
+            return Ok(bookedDate);
         }
     }
 }

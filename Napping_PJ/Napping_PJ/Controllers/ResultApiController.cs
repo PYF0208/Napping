@@ -17,21 +17,7 @@ namespace Napping_PJ.Controllers
         {
             _context = context;
         }
-        //[HttpGet]
-        //public IEnumerable<ResultViewModel> Get()
-        //{
 
-        //	return _context.Hotels.Select(x => new ResultViewModel
-        //	{
-        //		HotelId = x.HotelId,
-        //		Name = x.Name,
-        //		Image = x.Image,
-        //		City = x.City,
-        //		Region = x.Region,
-
-        //	});
-
-        //}
         [HttpGet]
         public IEnumerable<ResultViewModel> Get()
         {

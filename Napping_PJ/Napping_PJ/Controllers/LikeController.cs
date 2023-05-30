@@ -29,13 +29,14 @@ namespace Napping_PJ.Controllers
             {
                 var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
                 allHotel = _context.Likes.AsNoTracking().Where(x => x.CustomerId == customer.CustomerId).Select(x => x.HotelId).ToHashSet();
-                var likeViewModel = _context.Likes.Where(Likes => Likes.CustomerId == customer.CustomerId).Select(Likes => new LikeViewModel
+                var likeViewModel = _context.Likes.Include(x=>x.Hotel).ThenInclude(x=>x.Rooms).Where(Likes => Likes.CustomerId == customer.CustomerId).Select(Likes => new LikeViewModel
                 {
                     HotelId = Likes.Hotel.HotelId,
                     HotelName = Likes.Hotel.Name,
                     City = Likes.Hotel.City,
                     Region = Likes.Hotel.Region,
                     HotelImage = Likes.Hotel.Image,
+                    LowestPrice = Likes.Hotel.Rooms.First().Price,
                     CreateDate = Likes.CreateDate,
                     IsLike = (allHotel != null && allHotel.Contains(Likes.HotelId)) ? true : false,
                 });
@@ -45,33 +46,21 @@ namespace Napping_PJ.Controllers
 
         }
         [HttpGet]
-        public ApiResponseDto ClickLike(int hotelId)
+        public IActionResult ClickLike(int hotelId)
         {
             if (User.Identity == null)
             {
-                return new ApiResponseDto
-                {
-                    Code = "A101",
-                    Message = "沒登入"
-                };
-            }
+				return BadRequest("/Login/Index");
+			}
             if (!User.Identity.IsAuthenticated)
             {
-                return new ApiResponseDto
-                {
-                    Code = "A101",
-                    Message = "沒登入"
-                };
-            }
+				return BadRequest("/Login/Index");
+			}
             var user = _context.Customers.Include(x => x.Likes).AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
             if (user == null)
             {
-                return new ApiResponseDto
-                {
-                    Code = "A102",
-                    Message = "找不到Customer"
-                };
-            }
+				return BadRequest("/Login/Index");
+			}
             var findResult = user.Likes.FirstOrDefault(x => x.HotelId == hotelId);
             if (findResult != null)
             {
@@ -87,11 +76,11 @@ namespace Napping_PJ.Controllers
                 });
             }
             _context.SaveChanges();
-            return new ApiResponseDto
+            return Ok(new ApiResponseDto
             {
                 Code = "A103",
                 Message = "修改成功"
-            };
+            });
 
 
             #region 原版本
