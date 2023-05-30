@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app" style="background-color:gray">
+        <div style="padding-top:200px;display:flex;" class="container-fluid">
+            <div v-for="room in allRooms" class="row m-1" style="width:400px">
+                <span v-model="room.roomId" class="form-control col-12">{{room.roomId}}</span>
+                <span v-model="room.roomType" class="form-control col-12">{{room.roomType}}</span>
+                <input v-model="room.checkIn" class="form-control col-5" type="date" />
+                <input v-model="room.checkOut" class="form-control col-5" type="date" />
+                <input v-model="room.maxGuests" class="form-control col-12" type="number" min="1" :max="room.maxGuests" placeholder="人數" />
+                <input v-model="room.travelType" class="form-control col-12" type="number" min="1" placeholder="旅遊類型" />
+                <input v-model="room.note" class="form-control col-12" type="text" placeholder="備註" />
+                <div v-for="service in room.selectedExtraServices">
+                    <label>{{service.name}}</label>
+                    <input type="number" v-model="service.serviceQuantity" />
+                </div>
+                <button class="btn-info m-1" @@click="addToCart(room)">add to cart</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+@section Scripts{
+    @*<script src="lib\axios\axios.min.js"></script>*@
+    @*<script src="lib\vue\vue.min.js"></script>*@
+    <script>
+        var VueApp = new Vue({
+            el: '#app',
+            data: {
+                allRooms: [],                
+            },
+            mounted: function () {
+                var _this = this;
+                _this.getRooms();
+            },
+            methods: {
+                getRooms: function () {
+                    var _this = this;
+                    _this.allRooms = [];
+                    axios.post(`Cart/GetRooms`)
+                        .then(response => {
+                            //console.log(response.data);
+                            _this.allRooms = response.data;
+                        })
+                        .catch();
+                },
+                addToCart: function (room) {
+                    var _this = this;
+                    var cookieName = 'cartItem';
+                    //將房間物件加入cookie
+                    var cartList = _this.getCartList(cookieName);
+                    //var cartList = masterCartList;
+                    var findRoomIndex = cartList.findIndex(r => r.roomId == room.roomId);
+                    if (findRoomIndex >= 0) {
+                        return;
+                    }
+                    cartList.push(room);
+                    //console.log(cartList);
+                    _this.setCookie(cookieName, cartList, 365);
+                },
+                removeFromCart: function (name, idx) {
+                    var _this = this;
+                    var cookieName = 'cartItem';
+                    var cartList = _this.getCartList(name);
+                    cartList.splice(idx, 1);
+                    _this.setCookie(cookieName, cartList, 365);
+
+                },
+                setCookie: function (name, value, days) {
+                    var _this = this;
+                    var jsonStr = JSON.stringify(value);
+                    var encodeStr = encodeURIComponent(jsonStr);
+                    _this.$cookies.set(name, encodeStr, { expires: days });
+                    cartVue.freshCart();
+                },
+                getCartList: function (name) {
+                    var _this = this;
+                    var cartList = [];
+
+                    var cookies = document.cookie.split(';');
+
+                    var encodedValue = _this.$cookies.get(name);
+                    if (encodedValue) {
+                        var decodedValue = decodeURIComponent(encodedValue);
+                        cartList = JSON.parse(decodedValue);
+                    }
+                    return cartList;
+                },
+            },
+        });
+    
+    </script>
+}

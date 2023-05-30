@@ -1,0 +1,211 @@
+﻿/*購物車樣式*/
+
+#cartVue .offcanvas-start {
+    width: 600px;
+}
+
+#cartVue .cart-float {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 20px;
+    color: white;
+}
+
+#cartVue .cartBtn {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    border-radius: 50px;
+}
+
+#cartVue .cartItem {
+    position: relative;
+    border: 1px solid;
+}
+
+#cartVue .cartoffcanvas {
+    z-index: 9999;
+}
+
+
+#cartVue .title {
+    margin-bottom: 5vh;
+}
+
+#cartVue .card {
+    margin: auto;
+    max-width: 950px;
+    width: 90%;
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 1rem;
+    border: transparent;
+    overflow: auto;
+}
+
+@media(max-width:767px) {
+    #cartVue .card {
+        margin: 3vh auto;
+    }
+}
+
+#cartVue .cart {
+    background-color: #fff;
+    padding: 4vh 5vh;
+    border-bottom-left-radius: 1rem;
+    border-top-left-radius: 1rem;
+    position: relative;
+}
+
+@media(max-width:767px) {
+    #cartVue .cart {
+        padding: 4vh;
+        border-bottom-left-radius: unset;
+        border-top-right-radius: 1rem;
+    }
+}
+
+#cartVue .summary {
+    background-color: #ddd;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    padding: 4vh;
+    color: rgb(65, 65, 65);
+}
+
+@media(max-width:767px) {
+    #cartVue .summary {
+        border-top-right-radius: unset;
+        border-bottom-left-radius: 1rem;
+    }
+}
+
+#cartVue .summary .col-2 {
+    padding: 0;
+}
+
+#cartVue .summary .col-10 {
+    padding: 0;
+}
+
+#cartVue .row {
+    margin: 0;
+}
+
+#cartVue .title b {
+    font-size: 1.5rem;
+}
+
+#cartVue .main {
+    margin: 0;
+    padding: 2vh 0;
+    width: 100%;
+}
+
+#cartVue .col-2, .col {
+    padding: 0 1vh;
+}
+
+#cartVue a {
+    padding: 0 1vh;
+}
+
+#cartVue .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#cartVue .optionDiv {
+    padding: 5px;
+    border-radius: 10px;
+    width: auto;
+    border: 1px solid;
+    margin: 5px;
+}
+
+#cartVue .back-to-shop {
+    margin-top: 4.5rem;
+}
+
+#cartVue h5 {
+    margin-top: 4vh;
+}
+
+#cartVue hr {
+    margin-top: 1.25rem;
+}
+
+#cartVue form {
+    padding: 2vh 0;
+}
+
+#cartVue select {
+    border: 1px solid rgba(0, 0, 0, 0.137);
+    padding: 1.5vh 1vh;
+    margin-bottom: 4vh;
+    outline: none;
+    width: 100%;
+    background-color: rgb(247, 247, 247);
+}
+
+#cartVue input {
+    border: 1px solid rgba(0, 0, 0, 0.137);
+    padding: 1vh;
+    margin-bottom: 4vh;
+    outline: none;
+    width: 100%;
+    background-color: rgb(247, 247, 247);
+}
+
+#cartVue input:focus::-webkit-input-placeholder {
+        color: transparent;
+    }
+
+#cartVue .btn {
+    background-color: #000;
+    border-color: #000;
+    color: white;
+    width: 100%;
+    font-size: 0.7rem;
+    margin-top: 4vh;
+    padding: 1vh;
+    border-radius: 0;
+}
+
+#cartVue .btn:focus {
+        box-shadow: none;
+        outline: none;
+        box-shadow: none;
+        color: white;
+        -webkit-box-shadow: none;
+        -webkit-user-select: none;
+        transition: none;
+    }
+
+#cartVue .btn:hover {
+        color: white;
+    }
+
+#cartVue a {
+    color: black;
+}
+
+#cartVue a:hover {
+        color: black;
+        text-decoration: none;
+    }
+
+#cartVue #code {
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+    background-repeat: no-repeat;
+    background-position-x: 95%;
+    background-position-y: center;
+}
+/*購物車樣式*/

@@ -74,6 +74,10 @@
                                 </div>
                                 <div class="card-footer text-center py-3">
                                     <div class="small"><a asp-controller="Login" asp-action="Index">Have an account? Go to login</a></div>
+                                    <form asp-controller="ThirdPartyLogin" asp-action="OauthGooleLogin" method="post">
+                                        <button type="submit" class="btn btn-primary" name="provider">Google</button>
+                                    </form>
+                                    <button asp-controller="ThirdPartyLogin" asp-action="OauthGooleLogin">try</button>
                                 </div>
                             </div>
                         </div>

@@ -1,52 +1,109 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Napping</title>
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/Napping_PJ.styles.css" asp-append-version="true" />
-	<link href="~/css/flaticon.css" rel="stylesheet" />
-	<link href="~/css/responsive.css" rel="stylesheet" />
-	<link href="~/css/clientstyle.css" rel="stylesheet" />
-	<link href="~/animate.css/animate.min.css" rel="stylesheet" />
-	<link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
-	@await RenderSectionAsync("Styles", required: false)
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Napping</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Napping_PJ.styles.css" asp-append-version="true" />
+    <link href="~/css/flaticon.css" rel="stylesheet" />
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link href="~/css/clientstyle.css" rel="stylesheet" />
+    <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/cart.css" rel="stylesheet" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 
 <body>
-	<div class="page-wrapper">
-		<!-- Preloader -->
-		<div class="preloader">
-			<div class="icon"></div>
-		</div>
+    <header class="main-header header-style-one alternate">
 
-		@RenderBody()
+        <!-- Header Upper -->
+        <div class="header-upper">
+            <div class="inner-container clearfix">
+                <!--Logo-->
+                <div class="logo-box">
+                    <div class="logo">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><h1 style="color: white;">Napping</h1></a>
+                    </div>
+                </div>
+                <div class="nav-outer clearfix">
+
+                    <!-- Main Menu -->
+                    <nav class="main-menu navbar-expand-md navbar-light">
+                        <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
+                        </div>
+                    </nav>
+                </div>
+
+                <div class="other-links clearfix">
+                    <div class="info">
+                        <ul class="clearfix">
+                            <partial name="_LoginPartial" />
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--End Header Upper-->
+    </header>
+    <div class="page-wrapper">
+        <!-- Preloader -->
+        <div class="preloader">
+            <div class="icon"></div>
+        </div>
+        @RenderBody()
 
 </div>
 
-	
+    <!--購物車-->
+    <partial name="_CartPartial" />
+    <!--購物車-->
 
-	<footer class="main-footer">
-		<div class="top-pattern-layer-dark"></div>
+    <footer class="main-footer">
+        <div class="top-pattern-layer-dark"></div>
 
 
 		<div class="widgets-section">
 			<div class="auto-container">
 				<div class="row clearfix">
 
-					<div class="column col-xl-3 col-lg-12 col-md-12 col-sm-12">
-						<div class="footer-widget about-widget">
-							<div class="logo">
-								<h3>Napping</h3>
-							</div>
-						</div>
-					</div>
 
-				</div>
-			</div>
-		</div>
+                    <div class="column col-xl-3 col-lg-12 col-md-12 col-sm-12">
+                        <div class="footer-widget about-widget">
+                            <div class="logo">
+                                <h3>Napping</h3>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="column col-xl-5 col-lg-8 col-md-12 col-sm-12">
+                        <div class="footer-widget links-widget">
+                            <div class="widget-content">
+                                <div class="row clearfix">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="widget-title">
+                                            <h4>Services</h4>
+                                        </div>
+                                        <ul class="links">
+                                            <li><a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後端</a></li>
+                                            <li><a href="rooms-grid.html">Our Rooms</a></li>
+                                            <li><a href="restaurant.html">Restaurant</a></li>
+                                            <li><a href="about.html">About Hotera</a></li>
+                                            <li><a href="contact.html">Contact</a></li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 		<div class="footer-bottom">
@@ -60,15 +117,17 @@
 			</div>
 		</div>
 
-	</footer>
-
-
-	<script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-	<script src="~/lib/jqueryui/jquery-ui.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-	<script src="~/js/site.js"></script>
-	<script src="~/js/appear.js"></script>
-	<script src="~/lib/wow/wow.min.js"></script>
-	@await RenderSectionAsync("Scripts", required: false)
+    </footer>
+    <script src="~/lib/vue/vue.min.js"></script>
+    <script src="~/lib/vue-cookies/vue-cookies.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/js/appear.js"></script>
+    <script src="~/lib/wow/wow.min.js"></script>
+    <script src="~/js/Cart.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

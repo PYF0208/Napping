@@ -6,7 +6,7 @@
 
 <div id="app" class="container">
 
-
+    <input v-for="item in ExtraServiceViewModel"  />
     <div class="form-group">
         @*篩選欄位*@
         <div class="row" style="width:50%;margin-left:auto;margin-right:0px">
@@ -124,6 +124,7 @@
                     let _this = this;
                     var request = {};
                     request.ExtraServiceId = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
+                    request.Price = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
                     request.ExtraServiceName = request.HotelName =_this.filter;
                     axios.post('ExtraServices/FilterExtraServices', request)
                         .then(function (response) {

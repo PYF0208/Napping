@@ -194,10 +194,10 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<Like>(entity =>
             {
-                entity.HasKey(e => new { e.RoomId, e.CustomerId })
+                entity.HasKey(e => new { e.HotelId, e.CustomerId })
                     .HasName("PK_Like");
 
-                entity.Property(e => e.EndTime).HasColumnType("date");
+                entity.Property(e => e.CreateDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Likes)
@@ -205,11 +205,11 @@ namespace Napping_PJ.Models.Entity
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Like_Customer");
 
-                entity.HasOne(d => d.Room)
+                entity.HasOne(d => d.Hotel)
                     .WithMany(p => p.Likes)
-                    .HasForeignKey(d => d.RoomId)
+                    .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Like_Room");
+                    .HasConstraintName("FK_Likes_Hotels");
             });
 
             modelBuilder.Entity<Oauth>(entity =>
