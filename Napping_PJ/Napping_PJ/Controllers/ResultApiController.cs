@@ -17,21 +17,7 @@ namespace Napping_PJ.Controllers
         {
             _context = context;
         }
-        //[HttpGet]
-        //public IEnumerable<ResultViewModel> Get()
-        //{
 
-        //	return _context.Hotels.Select(x => new ResultViewModel
-        //	{
-        //		HotelId = x.HotelId,
-        //		Name = x.Name,
-        //		Image = x.Image,
-        //		City = x.City,
-        //		Region = x.Region,
-
-        //	});
-
-        //}
         [HttpGet]
         public IEnumerable<ResultViewModel> Get()
         {
@@ -41,14 +27,16 @@ namespace Napping_PJ.Controllers
                 var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
                 allHotel = _context.Likes.AsNoTracking().Where(x => x.CustomerId == customer.CustomerId).Select(x => x.HotelId).ToHashSet();
             }
-            return _context.Hotels.AsNoTracking().Select(x => new ResultViewModel
-            {
-                HotelId = x.HotelId,
-                Name = x.Name,
-                Image = x.Image,
-                City = x.City,
-                Region = x.Region,
-                IsLike = (allHotel != null && allHotel.Contains(x.HotelId)) ? true : false,
+            return _context.Hotels.AsNoTracking().Join(_context.Rooms, h => h.HotelId, r => r.HotelId, (h, r) => new ResultViewModel
+			{
+                HotelId = h.HotelId,
+                Name = h.Name,
+                Image = h.Image,
+                City = h.City,
+                Region = h.Region,
+				Price = r.Price,
+				MaxGuests = r.MaxGuests,
+				IsLike = (allHotel != null && allHotel.Contains(h.HotelId)) ? true : false,
             });
 
         }

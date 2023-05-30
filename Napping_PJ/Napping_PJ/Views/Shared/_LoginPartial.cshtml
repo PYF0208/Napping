@@ -1,11 +1,7 @@
 ﻿@using System.Security.Claims;
 @if (User.Identity.IsAuthenticated)
 {
-    <li>
-        <button type="button" class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#likeList" @@click="getLikes()">
-            喜愛清單
-        </button>
-    </li>
+   
     <li class="txt">
         <a asp-area="" asp-controller="Member" asp-action="Index" class="nav-link ">Hello @User.FindFirst(ClaimTypes.Email).Value</a>
     </li>
