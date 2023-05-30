@@ -29,13 +29,14 @@ namespace Napping_PJ.Controllers
             {
                 var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
                 allHotel = _context.Likes.AsNoTracking().Where(x => x.CustomerId == customer.CustomerId).Select(x => x.HotelId).ToHashSet();
-                var likeViewModel = _context.Likes.Where(Likes => Likes.CustomerId == customer.CustomerId).Select(Likes => new LikeViewModel
+                var likeViewModel = _context.Likes.Include(x=>x.Hotel).ThenInclude(x=>x.Rooms).Where(Likes => Likes.CustomerId == customer.CustomerId).Select(Likes => new LikeViewModel
                 {
                     HotelId = Likes.Hotel.HotelId,
                     HotelName = Likes.Hotel.Name,
                     City = Likes.Hotel.City,
                     Region = Likes.Hotel.Region,
                     HotelImage = Likes.Hotel.Image,
+                    LowestPrice = Likes.Hotel.Rooms.First().Price,
                     CreateDate = Likes.CreateDate,
                     IsLike = (allHotel != null && allHotel.Contains(Likes.HotelId)) ? true : false,
                 });

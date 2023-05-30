@@ -1,62 +1,62 @@
 @section Styles{
-	<link href="lib\element-ui\theme-chalk\index.min.css" rel="stylesheet" />
-	<style>
-		.el-date-editor .el-range-separator {
-			width: auto;
-		}
+    <link href="~/lib/element-ui/theme-chalk/index.min.css" rel="stylesheet" />
+    <style>
+        .el-date-editor .el-range-separator {
+            width: auto;
+        }
 
-		.filters-section.style-four .form-box {
-			max-width: 400px;
-		}
+        .filters-section.style-four .form-box {
+            max-width: 400px;
+        }
 
-		.demo-date-picker {
-			display: flex;
-			width: 100%;
-			padding: 0;
-			flex-wrap: wrap;
-			z-index: 9999;
-		}
+        .demo-date-picker {
+            display: flex;
+            width: 100%;
+            padding: 0;
+            flex-wrap: wrap;
+            z-index: 9999;
+        }
 
-			.demo-date-picker .block {
-				padding: 30px 0;
-				text-align: center;
-				border-right: solid 1px var(--el-border-color);
-				flex: 1;
-			}
+            .demo-date-picker .block {
+                padding: 30px 0;
+                text-align: center;
+                border-right: solid 1px var(--el-border-color);
+                flex: 1;
+            }
 
-				.demo-date-picker .block:last-child {
-					border-right: none;
-				}
+                .demo-date-picker .block:last-child {
+                    border-right: none;
+                }
 
-			.demo-date-picker .demonstration {
-				display: block;
-				color: var(--el-text-color-secondary);
-				font-size: 14px;
-				margin-bottom: 20px;
-			}
-	</style>
-	<style>
-		#map {
-			height: 800px;
-			width: auto;
-		}
-	</style>
-	<style>
-		.fa-solid.fa-heart {
-			color: white;
-			transition: color 0.3s ease-in-out;
-		}
+            .demo-date-picker .demonstration {
+                display: block;
+                color: var(--el-text-color-secondary);
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+    </style>
+    <style>
+        #map {
+            height: 800px;
+            width: auto;
+        }
+    </style>
+    <style>
+        .fa-solid.fa-heart {
+            color: white;
+            transition: color 0.3s ease-in-out;
+        }
 
-			.fa-heart:hover,
-			.fa-solid.fa-heart.is-Liked {
-				color: red;
-			}
+            .fa-heart:hover,
+            .fa-solid.fa-heart.is-Liked {
+                color: red;
+            }
 
-	</style>
+    </style>
 }
 
 ﻿@{
-	ViewBag.Title = "Simple Map";
+    ViewBag.Title = "Simple Map";
 }
 
 
@@ -64,374 +64,391 @@
 <header class="main-header header-style-one alternate">
 
 
-	<!-- Header Upper -->
-	<div class="header-upper">
-		<div class="inner-container clearfix">
-			<!--Logo-->
-			<div class="logo-box">
-				<div class="logo">
-					<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-						<h3 style="">Napping</h3>
-					</a>
-				</div>
-			</div>
-			<div id="vueApp" class="nav-outer clearfix">
-				<!-- Main Menu -->
-				<nav class="main-menu navbar-expand-md navbar-light">
-					<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
-						<div class="d-flex" style="align-items: center; column-gap: 12px;">
+    <!-- Header Upper -->
+    <div class="header-upper">
+        <div class="inner-container clearfix">
+            <!--Logo-->
+            <div class="logo-box">
+                <div class="logo">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                        <h3 style="">Napping</h3>
+                    </a>
+                </div>
+            </div>
+            <div class="nav-outer clearfix">
+                <!-- Main Menu -->
+                <nav class="main-menu navbar-expand-md navbar-light">
+                    <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
+                        <div class="d-flex" style="align-items: center; column-gap: 12px;">
 
-							<div class="form-group">
-								<template>
-									<div class="demo-date-picker">
-										<div class="block">
-											<el-date-picker v-model="timeValue"
-															type="daterange"
-															range-separator="至"
-															start-placeholder="入住時間"
-															end-placeholder="退房時間"
-															:size="size" />
-										</div>
-									</div>
-								</template>
-							</div>
+                            <div class="form-group" id="vueApp">
+                                <template>
+                                    <div class="demo-date-picker">
+                                        <div class="block">
+                                            <el-date-picker v-model="timeValue"
+                                                            type="daterange"
+                                                            range-separator="至"
+                                                            start-placeholder="入住時間"
+                                                            end-placeholder="退房時間"
+                                                            :size="size" />
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
 
-							<div class="form-group">
-								<div class="field-inner">
-									<div class="check-sel-box">
-										<div class="check-sel-btn">
-											<span class="adult-info">2</span><span> 位成人</span>
-											<span class="child-info">0</span><span> 位兒童</span>
-										</div>
-										<ul class="check-sel-droplist">
-											<li>
-												<div class="sel-title">成人人數：</div>
-												<div class="clearfix">
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-1" value="0"><label for="radio-1">0</label>
-													</div>
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-2" value="1"><label for="radio-2">1</label>
-													</div>
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-3" value="2" checked><label for="radio-3">2</label>
-													</div>
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-4" value="3"><label for="radio-4">3</label>
-													</div>
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-5" value="4"><label for="radio-5">4</label>
-													</div>
-												</div>
-											</li>
-											<li>
-												<div class="sel-title">兒童人數：</div>
-												<div class="clearfix">
+                            <div class="form-group">
+                                <div class="field-inner">
+                                    <div class="check-sel-box">
+                                        <div class="check-sel-btn">
+                                            <span class="adult-info">2</span><span> 位成人</span>
+                                            <span class="child-info">0</span><span> 位兒童</span>
+                                        </div>
+                                        <ul class="check-sel-droplist">
+                                            <li>
+                                                <div class="sel-title">成人人數：</div>
+                                                <div class="clearfix">
+                                                    <div class="radio-block adult-block">
+                                                        <input type="radio"
+                                                               name="adult-group" id="radio-1" value="0"><label for="radio-1">0</label>
+                                                    </div>
+                                                    <div class="radio-block adult-block">
+                                                        <input type="radio"
+                                                               name="adult-group" id="radio-2" value="1"><label for="radio-2">1</label>
+                                                    </div>
+                                                    <div class="radio-block adult-block">
+                                                        <input type="radio"
+                                                               name="adult-group" id="radio-3" value="2" checked><label for="radio-3">2</label>
+                                                    </div>
+                                                    <div class="radio-block adult-block">
+                                                        <input type="radio"
+                                                               name="adult-group" id="radio-4" value="3"><label for="radio-4">3</label>
+                                                    </div>
+                                                    <div class="radio-block adult-block">
+                                                        <input type="radio"
+                                                               name="adult-group" id="radio-5" value="4"><label for="radio-5">4</label>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="sel-title">兒童人數：</div>
+                                                <div class="clearfix">
 
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-6" value="0" checked><label for="radio-6">0</label>
-													</div>
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-7" value="1"><label for="radio-7">1</label>
-													</div>
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-8" value="2"><label for="radio-8">2</label>
-													</div>
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-9" value="3"><label for="radio-9">3</label>
-													</div>
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-10" value="4"><label for="radio-10">4</label>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="field-inner">
-									<div class="btn btn-light" @@click="searchRoom()">
-										<i class="fa-solid fa-magnifying-glass"></i>
-										搜尋
-									</div>
-								</div>
-							</div>
-							<div>
-								<button type="button" class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#likeList" @@click="getLikes()">
-									喜愛清單
-								</button>
-							</div>
-						</div>
-					</div>
-				</nav>
-			</div>
+                                                    <div class="radio-block child-block">
+                                                        <input type="radio"
+                                                               name="child-group" id="radio-6" value="0" checked><label for="radio-6">0</label>
+                                                    </div>
+                                                    <div class="radio-block child-block">
+                                                        <input type="radio"
+                                                               name="child-group" id="radio-7" value="1"><label for="radio-7">1</label>
+                                                    </div>
+                                                    <div class="radio-block child-block">
+                                                        <input type="radio"
+                                                               name="child-group" id="radio-8" value="2"><label for="radio-8">2</label>
+                                                    </div>
+                                                    <div class="radio-block child-block">
+                                                        <input type="radio"
+                                                               name="child-group" id="radio-9" value="3"><label for="radio-9">3</label>
+                                                    </div>
+                                                    <div class="radio-block child-block">
+                                                        <input type="radio"
+                                                               name="child-group" id="radio-10" value="4"><label for="radio-10">4</label>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" id="search">
+                                <div class="field-inner">
+                                    <div class="btn btn-light" @@click="searchRoom()">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        搜尋
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="likeButton">
+                                <button type="button" class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
+                                    喜愛清單
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
 
-			<div class="other-links clearfix">
-				<div class="info">
-					<ul class="clearfix">
-						<partial name="_LoginPartial" />
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
+            <div class="other-links clearfix">
+                <div class="info">
+                    <ul class="clearfix">
+                        <partial name="_LoginPartial" />
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>
 
 <div id="app">
 
-	<div class="sidebar-page-container">
-		<div class="circles-two">
-			<div class="c-1"></div>
-			<div class="c-2"></div>
-		</div>
-		<span class="dotted-pattern dotted-pattern-5"></span>
-		<span class="tri-pattern tri-pattern-8"></span>
+    <div class="sidebar-page-container">
+        <div class="circles-two">
+            <div class="c-1"></div>
+            <div class="c-2"></div>
+        </div>
+        <span class="dotted-pattern dotted-pattern-5"></span>
+        <span class="tri-pattern tri-pattern-8"></span>
 
-		<div class="result-container">
-			<div class="row clearfix">
+        <div class="result-container">
+            <div class="row clearfix">
 
-				<!--Content Side-->
-				<div class="content-side col-lg-8 col-md-12 col-sm-12">
-					<div class="blog-content">
-						<div class="row">
-							<!--Feature Box-->
-							<template v-for="item in resultVM">
-								<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-									<div class="inner-box">
-										<div class="icon-box">
-											<div class="heart-box">
-												<button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
-											</div>
-											<img :src="item.image" />
-										</div>
-										<div class="text-box">
-											<a :href="'Home/HotelPage/'+item.hotelId">
-												<h3>{{item.name}}</h3>
-												<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
-												<div>
-													<h4><span>NT </span><span>{{item.price}}</span><span>/每晚</span></h4>
-												</div>
-											</a>
-										</div>
+                <!--Content Side-->
+                <div class="content-side col-lg-8 col-md-12 col-sm-12">
+                    <div class="blog-content">
+                        <div class="row">
+                            <!--Feature Box-->
+                            <template v-for="item in resultVM">
+                                <div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                                    <div class="inner-box">
+                                        <div class="icon-box">
+                                            <div class="heart-box">
+                                                <button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
+                                            </div>
+                                            <img :src="item.image" />
+                                        </div>
+                                        <div class="text-box">
+                                            <a :href="'Home/HotelPage/'+item.hotelId">
+                                                <h3>{{item.name}}</h3>
+                                                <h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
+                                                <div>
+                                                    <h4><span>NT </span><span>{{item.price}}</span><span>/每晚</span></h4>
+                                                </div>
+                                            </a>
+                                        </div>
 
-									</div>
-								</div>
-							</template>
+                                    </div>
+                                </div>
+                            </template>
 
-						</div>
-					</div>
-				</div>
+                        </div>
+                    </div>
+                </div>
 
-				<!--Sidebar Side-->
-				<div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
-					<aside class="sidebar blog-sidebar">
-						<!--Sidebar Widget-->
-						<div class="sidebar-widget search-box wow fadeInUp" data-wow-delay="0ms"
-							 data-wow-duration="1500ms">
-							<div class="widget-inner" id="map">
-								<div class="sidebar-title">
-								</div>
-							</div>
-						</div>
-					</aside>
-				</div>
-			</div>
+                <!--Sidebar Side-->
+                <div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
+                    <aside class="sidebar blog-sidebar">
+                        <!--Sidebar Widget-->
+                        <div class="sidebar-widget search-box wow fadeInUp" data-wow-delay="0ms"
+                             data-wow-duration="1500ms">
+                            <div class="widget-inner" id="map">
+                                <div class="sidebar-title">
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
 
-		</div>
-	</div>
-	<div class="modal fade" id="likeList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title" id="staticBackdropLabel" style="color: red;">喜愛清單</h3>
-					@*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
-				</div>
-				<div class="modal-body">
-					<template v-if="likeVM.length === 0">
-						<p>您還沒有收藏任何旅店唷!</p>
-					</template>
-					<template v-else>
-						<div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" v-for="item in likeVM">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
-									</div>
-									<img :src="item.hotelImage" />
-								</div>
-								<div class="text-box">
-									<a href="index-5.html">
-										<h3>{{item.hotelName}}</h3>
-										<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
-										<div>
-											<h4>NT 2000/晚</h4>
-											<h4>建立時間:{{item.createDate | formatDateTime }}</h4>
-										</div>
-									</a>
-								</div>
+        </div>
+    </div>
+    <div class="modal fade" id="likeList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="staticBackdropLabel" style="color: red;">喜愛清單</h3>
+                    @*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
+                </div>
+                <div class="modal-body">
+                    <template v-if="likeVM.length === 0">
+                        <p>您還沒有收藏任何旅店唷!</p>
+                    </template>
+                    <template v-else>
+                        <div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" v-for="item in likeVM">
+                            <div class="inner-box">
+                                <div class="icon-box">
+                                    <div class="heart-box">
+                                        <button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
+                                    </div>
+                                    <img :src="item.hotelImage" />
+                                </div>
+                                <div class="text-box">
+                                    <a :href="'Home/HotelPage/'+item.hotelId">
+                                        <h3>{{item.hotelName}}</h3>
+                                        <h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
+                                        <div>
+                                            <h4>最低價格:<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span></h4>
+                                            <h4>建立時間:{{item.createDate | formatDateTime }}</h4>
+                                        </div>
+                                    </a>
+                                </div>
 
-							</div>
-						</div>
-					</template>
+                            </div>
+                        </div>
+                    </template>
 
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 
 
 @section Scripts {
 
-	<a href="~/lib/jquery/dist/jquery.min.map"></a>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
-	<script src="~/lib/vue/vue.min.js"></script>
-	<script src="~/lib/axios/axios.min.js"></script>
-	<script src="lib\element-ui\index.min.js"></script>
+    <a href="~/lib/jquery/dist/jquery.min.map"></a>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
+    <script src="~/lib/vue/vue.min.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script src="~/lib/element-ui/index.min.js"></script>
 
-	<script>
-		let map;
-		function initMap() {
-			map = new google.maps.Map(document.getElementById("map"), {
-				center: { lat: 25.105497, lng: 121.597366 },
-				zoom: 14,
-			});
-		}
-		window.initMap = initMap;
-	</script>
+    <script>
+        let map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 25.105497, lng: 121.597366 },
+                zoom: 14,
+            });
+        }
+        window.initMap = initMap;
+    </script>
 
-	<script>
-		const vm = new Vue({
-			el: "#app",
-			data: {
-				resultVM: [],
-				likeVM: [],
-				baseURL: "",
-				//numOfGuests: ,
-			},
-			computed: {
-				//getNumOfGuests: function () {
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                resultVM: [],
+                likeVM: [],
+                baseURL: "",
+                //numOfGuests: ,
+            },
+            computed: {
+                //getNumOfGuests: function () {
 
-				//	numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
+                //	numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
 
-				//},
-			},
-			filters: {
-				formatDateTime(value) {
-					const date = new Date(value);
-					const year = date.getFullYear();
-					const month = ("0" + (date.getMonth() + 1)).slice(-2);
-					const day = ("0" + date.getDate()).slice(-2);
-					const hours = ("0" + date.getHours()).slice(-2);
-					const minutes = ("0" + date.getMinutes()).slice(-2);
-					return `${year}-${month}-${day} ${hours}:${minutes}`;
-				}
-			},
-			mounted: function () {
-				let _this = this;
-				_this.filterResultVM();
-				_this.getLikes();
-				_this.baseURL = window.location.origin;
-			},
-			methods: {
-				filterResultVM: function () {
-					let _this = this;
-					//var resultList = [];
-					axios.get(`/api/Result/Get`).then(response => {
+                //},
+            },
+            filters: {
+                formatDateTime(value) {
+                    const date = new Date(value);
+                    const year = date.getFullYear();
+                    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+                    const day = ("0" + date.getDate()).slice(-2);
+                    const hours = ("0" + date.getHours()).slice(-2);
+                    const minutes = ("0" + date.getMinutes()).slice(-2);
+                    return `${year}-${month}-${day} ${hours}:${minutes}`;
+                }
+            },
+            mounted: function () {
+                let _this = this;
+                _this.filterResultVM();
+                _this.baseURL = window.location.origin;
+            },
+            methods: {
+                filterResultVM: function () {
+                    let _this = this;
+                    //var resultList = [];
+                    axios.get(`/api/Result/Get`).then(response => {
 
-						_this.resultVM = response.data;
+                        _this.resultVM = response.data;
 
-					})
-					//resultList.filter();
-				},
-				getLikes: function () {
-					let _this = this;
-					axios.get(`/Like/GetLikes`).then(response => {
-						//alert(JSON.stringify(response.data));
-						_this.likeVM = response.data;
-					}).catch(error => {
-						//console.log(error.response.data);
-						location.href = _this.baseURL + error.response.data;
-					});
-				},
-				clickLike: function (id) {
-					let _this = this;
-					var request = { params: { hotelId: id } };
-					axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
-						_this.filterResultVM();
-						_this.getLikes();
-					}).catch(error => {
-						//console.log(error.response.data);
-						location.href = _this.baseURL + error.response.data;
-					});
-				},
+                    })
+                    //resultList.filter();
+                },
+                getLikes: function () {
+                    let _this = this;
+                    axios.get(`/Like/GetLikes`).then(response => {
+                        //alert(JSON.stringify(response.data));
+                        _this.likeVM = response.data;
+                    }).catch(error => {
+                        //console.log(error.response.data);
+                        location.href = _this.baseURL + error.response.data;
+                    });
+                },
+                clickLike: function (id) {
+                    let _this = this;
+                    var request = { params: { hotelId: id } };
+                    axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
+                        _this.filterResultVM();
+                        _this.getLikes();
+                    }).catch(error => {
+                        //console.log(error.response.data);
+                        location.href = _this.baseURL + error.response.data;
+                    });
+                },
 
 
-			}
+            }
 
-		});
-	</script>
+        });
+    </script>
 
-	<script>
-		var app = new Vue({
-			el: '#vueApp',
-			data: {
-				size: 'default',
-				timeValue: null,
-				likeVM: [],
-				baseURL: "",
-			},
-			mounted: function () {
-				let _this=this;
-				_this.baseURL = window.location.origin;
-			},
-			methods: {
-				submitForm() {
-					// 提交後想做什麼邏輯
-					console.log("開始日期:", this.timeValue[0]);
-					console.log("结束日期:", this.timeValue[1]);
-				},
-				searchRoom: function () {
+    <script>
+        var likeapp = new Vue({
+            el: '#likeButton',
+            data: {
+            
+            },
+            mounted: function () {
+     
+            },
+            methods: {
+              
+            },
+        });
 
-					var p = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
+    </script>
+    <script>
+        var app = new Vue({
+            el: '#vueApp',
+            data: {
+                size: 'default',
+                timeValue: null,
+            },
+            mounted: function () {
 
-					if (p > 6 || p == 0) {
+            },
+            methods: {
+                submitForm() {
+                    // 提交後想做什麼邏輯
+                    console.log("開始日期:", this.timeValue[0]);
+                    console.log("结束日期:", this.timeValue[1]);
+                },
 
-						alert("合計人數必須在1～6人之間")
+            },
+        });
 
-					} else {
-						vm.filterResultVM(p);
-					}
+    </script>
 
-				},
-				getLikes: function () {
-					let _this = this;
-					axios.get(`/Like/GetLikes`).then(response => {
-						//alert(JSON.stringify(response.data));
-						_this.likeVM = response.data;
-					}).catch(error => {
-						//console.log(error.response.data);
-						location.href = _this.baseURL + error.response.data;
-					});
-				},
-			},
-		});
+    <script>
+        var searchApp = new Vue({
+            el: '#search',
+            data: {
 
-	</script>
+            },
+            mounted: function () {
+
+            },
+            methods: {
+                searchRoom: function () {
+
+                    var p = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
+
+                    if (p > 6 || p == 0) {
+
+                        alert("合計人數必須在1～6人之間")
+
+                    } else {
+                        vm.filterResultVM(p);
+                    }
+
+                },
+            },
+        });
+
+    </script>
 }
