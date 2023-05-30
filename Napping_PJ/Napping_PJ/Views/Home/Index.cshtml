@@ -1,5 +1,5 @@
 @section Styles{
-	<link href="lib\element-ui\theme-chalk\index.min.css" rel="stylesheet" />
+		<link href="~/lib/element-ui/theme-chalk/index.min.css" rel="stylesheet" />
 	<style>
 		.el-date-editor .el-range-separator {
 			width: auto;
@@ -168,6 +168,7 @@
 									</div>
 								</div>
 							</div>
+
 						</div>
 					</div>
 				</nav>
@@ -212,7 +213,7 @@
 											<img :src="item.image" />
 										</div>
 										<div class="text-box">
-											<a :href="'Home/HotelPage/'+item.hotelId">
+											<a :href="'/Home/HotelPage/'+item.hotelId">
 												<h3>{{item.name}}</h3>
 												<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
 												<div>
@@ -302,7 +303,8 @@
 	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
 	<script src="~/lib/vue/vue.min.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
-	<script src="lib\element-ui\index.min.js"></script>
+	<script src="~/lib/element-ui/index.min.js"></script>
+	
 
 	<script>
 		let map;

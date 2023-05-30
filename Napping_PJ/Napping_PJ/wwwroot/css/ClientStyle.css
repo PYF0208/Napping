@@ -1219,17 +1219,17 @@ img.lazy-image {
         display: block;
     }
 
-        .default-form .field-inner .alt-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            margin-top: -15px;
-            line-height: 30px;
-            font-size: 18px;
-            color: #9b9fa6;
-            z-index: 1;
-            pointer-events: none;
-        }
+.default-form .field-inner .alt-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    margin-top: -15px;
+    line-height: 30px;
+    font-size: 18px;
+    color: #9b9fa6;
+    z-index: 1;
+    pointer-events: none;
+}
 
     .default-form .form-group .field-label {
         position: relative;
@@ -9701,7 +9701,6 @@ img.lazy-image {
         line-height: 80px;
         color: #aaaaaa;
         width: 100%;
-        margin-bottom: 10px;
         overflow: hidden;
         width: 100%;
         height: 320px;
