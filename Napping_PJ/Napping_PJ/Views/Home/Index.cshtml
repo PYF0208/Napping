@@ -439,7 +439,7 @@
 				searchRoom: function () {
 
 					vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
-
+					vm.filterResultVM();
 				},
 			},
 		});
