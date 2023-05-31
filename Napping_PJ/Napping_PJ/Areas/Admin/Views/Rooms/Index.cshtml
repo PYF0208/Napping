@@ -41,7 +41,7 @@
 				@*表格標題*@
 				@*表格內容*@
 				<tbody>
-					<tr v-for="item in RoomsViewModel">
+					<tr v-for="item in displayRooms">
 						<td>{{item.roomId}}</td>
 						<td>{{item.hotelId}}</td>
 						<td>{{item.type}}</td>
@@ -57,10 +57,12 @@
 							<a class="btn delete" @@click="deleteRooms(item.roomId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
 						</td>
 						</tr>
-				</tbody>
+				</tbody>				
 				@*表格內容*@
 			</table>
-
+			<div style="text-align:center" id="loading">
+				<i class="fas fa-spinner fa-spin" style="font-size:30px"></i>
+			</div>
 		</div>
 		@*編輯用的互動視窗*@
 		<div class="form-group">
@@ -167,6 +169,7 @@
 			el: "#app",
 			data: {
 				RoomsViewModel: [],
+				displayRooms:[],
 				FeatureViewModel: [],
 				featureId: "",
 				name: "",
@@ -182,12 +185,21 @@
 				originalPrice: "",
 				originalMaxGuests: "",
 				roomId: "",
-				originalFeatures: []
+				originalFeatures: [],
+				count:10,
 			},
 			mounted: function () {
 				let _this = this;
 				_this.getRooms();
 				_this.getFeature();
+				let obs = new IntersectionObserver(function(){
+					var newData = _this.RoomsViewModel.slice(_this.count,_this.count+10);
+					for(let d of newData){
+						_this.displayRooms.push(d);
+					}
+					_this.count+=10;
+				},{})
+				obs.observe(document.getElementById('loading'))
 			},
 			methods: {
 				getFeature: function () {
@@ -231,6 +243,7 @@
 					request.RoomId = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
 					request.HotelId = request.Type = request.Price = request.MaxGuests = _this.filter;
 					axios.post('Rooms/FilterRooms', request).then(function (response) {
+						_this.displayRooms = response.data.slice(0, 10);
 						_this.RoomsViewModel = response.data;
 					})
 						.catch(function (error) {
