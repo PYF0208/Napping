@@ -8,7 +8,7 @@
 		public double Price { get; set; }
 		public int MaxGuests { get; set; }
 
-		public List<FeatureInRoomViewModel>Feature{get; set;}
+		public List<FeatureInRoomViewModel> Feature { get; set; }
 	}
 	public class FeatureInRoomViewModel
 	{

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Areas.Admin.Models;
 using Napping_PJ.Models.Entity;
+using NuGet.Packaging;
 
 namespace Napping_PJ.Areas.Admin.Controllers
 {
@@ -38,7 +39,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 				Type = Rooms.Type,
 				Price = Rooms.Price,
 				MaxGuests = Rooms.MaxGuests,
-				
+
 
 			}).ToListAsync();
 			return Rooms;
@@ -219,14 +220,14 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 
-		public async Task<string> Edit(int id, [FromBody] RoomsViewModel room)
+		public  string Edit(int id, [FromBody] RoomsEditViewModel room)
 		{
 			if (id == null || room.RoomId == null || id != room.RoomId)
 			{
 				return "修改失敗1";
 			}
-
-			var SearchHotel = await _context.Rooms.FindAsync(id);
+			
+			var SearchHotel =  _context.Rooms.Include(x=>x.Features).SingleOrDefault(x=>x.RoomId==id);
 			if (SearchHotel == null)
 			{
 				return "修改失敗2";
@@ -236,11 +237,14 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			SearchHotel.Type = room.Type;
 			SearchHotel.Price = room.Price;
 			SearchHotel.MaxGuests = room.MaxGuests;
-			
+			SearchHotel.Features.Clear();
+			var x=_context.Features.Where(x => room.Features.Contains(x.FeatureId)).ToList();
+			SearchHotel.Features.AddRange(x);
+
 			try
 			{
 				_context.Update(SearchHotel);
-				await _context.SaveChangesAsync();
+				 _context.SaveChanges();
 			}
 			catch (DbUpdateConcurrencyException)
 			{

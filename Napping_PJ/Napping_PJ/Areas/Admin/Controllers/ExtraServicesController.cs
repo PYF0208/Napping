@@ -35,54 +35,28 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 .Select(es => new ExtraServiceViewModel
                 {
                     ExtraServiceId = es.ExtraServiceId,
-                    HotelId = es.HotelId,
                     ExtraServiceName = es.Name,
-                    Price = es.Price,
-                    HotelName = es.Hotel.Name
+                    Image = es.Image,
                 })
                 .ToListAsync();
 
             return esViewModel;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<HotelsViewModel>> GetHotels()
-        {
-            var hotelsViewModel = await _context.Hotels
-                .Select(h => new HotelsViewModel
-                {
-                    HotelId = h.HotelId,
-                    Name = h.Name,
-                    Star = h.Star,
-                    Image = h.Image,
-                    ContactName = h.ContactName,
-                    Phone = h.Phone,
-                    Email = h.Email,
-                    City = h.City,
-                    Region = h.Region,
-                    Address = h.Address,
-                    AvgComment = h.AvgComment,
-                })
-                .ToListAsync();
-
-            return hotelsViewModel;
-        }
-        [HttpPost]
+		[HttpPost]
         public async Task<IEnumerable<ExtraServiceViewModel>> FilterExtraServices(
             [FromBody] ExtraServiceViewModel esViewModel)
         {
             return await _context.ExtraServices.Where(es =>
             es.ExtraServiceId == esViewModel.ExtraServiceId ||
-            es.Price == esViewModel.Price ||
             es.Name.Contains(esViewModel.ExtraServiceName) ||
-            es.Hotel.Name.Contains(esViewModel.HotelName)).Select(es => new ExtraServiceViewModel
+            es.Image.Contains(esViewModel.Image)).Select(es => new ExtraServiceViewModel
             {
                 ExtraServiceId = es.ExtraServiceId,
-                HotelId = es.HotelId,
                 ExtraServiceName = es.Name,
-                Price = es.Price,
-                HotelName = es.Hotel.Name
-            }).ToListAsync();
+				Image = es.Image,
+
+			}).ToListAsync();
 
         }
 
@@ -96,8 +70,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
             ExtraService es = await _context.ExtraServices.FindAsync(id);
             es.ExtraServiceId = esViewModel.ExtraServiceId;
             es.Name = esViewModel.ExtraServiceName;
-            es.Price = esViewModel.Price;
-            es.HotelId = esViewModel.HotelId;
+            es.Image = esViewModel.Image;
             _context.Entry(es).State = EntityState.Modified;
 
             try
@@ -129,8 +102,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
             {
                 ExtraServiceId = esViewModel.ExtraServiceId,
                 Name = esViewModel.ExtraServiceName,
-                Price = esViewModel.Price,
-                HotelId = esViewModel.HotelId
+                Image = esViewModel.Image,
 
             };
             _context.ExtraServices.Add(es);

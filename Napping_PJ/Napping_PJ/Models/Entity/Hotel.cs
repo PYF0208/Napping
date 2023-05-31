@@ -8,7 +8,7 @@ namespace Napping_PJ.Models.Entity
         public Hotel()
         {
             Comments = new HashSet<Comment>();
-            ExtraServices = new HashSet<ExtraService>();
+            HotelExtraServices = new HashSet<HotelExtraService>();
             Likes = new HashSet<Like>();
             Rooms = new HashSet<Room>();
         }
@@ -29,7 +29,7 @@ namespace Napping_PJ.Models.Entity
         public double? AvgComment { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<ExtraService> ExtraServices { get; set; }
+        public virtual ICollection<HotelExtraService> HotelExtraServices { get; set; }
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<Room> Rooms { get; set; }
     }

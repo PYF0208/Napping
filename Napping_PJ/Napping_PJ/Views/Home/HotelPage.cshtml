@@ -37,7 +37,7 @@
 </header>
 <div id="app">
 	<section class="page-banner">
-
+		
 		<div class="row auto-container">
 			<div class="col-4">
 				
@@ -69,65 +69,30 @@
 			<div class="c-1"></div>
 			<div class="c-2"></div>
 		</div>
-		<div class="auto-container">
-			<div class="sec-title centered">
+		<div class="auto-container" >
+			<div class="sec-title centered" >
 				<h2>所有房型</h2>
+				
 			</div>
-			<div class="row clearfix">
+			<div class="row clearfix" >
 				<!--Block-->
-				<div class="featured-block-two col-xl-4 col-lg-6 col-md-6 col-sm-12">
+				<div class="featured-block-two col-xl-4 col-lg-6 col-md-6 col-sm-12" v-for="item in roomTypeViewModel">
 					<div class="inner-box">
-						<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-							<figure class="image">
-								<a href="#">
-									<img src="~/images/featured-image-15.jpg" />
+						<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" >
+							<figure class="image" >
+								<a href="" >
+									<img :src="item.pics[0].image" />
 								</a>
 							</figure>
 						</div>
 						<div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
 							<div class="cap-inner">
-								<div class="price">From <span>$50.00</span></div>
-								<h5>Deluxe Room</h5>
+								<div class="price">From <span>{{item.room.price}}</span></div>
+								<a :href="'RoomDetail/index/'+item.room.roomId"><h5>{{item.room.type}}</h5></a>
 							</div>
 						</div>
 					</div>
-				</div>
-				<!--Block-->
-				<div class="featured-block-two col-xl-4 col-lg- col-md-6 col-sm-12">
-					<div class="inner-box">
-						<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-							<figure class="image">
-								<a href="#">
-									<img src="~/images/featured-image-16.jpg" />
-								</a>
-							</figure>
-						</div>
-						<div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
-							<div class="cap-inner">
-								<div class="price">From <span>$50.00</span></div>
-								<h5>Sea View Room</h5>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!--Block-->
-				<div class="featured-block-two col-xl-4 col-lg-6 col-md-6 col-sm-12">
-					<div class="inner-box">
-						<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-							<figure class="image">
-								<a href="#">
-									<img src="~/images/featured-image-17.jpg" />
-								</a>
-							</figure>
-						</div>
-						<div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
-							<div class="cap-inner">
-								<div class="price">From <span>$50.00</span></div>
-								<h5>Superior Room</h5>
-							</div>
-						</div>
-					</div>
-				</div>
+				</div>					
 			</div>
 		</div>
 	</section>
@@ -215,11 +180,13 @@
 			data: {
 
 				hotelPageVM: {},
-
+				hotelid:"",
+				roomTypeViewModel:[],
 			},
 			mounted: function () {
 				let _this = this;
 				_this.filterHotelPageVM();
+				_this.getHotelsRoomType();
 			},
 			methods: {
 				filterHotelPageVM: function () {
@@ -228,7 +195,7 @@
 
 					var parts = window.location.href.split('/');
 					var id = parts[parts.length - 1];
-
+					_this.hotelId = id;
 					axios.get(`/api/HotelPage/Get/${id}`).then(response => {
 						//alert(JSON.stringify(response.data))
 						_this.hotelPageVM = response.data;
@@ -237,6 +204,20 @@
 
 
 				},
+				getHotelsRoomType:function()
+				{
+					let _this=this;
+					
+
+					var id = _this.hotelId; 
+
+					axios.post(`/api/HotelPage/GetRoomType/${id}`).then(res => {
+						//alert(JSON.stringify(res.data))
+
+						_this.roomTypeViewModel = res.data
+					})
+					
+				}
 
 
 			}

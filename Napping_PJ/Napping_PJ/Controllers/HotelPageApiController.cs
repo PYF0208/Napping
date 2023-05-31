@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Areas.Admin.Models;
 using Napping_PJ.Models;
 using Napping_PJ.Models.Entity;
 
@@ -34,6 +35,25 @@ namespace Napping_PJ.Controllers
 				Description = h.Description,
 
 			}).Where(h => h.HotelId == id);
+
+		}
+
+		[HttpPost("{id}")]
+		public object GetRoomType(int id)
+		{
+			return _context.Rooms.Include(h => h.Hotel).Include(rimg => rimg.RoomImages).Where(i => i.HotelId == id).Select(r => new
+			{
+				room = new
+				{
+					price = r.Price,
+					type = r.Type,
+					roomId = r.RoomId,
+					hotelId = r.HotelId,
+					maxGuests = r.MaxGuests,
+				},
+				pics=r.RoomImages.ToList(),
+			}).ToList() ;
+
 
 		}
 	}

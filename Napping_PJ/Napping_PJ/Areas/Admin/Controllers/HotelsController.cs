@@ -76,36 +76,36 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			return HotelsService;
 		}
 
-		[HttpPost]
-		public async Task<IEnumerable<HotelsViewModel>> FilterExtraServices(
-			[FromBody] HotelsViewModel hotel)
-		{
-			return _context.ExtraServices.Where(h =>
-			h.HotelId == hotel.HotelId ||
-			h.Hotel.Name.Contains(hotel.Name)||
-			h.Hotel.Star.Contains(hotel.Star)||
-			h.Hotel.Image.Contains(hotel.Image)||
-			h.Hotel.ContactName.Contains(hotel.ContactName)||
-			h.Hotel.Phone.Contains(hotel.Phone)||
-			h.Hotel.Email.Contains(hotel.Email)||
-			h.Hotel.City.Contains(hotel.City)||
-			h.Hotel.Region.Contains(hotel.Region)||
-			h.Hotel.Address.Contains(hotel.Address)).Select(h => new HotelsViewModel
-			{
-				HotelId = hotel.HotelId,
-				Name = hotel.Name,
-				Star = hotel.Star,
-				Image = hotel.Image,
-				ContactName = hotel.ContactName,
-				Phone = hotel.Phone,
-				Email = hotel.Email,
-				City = hotel.City,
-				Region = hotel.Region,
-				Address = hotel.Address,
-				AvgComment = hotel.AvgComment
-			});
+		//[HttpPost]
+		//public async Task<IEnumerable<HotelsViewModel>> FilterExtraServices(
+		//	[FromBody] HotelsViewModel hotel)
+		//{
+		//	return _context.ExtraServices.Where(h =>
+		//	h.HotelId == hotel.HotelId ||
+		//	h.Hotel.Name.Contains(hotel.Name)||
+		//	h.Hotel.Star.Contains(hotel.Star)||
+		//	h.Hotel.Image.Contains(hotel.Image)||
+		//	h.Hotel.ContactName.Contains(hotel.ContactName)||
+		//	h.Hotel.Phone.Contains(hotel.Phone)||
+		//	h.Hotel.Email.Contains(hotel.Email)||
+		//	h.Hotel.City.Contains(hotel.City)||
+		//	h.Hotel.Region.Contains(hotel.Region)||
+		//	h.Hotel.Address.Contains(hotel.Address)).Select(h => new HotelsViewModel
+		//	{
+		//		HotelId = hotel.HotelId,
+		//		Name = hotel.Name,
+		//		Star = hotel.Star,
+		//		Image = hotel.Image,
+		//		ContactName = hotel.ContactName,
+		//		Phone = hotel.Phone,
+		//		Email = hotel.Email,
+		//		City = hotel.City,
+		//		Region = hotel.Region,
+		//		Address = hotel.Address,
+		//		AvgComment = hotel.AvgComment
+		//	});
 
-		}
+		//}
 
 
 		// GET: Admin/Hotels/Create

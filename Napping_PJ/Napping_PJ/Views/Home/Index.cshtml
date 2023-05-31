@@ -269,38 +269,38 @@
 				</div>
 			</div>
 
-		</div>
-	</div>
-	<div class="modal fade" id="likeList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title" id="staticBackdropLabel" style="color: red;">喜愛清單</h3>
-					@*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
-				</div>
-				<div class="modal-body">
-					<template v-if="likeVM.length === 0">
-						<p>您還沒有收藏任何旅店唷!</p>
-					</template>
-					<template v-else>
-						<div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" v-for="item in likeVM">
-							<div class="inner-box">
-								<div class="icon-box">
-									<div class="heart-box">
-										<button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
-									</div>
-									<img :src="item.hotelImage" />
-								</div>
-								<div class="text-box">
-									<a :href="'Home/HotelPage/'+item.hotelId">
-										<h3>{{item.hotelName}}</h3>
-										<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
-										<div>
-											<h4>最低價格:<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span></h4>
-											<h4>建立時間:{{item.createDate | formatDateTime }}</h4>
-										</div>
-									</a>
-								</div>
+        </div>
+    </div>
+    <div class="modal fade" id="likeList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="staticBackdropLabel" style="color: red;">喜愛清單</h3>
+                    @*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
+                </div>
+                <div class="modal-body">
+                    <template v-if="likeVM.length === 0">
+                        <p>您還沒有收藏任何旅店唷!</p>
+                    </template>
+                    <template v-else>
+                        <div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" v-for="item in likeVM">
+                            <div class="inner-box">
+                                <div class="icon-box">
+                                    <div class="heart-box">
+                                        <button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
+                                    </div>
+                                    <img :src="item.hotelImage" />
+                                </div>
+                                <div class="text-box">
+                                    <a :href="'Home/HotelPage/'+item.hotelId">
+                                        <h3>{{item.hotelName}}</h3>
+                                        <h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
+                                        <div>
+                                            <h4>從&ensp;<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span>&ensp;起</h4>
+                                            <h4>建立時間:{{item.createDate | formatDateTime }}</h4>
+                                        </div>
+                                    </a>
+                                </div>
 
 							</div>
 						</div>
