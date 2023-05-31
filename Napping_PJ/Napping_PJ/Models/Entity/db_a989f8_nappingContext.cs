@@ -36,7 +36,6 @@ namespace Napping_PJ.Models.Entity
         public virtual DbSet<Promotion> Promotions { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<Room> Rooms { get; set; } = null!;
-        public virtual DbSet<RoomFeature> RoomFeatures { get; set; } = null!;
         public virtual DbSet<RoomImage> RoomImages { get; set; } = null!;
         public virtual DbSet<UserRole> UserRoles { get; set; } = null!;
 
@@ -185,9 +184,8 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<HotelExtraService>(entity =>
             {
-                entity.HasKey(e => e.Hesid);
-
-                entity.Property(e => e.Hesid).HasColumnName("HESid");
+                entity.HasKey(e => new { e.HotelId, e.ExtraServiceId })
+                    .HasName("PK_HotelExtraServices_1");
 
                 entity.HasOne(d => d.ExtraService)
                     .WithMany(p => p.HotelExtraServices)
@@ -265,9 +263,9 @@ namespace Napping_PJ.Models.Entity
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.Property(e => e.CheckIn).HasColumnType("date");
+                entity.Property(e => e.CheckIn).HasColumnType("datetime");
 
-                entity.Property(e => e.CheckOut).HasColumnType("date");
+                entity.Property(e => e.CheckOut).HasColumnType("datetime");
 
                 entity.Property(e => e.TravelType).HasMaxLength(50);
 
@@ -335,21 +333,19 @@ namespace Napping_PJ.Models.Entity
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Room_Hotel");
-            });
 
-            modelBuilder.Entity<RoomFeature>(entity =>
-            {
-                entity.HasOne(d => d.Feature)
-                    .WithMany(p => p.RoomFeatures)
-                    .HasForeignKey(d => d.FeatureId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Room_Feature_Feature");
+                entity.HasMany(d => d.Features)
+                    .WithMany(p => p.Rooms)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "RoomFeature",
+                        l => l.HasOne<Feature>().WithMany().HasForeignKey("FeatureId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Feature"),
+                        r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Room"),
+                        j =>
+                        {
+                            j.HasKey("RoomId", "FeatureId").HasName("PK_RoomFeatures_1");
 
-                entity.HasOne(d => d.Room)
-                    .WithMany(p => p.RoomFeatures)
-                    .HasForeignKey(d => d.RoomId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Room_Feature_Room");
+                            j.ToTable("RoomFeatures");
+                        });
             });
 
             modelBuilder.Entity<RoomImage>(entity =>

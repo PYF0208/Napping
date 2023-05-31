@@ -4,10 +4,19 @@
     {
 
         public int ExtraServiceId { get; set; }
-        public int HotelId { get; set; }
+    
         public string ExtraServiceName { get; set; } = null!;
-        public double Price { get; set; }
-        public string HotelName { get; set; } = null!;
+		public string? Image { get; set; }
 
-    }
+		public int HotelId { get; set; }
+		public string HotelName { get; set; } = null!;
+
+		public int ExtraServicePrice { get; set; }
+
+
+
+
+
+
+	}
 }

@@ -7,8 +7,8 @@ namespace Napping_PJ.Models.Entity
     {
         public Room()
         {
-            RoomFeatures = new HashSet<RoomFeature>();
             RoomImages = new HashSet<RoomImage>();
+            Features = new HashSet<Feature>();
         }
 
         public int RoomId { get; set; }
@@ -19,7 +19,8 @@ namespace Napping_PJ.Models.Entity
         public int MaxGuests { get; set; }
 
         public virtual Hotel Hotel { get; set; } = null!;
-        public virtual ICollection<RoomFeature> RoomFeatures { get; set; }
         public virtual ICollection<RoomImage> RoomImages { get; set; }
+
+        public virtual ICollection<Feature> Features { get; set; }
     }
 }

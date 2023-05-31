@@ -28,11 +28,14 @@
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
-						<td>RoomId</td>
-						<td>HotelId</td>
-						<td>Type</td>
+						<th>RoomId</th>
+						<th>HotelId</th>
+						<th>Type</th>
 						<th>Price</th>
 						<th>MaxGuests</th>
+						<th>房型特徵</th>
+						<th>操作</th>
+
 					</tr>
 				</thead>
 				@*表格標題*@
@@ -44,6 +47,11 @@
 						<td>{{item.type}}</td>
 						<td>{{item.price}}</td>
 						<td>{{item.maxGuests}}</td>
+						<td>
+							<span v-for="f in item.feature">
+								<i :class="f.image" style="font-size:20px"></i>{{f.name}}
+							</span>
+						</td>
 						<td>
 							<a class="btn edit" @@click="edit(item.roomId)"><i class="fa-solid fa-pen" title="Edit"></i></a>
 							<a class="btn delete" @@click="deleteRooms(item.roomId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
@@ -84,6 +92,16 @@
 								<label class="form-label">MaxGuests</label>
 								<input class="form-control" v-model="originalMaxGuests" />
 							</div>
+							<div class="form-group">
+								<label class="form-label">房型特徵</label>
+								<div class="row">
+									<div v-for="f in FeatureViewModel" class="form-check col-4" :key="f.name">
+										<label class="form-check-label" :for="f.featureId">{{f.name}}</label>
+										<i :class="f.image" :key="f.name" ref="icons"></i>
+										<input class="form-check-input" type="checkbox" :value="f.featureId" :id="f.featureId" v-model="originalFeatures">
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -119,6 +137,10 @@
 								<label class="form-label">maxGuests</label>
 								<input class="form-control" v-model="maxGuests" />
 							</div>
+							<div class="form-group">
+								<label class="form-label">featureId</label>
+								<input class="form-control" v-model="featureId" />
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -139,11 +161,16 @@
 
 	<script src="~/lib/vue/vue.min.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
+
 	<script>
 		const vm = new Vue({
 			el: "#app",
 			data: {
 				RoomsViewModel: [],
+				FeatureViewModel: [],
+				featureId: "",
+				name: "",
+				image: "",
 				filter: "",
 				hotelId: "",
 				type: "",
@@ -155,12 +182,48 @@
 				originalPrice: "",
 				originalMaxGuests: "",
 				roomId: "",
+				originalFeatures: []
 			},
 			mounted: function () {
 				let _this = this;
 				_this.getRooms();
+				_this.getFeature();
 			},
 			methods: {
+				getFeature: function () {
+					let _this = this;
+					axios.get('Rooms/GetFeature').then(response => {
+
+						_this.FeatureViewModel = response.data;
+						var FeatureList = [];
+
+						_this.Feature.forEach(
+							item => {
+
+								//item.Edit = false;
+								FeatureList.push(item);
+
+							}
+						)
+						_this.Feature = FeatureList;
+					})
+				},
+				edit: function (item) {
+					$("#editModal").modal("show");
+					let _this = this;
+					_this.featureId = item.featureId;
+					_this.name = item.name;
+					_this.image = item.image;
+				},
+				update: function () {
+					//alert("UPDATE");
+					let _this = this;
+					var request = {
+						FeatureId: _this.featureId,
+						Name: _this.name,
+						Image: _this.image,
+					}
+				},
 				getRooms: function () {
 					//alert("有！！");
 					let _this = this;
@@ -169,13 +232,6 @@
 					request.HotelId = request.Type = request.Price = request.MaxGuests = _this.filter;
 					axios.post('Rooms/FilterRooms', request).then(function (response) {
 						_this.RoomsViewModel = response.data;
-						var RoomList = [];
-
-						for (var i = 0; i < _this.RoomsViewModel.length; i++) {
-							var item = _this.RoomsViewModel[i];
-							RoomList.push(item);
-						}
-						_this.RoomsViewModel = RoomList;
 					})
 						.catch(function (error) {
 							console.log(error);
@@ -184,7 +240,6 @@
 				edit: function (roomId) {
 					$("#editModal").modal("show");
 					let _this = this;
-					var RoomList = [];
 					for (var i = 0; i < _this.RoomsViewModel.length; i++) {
 						var item = _this.RoomsViewModel[i];
 						if (roomId == item.roomId) {
@@ -193,9 +248,9 @@
 							_this.originalType = item.type;
 							_this.originalPrice = item.price;
 							_this.originalMaxGuests = item.maxGuests;
-						} RoomList.push(item);
+							_this.originalFeatures = item.feature.map(x => x.id)
+						}
 					}
-					_this.RoomsViewModel = RoomList;
 				},
 				update: function () {
 					let _this = this
@@ -205,12 +260,14 @@
 						Type: _this.originalType,
 						Price: _this.originalPrice,
 						MaxGuests: _this.originalMaxGuests,
+						Features: _this.originalFeatures
 					};
 					axios.post(`Rooms/Edit?ID=${_this.originalRoomId}`, request)
 						.then(response => {
 							alert(response.data);
-							$("#editModal").modal('hide');
+							_this.RoomsViewModel=[];
 							_this.getRooms();
+							$("#editModal").modal('hide');
 						});
 				},
 
@@ -244,6 +301,7 @@
 							});
 					}
 				},
+
 			}
 		})
 	</script>

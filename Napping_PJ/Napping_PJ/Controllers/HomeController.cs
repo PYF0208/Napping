@@ -28,8 +28,12 @@ namespace Napping_PJ.Controllers
         {
             return View();
         }
+        public IActionResult About()
+        {
+            return View();
+        }
 
-		public IActionResult HotelPage(int id)
+        public IActionResult HotelPage(int id)
 		{
 
 			return View();
