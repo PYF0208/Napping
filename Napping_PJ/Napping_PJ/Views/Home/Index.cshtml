@@ -166,9 +166,10 @@
 								</div>
 							</div>
 							<div id="likeButton">
-								<button type="button" class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
+								<div class="btn btn-light" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
+									<i class="fa-regular fa-heart"></i>
 									喜愛清單
-								</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -273,7 +274,7 @@
                                         <h3>{{item.hotelName}}</h3>
                                         <h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
                                         <div>
-                                            <h4>從&ensp;<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span>&ensp;起</h4>
+                                            <h4>起價&ensp;<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span></h4>
                                             <h4>建立時間:{{item.createDate | formatDateTime }}</h4>
                                         </div>
                                     </a>

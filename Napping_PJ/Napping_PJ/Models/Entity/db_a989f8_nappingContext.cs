@@ -334,18 +334,18 @@ namespace Napping_PJ.Models.Entity
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Room_Hotel");
 
-                //entity.HasMany(d => d.Features)
-                //    .WithMany(p => p.Rooms)
-                //    .UsingEntity<Dictionary<string, object>>(
-                //        "RoomFeature",
-                //        l => l.HasOne<Feature>().WithMany().HasForeignKey("FeatureId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Feature"),
-                //        r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Room"),
-                //        j =>
-                //        {
-                //            j.HasKey("RoomId", "FeatureId").HasName("PK_RoomFeatures_1");
+                entity.HasMany(d => d.Features)
+                    .WithMany(p => p.Rooms)
+                    .UsingEntity<Dictionary<string, object>>(
+                        "RoomFeature",
+                        l => l.HasOne<Feature>().WithMany().HasForeignKey("FeatureId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Feature"),
+                        r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Room"),
+                        j =>
+                        {
+                            j.HasKey("RoomId", "FeatureId").HasName("PK_RoomFeatures_1");
 
-                //            j.ToTable("RoomFeatures");
-                //        });
+                            j.ToTable("RoomFeatures");
+                        });
             });
 
             modelBuilder.Entity<RoomImage>(entity =>

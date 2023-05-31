@@ -7,13 +7,13 @@ namespace Napping_PJ.Models.Entity
     {
         public Feature()
         {
-            RoomFeatures = new HashSet<RoomFeature>();
+            Rooms = new HashSet<Room>();
         }
 
         public int FeatureId { get; set; }
         public string Name { get; set; } = null!;
         public string Image { get; set; } = null!;
 
-        public virtual ICollection<RoomFeature> RoomFeatures { get; set; }
+        public virtual ICollection<Room> Rooms { get; set; }
     }
 }
