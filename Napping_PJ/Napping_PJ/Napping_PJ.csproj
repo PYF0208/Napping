@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\CustomerViewModel.cs" />
+    <Compile Remove="Areas\Admin\Controllers\OrdersController.cs" />
+    <Compile Remove="Controllers\CartController.cs" />
+    <Compile Remove="Controllers\RoomDetailController.cs" />
   </ItemGroup>
 
   <ItemGroup>
