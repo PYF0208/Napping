@@ -28,29 +28,19 @@ namespace Napping_PJ.Controllers
                 allHotel = _context.Likes.AsNoTracking().Where(x => x.CustomerId == customer.CustomerId).Select(x => x.HotelId).ToHashSet();
             }
             return _context.Hotels.AsNoTracking().Join(_context.Rooms, h => h.HotelId, r => r.HotelId, (h, r) => new ResultViewModel
-			{
-<<<<<<< HEAD
-				HotelId = x.HotelId,
-				Name = x.Name,
-				Image = x.Image,
-				City = x.City,
-				Region = x.Region,
-				PositionLat = (float)x.PositionLat,
-				PositionLon = (float)x.PositionLon,
-			});
-=======
+            {
+
                 HotelId = h.HotelId,
                 Name = h.Name,
                 Image = h.Image,
                 City = h.City,
                 Region = h.Region,
-				Price = r.Price,
-				MaxGuests = r.MaxGuests,
-				IsLike = (allHotel != null && allHotel.Contains(h.HotelId)) ? true : false,
+                Price = r.Price,
+                MaxGuests = r.MaxGuests,
+                PositionLat = (float)h.PositionLat,
+                PositionLon = (float)h.PositionLon,
+                IsLike = (allHotel != null && allHotel.Contains(h.HotelId)) ? true : false,
             });
-
         }
->>>>>>> main
-
     }
 }

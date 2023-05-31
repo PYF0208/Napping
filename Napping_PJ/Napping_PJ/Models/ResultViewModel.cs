@@ -15,13 +15,11 @@ namespace Napping_PJ.Models
 		public double Price { get; set; }
 		public int MaxGuests { get; set; }
 
-<<<<<<< HEAD
 		public float PositionLat { get; set; }
 		public float PositionLon { get; set; }
-	}
-=======
 		public bool IsLike { get; set; }
+	}
+	
 
-    }
->>>>>>> main
 }
+
