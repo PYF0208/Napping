@@ -88,7 +88,7 @@
 						<div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
 							<div class="cap-inner">
 								<div class="price">From <span>{{item.room.price}}</span></div>
-								<h5 >{{item.room.type}}</h5>
+								<a :href="'RoomDetail/index/'+item.room.roomId"><h5>{{item.room.type}}</h5></a>
 							</div>
 						</div>
 					</div>
