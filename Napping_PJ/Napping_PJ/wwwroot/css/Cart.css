@@ -1,10 +1,10 @@
 ﻿/*購物車樣式*/
 
-.offcanvas-start {
+#cartVue .offcanvas-start {
     width: 600px;
 }
 
-.cart-float {
+#cartVue .cart-float {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -15,7 +15,7 @@
     color: white;
 }
 
-.cartBtn {
+#cartVue .cartBtn {
     position: fixed;
     width: 100px;
     height: 100px;
@@ -25,21 +25,21 @@
     border-radius: 50px;
 }
 
-.cartItem {
+#cartVue .cartItem {
     position: relative;
-    border:1px solid;
+    border: 1px solid;
 }
 
-.cartoffcanvas {
+#cartVue .cartoffcanvas {
     z-index: 9999;
 }
 
 
-.title {
+#cartVue .title {
     margin-bottom: 5vh;
 }
 
-.card {
+#cartVue .card {
     margin: auto;
     max-width: 950px;
     width: 90%;
@@ -50,12 +50,12 @@
 }
 
 @media(max-width:767px) {
-    .card {
+    #cartVue .card {
         margin: 3vh auto;
     }
 }
 
-.cart {
+#cartVue .cart {
     background-color: #fff;
     padding: 4vh 5vh;
     border-bottom-left-radius: 1rem;
@@ -64,14 +64,14 @@
 }
 
 @media(max-width:767px) {
-    .cart {
+    #cartVue .cart {
         padding: 4vh;
         border-bottom-left-radius: unset;
         border-top-right-radius: 1rem;
     }
 }
 
-.summary {
+#cartVue .summary {
     background-color: #ddd;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
@@ -80,49 +80,49 @@
 }
 
 @media(max-width:767px) {
-    .summary {
+    #cartVue .summary {
         border-top-right-radius: unset;
         border-bottom-left-radius: 1rem;
     }
 }
 
-.summary .col-2 {
+#cartVue .summary .col-2 {
     padding: 0;
 }
 
-.summary .col-10 {
+#cartVue .summary .col-10 {
     padding: 0;
 }
 
-.row {
+#cartVue .row {
     margin: 0;
 }
 
-.title b {
+#cartVue .title b {
     font-size: 1.5rem;
 }
 
-.main {
+#cartVue .main {
     margin: 0;
     padding: 2vh 0;
     width: 100%;
 }
 
-.col-2, .col {
+#cartVue .col-2, .col {
     padding: 0 1vh;
 }
 
-a {
+#cartVue a {
     padding: 0 1vh;
 }
 
-.close {
+#cartVue .close {
     position: absolute;
     top: 0;
     right: 0;
 }
 
-.optionDiv {
+#cartVue .optionDiv {
     padding: 5px;
     border-radius: 10px;
     width: auto;
@@ -130,23 +130,23 @@ a {
     margin: 5px;
 }
 
-.back-to-shop {
+#cartVue .back-to-shop {
     margin-top: 4.5rem;
 }
 
-h5 {
+#cartVue h5 {
     margin-top: 4vh;
 }
 
-hr {
+#cartVue hr {
     margin-top: 1.25rem;
 }
 
-form {
+#cartVue form {
     padding: 2vh 0;
 }
 
-select {
+#cartVue select {
     border: 1px solid rgba(0, 0, 0, 0.137);
     padding: 1.5vh 1vh;
     margin-bottom: 4vh;
@@ -155,7 +155,7 @@ select {
     background-color: rgb(247, 247, 247);
 }
 
-input {
+#cartVue input {
     border: 1px solid rgba(0, 0, 0, 0.137);
     padding: 1vh;
     margin-bottom: 4vh;
@@ -164,11 +164,11 @@ input {
     background-color: rgb(247, 247, 247);
 }
 
-    input:focus::-webkit-input-placeholder {
+#cartVue input:focus::-webkit-input-placeholder {
         color: transparent;
     }
 
-.btn {
+#cartVue .btn {
     background-color: #000;
     border-color: #000;
     color: white;
@@ -179,7 +179,7 @@ input {
     border-radius: 0;
 }
 
-    .btn:focus {
+#cartVue .btn:focus {
         box-shadow: none;
         outline: none;
         box-shadow: none;
@@ -189,20 +189,20 @@ input {
         transition: none;
     }
 
-    .btn:hover {
+#cartVue .btn:hover {
         color: white;
     }
 
-a {
+#cartVue a {
     color: black;
 }
 
-    a:hover {
+#cartVue a:hover {
         color: black;
         text-decoration: none;
     }
 
-#code {
+#cartVue #code {
     background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
     background-repeat: no-repeat;
     background-position-x: 95%;
