@@ -80,8 +80,8 @@
 					<div class="inner-box">
 						<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" >
 							<figure class="image" >
-								<a href="" v-for="pic in item.pics">
-									<img :src="pic.image" />
+								<a href="" >
+									<img :src="item.pics[0].image" />
 								</a>
 							</figure>
 						</div>
@@ -92,44 +92,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				
-				<!--Block-->
-				<div class="featured-block-two col-xl-4 col-lg- col-md-6 col-sm-12" >
-					<div class="inner-box">
-						<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" >
-							<figure class="image">
-								<a href="#" >
-									<img src="~/images/featured-image-16.jpg" />
-								</a>
-							</figure>
-						</div>
-						<div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
-							<div class="cap-inner">
-								<div class="price">From <span>$50.00</span></div>
-								<h5>Sea View Room</h5>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!--Block-->
-				<div class="featured-block-two col-xl-4 col-lg-6 col-md-6 col-sm-12">
-					<div class="inner-box">
-						<div class="image-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
-							<figure class="image">
-								<a href="#">
-									<img src="~/images/featured-image-17.jpg" />
-								</a>
-							</figure>
-						</div>
-						<div class="cap-box wow fadeInDown" data-wow-delay="300ms" data-wow-duration="1500ms">
-							<div class="cap-inner">
-								<div class="price">From <span>$50.00</span></div>
-								<h5>Superior Room</h5>
-							</div>
-						</div>
-					</div>
-				</div>
+				</div>					
 			</div>
 		</div>
 	</section>
