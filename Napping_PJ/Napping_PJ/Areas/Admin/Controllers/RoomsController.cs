@@ -191,6 +191,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 				Price = room.Price,
 				MaxGuests = room.MaxGuests,
 			};
+			
 			_context.Rooms.Add(NewRoom);
 			await _context.SaveChangesAsync();
 			return "新增成功";
@@ -289,7 +290,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return "刪除失敗1";
 			}
-
+			
 			_context.Rooms.Remove(delete);
 			try
 			{
