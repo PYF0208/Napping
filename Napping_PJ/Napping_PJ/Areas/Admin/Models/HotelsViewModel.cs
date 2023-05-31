@@ -13,5 +13,7 @@
 		public string Region { get; set; } = null!;
 		public string Address { get; set; } = null!;
 		public double? AvgComment { get; set; }
+
+
 	}
 }

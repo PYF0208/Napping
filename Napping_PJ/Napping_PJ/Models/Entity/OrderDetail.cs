@@ -21,8 +21,6 @@ namespace Napping_PJ.Models.Entity
         public string? Note { get; set; }
 
         public virtual Order Order { get; set; } = null!;
-        public virtual Profit Profit { get; set; } = null!;
-        public virtual Room Room { get; set; } = null!;
         public virtual ICollection<OrderDetailExtraService> OrderDetailExtraServices { get; set; }
     }
 }

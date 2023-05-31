@@ -7,15 +7,13 @@ namespace Napping_PJ.Models.Entity
     {
         public ExtraService()
         {
-            OrderDetailExtraServices = new HashSet<OrderDetailExtraService>();
+            HotelExtraServices = new HashSet<HotelExtraService>();
         }
 
         public int ExtraServiceId { get; set; }
-        public int HotelId { get; set; }
         public string Name { get; set; } = null!;
-        public double Price { get; set; }
+        public string Image { get; set; } = null!;
 
-        public virtual Hotel Hotel { get; set; } = null!;
-        public virtual ICollection<OrderDetailExtraService> OrderDetailExtraServices { get; set; }
+        public virtual ICollection<HotelExtraService> HotelExtraServices { get; set; }
     }
 }
