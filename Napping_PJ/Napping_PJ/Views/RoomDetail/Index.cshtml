@@ -14,8 +14,8 @@
                         <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
                     </div>
                     <div class="carousel-inner  h-100">
-                        <div v-for="(image,index) in RoomDetail.RoomImages" :class="{'carousel-item' :'ture','active' : index === 0,' h-100' : 'true'}">
-                            <img :src="image.Image" class="d-block w-100 h-100" alt="image.Image" style="object-fit: cover">
+                        <div v-for="(image,index) in RoomDetail.roomImages" :class="{'carousel-item' :'ture','active' : index === 0,' h-100' : 'true'}">
+                            <img :src="image.image" class="d-block w-100 h-100" alt="image.image" style="object-fit: cover">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>First slide label</h5>
                                 <p>Some representative placeholder content for the first slide.</p>
@@ -34,56 +34,65 @@
             </div>
             <div class="p-5 col-7">
                 <div class="d-flex justify-content-between align-items-end mb-5">
-                    <h2>{{RoomDetail.RoomType}}</h2>
-                    <p><span>最大人數{{RoomDetail.MaxGuests}}</span>人・<span>單人床</span>・附早餐・衛浴1間・<span>18</span>平方公尺</p>
+                    <h2>{{RoomDetail.roomType}}</h2>
+                    <p><span>最大人數{{RoomDetail.maxGuests}}</span>人・<span>單人床</span>・附早餐・衛浴1間・<span>18</span>平方公尺</p>
                 </div>
-                <div class="row">房型特徵</div>
-                <div class="row">
-                    <div class="col-2 p-1 m-1 text-center" v-for="feature in RoomDetail.RoomFeatures">
+                <div class="row mb-2 text-center"><h4>房型特徵</h4></div>
+                <div class="row mb-5">
+                    <div class="col-2 p-1 m-1 text-center" v-for="feature in RoomDetail.roomFeatures">
                         <div class="mb-2 d-flex justify-content-center align-content-center flex-wrap" style="height: 50px">
-                            <i :class="feature.Image + ' fa-2xl'"></i>
+                            <i :class="feature.image + ' fa-2xl'"></i>
                         </div>
-                        <div class="overflow-wrap word-wrap-break-word">{{feature.Name}}</div>
+                        <div class="overflow-wrap word-wrap-break-word">{{feature.name}}</div>
                     </div>
                 </div>
-                <div class="row">加購項目</div>
-                <div class="row">
-                    <div v-for="Service in RoomDetail.SelectedExtraServices" class="col-2 text-center">
+                <div class="row mb-2 text-center"><h4>加購項目</h4></div>
+                <div class="row mb-5">
+                    <div v-for="Service in RoomDetail.selectedExtraServices" class="col-2 text-center">
                         <div class="mb-2 d-flex justify-content-center align-content-center flex-wrap" style="height: 50px">
-                            <i class="fa-sharp fa-solid fa-spa fa-2xl"></i>
+                            <i :class="Service.serviceImage + ' fa-2xl'"></i>
                         </div>
                         <div class="overflow-wrap word-wrap-break-word">
-                            {{Service.Name}}
+                            {{Service.name}}
                         </div>
                         <div>
-                            <input type="number" class="form-control" v-model="Service.ServiceQuantity" />
+                            <input type="number" class="form-control" v-model="Service.serviceQuantity" />
                         </div>
                     </div>
                 </div>
-                <div class="row">房間狀態</div>
-                <div class="row">
+                <div class="row mb-2 text-center"><h4>住宿日期</h4></div>
+                <div class="row mb-5">
                     <template>
-                        <div class="row"></div>
-                        <div class="col">
-                            <span class="demonstration">入住日期</span>
-                            <el-date-picker v-model="startDay"
-                                            type="date"
-                                            placeholder="Pick a day"
-                                            :size="size"
-                                            :picker-options="startOption"
-                                            @@change="() => {roomDetailVue.endDay = null}" />
+                        <div class="row align-items-center">
+                            <div class="col-4">
+                                <span class="demonstration">入住日期</span>
+                                <el-date-picker v-model="RoomDetail.checkIn"
+                                                type="date"
+                                                placeholder="Pick a day"
+                                                :size="size"
+                                                :picker-options="startOption"
+                                                @@change="() => {roomDetailVue.RoomDetail.checkOut = null}" />
 
-                        </div>
-                        <div class="col">
-                            <span class="demonstration">退房日期</span>
-                            <el-date-picker v-model="endDay"
-                                            type="date"
-                                            placeholder="Pick a day"
-                                            :size="size"
-                                            :picker-options="endOption" />
+                            </div>
+                            <div class="col-4">
+                                <span class="demonstration">退房日期</span>
+                                <el-date-picker v-model="RoomDetail.checkOut"
+                                                type="date"
+                                                placeholder="Pick a day"
+                                                :size="size"
+                                                :picker-options="endOption" />
+                            </div>
                         </div>
                     </template>
 
+                </div>
+                <div class="row mb-2 text-center"><h4>預估價格</h4></div>
+                <div class="row mb-5">
+                    <div class="col-6 mb-5">
+                        住宿<span class="fs-4">{{roomDays}}</span>日，共<span class="fs-4">{{RoomDetail.totalPrice}}</span>元。
+                    </div><div class="col-6 mb-5">
+                        <button class="btn btn-info" @@click="addToCart">加入購物車</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,89 +100,138 @@
 
 </div>
 @section Scripts
-    {
+{
     <script src="~/lib/element-ui/index.min.js"></script>
     <script>
         var roomDetailVue = new Vue({
             el: '#roomDetailApp',
             data: {
                 size: 'default',
-                startDay: null,
-                endDay: null,
                 startOption: {
                     disabledDate: null,
                 },
                 endOption: {
                     disabledDate: null,
                 },
-                ImageList: [],
-                RoomDetail: { RoomImages: [], SelectedExtraServices: [] },
+                RoomDetail: { roomImages: [], selectedExtraServices: [] },
                 RoomBookingState: [],
                 roomId: -1,
+                //roomPrice: 0,
+                roomDays: 0,
             },
-            mounted: function () {
+            mounted: function() {
                 var _this = this;
                 _this.roomId = @ViewBag.RoomId;
-                //_this.getImageList(_this.roomId);
                 _this.getRoomDetail(_this.roomId);
                 _this.getBookingState(_this.roomId);
                 _this.startOption.disabledDate = _this.disabledStartDate;
                 _this.endOption.disabledDate = _this.disabledEndDate;
             },
             methods: {
-                getRoomDetail: function (roomId) {
+                getRoomDetail: function(roomId) {
                     var _this = this;
-                    //_this.RoomDetail = {};
                     axios.get(`GetRoomDetail/${roomId}`).then(response => {
-                        console.log(response.data);
+                        //console.log(response.data);
                         _this.RoomDetail = response.data;
                     }).catch(
                         error => {
                             console.log(error.response.data);
+                            location.href = `${location.origin}${error.response.data}`;
                         }
                     );
                 },
-                getBookingState: function (roomId) {
+                getBookingState: function(roomId) {
                     var self = this;
                     axios.get(`GetBookingState/${roomId}`)
                         .then(response => {
                             //console.log(response.data);
-                            for (var i = 0; i < response.data.length; i++) {
-                                self.RoomBookingState.push((new Date(response.data[i])).getTime());
-                            }
-                            console.log(self.RoomBookingState);
+                            self.RoomBookingState = response.data;
                         })
                         .catch(error => { console.log(error.response.data); });
                 },
                 disabledStartDate(date) {
-                    // 获取被禁止的日期
+                    var self = this;
+                    //載入飯店的行政時間
+                    var availableCheckInTime = roomDetailVue.RoomDetail.availableCheckInTime;
+                    // 禁用今天以前的日期
                     var dateNow = new Date();
                     var yesterday = dateNow.setDate(dateNow.getDate() - 1);
-
-                    // 如果选择的日期早于被禁止的日期，则禁用
                     if (date.getTime() <= yesterday) {
                         return true;
                     }
-                    var bookingState = roomDetailVue.RoomBookingState;
-                    if (bookingState.includes(date.getTime())) {
+                    //禁用被booking的夜晚
+                    var dateAvailableCheckInTime = date.setHours(date.getHours() + availableCheckInTime);
+                    //只要dateAvailableCheckInTime介於RoomBookingState中某一陣列之間傳回true
+                    var bookingState = self.RoomBookingState.some(([start, end]) => { return dateAvailableCheckInTime >= start && dateAvailableCheckInTime <= end; });
+                    if (bookingState) {
                         return true;
                     }
-                    // 其他情况可选择日期
+                    // 其他情況可選
                     return false;
+
                 },
                 disabledEndDate(date) {
-                    var self = this;
-                    var startDayTime = self.startDay;
-                    var firstLokedDay = self.RoomBookingState.find(x => x > startDayTime) ?? null;
-                    var dateBetween = startDayTime < date.getTime() && date.getTime() < firstLokedDay;
-                    var dateAfter = startDayTime < date.getTime() && firstLokedDay == null;
-                    var starDayNotNull = startDayTime !== null;
-                    if (starDayNotNull && (dateBetween || dateAfter)) {
-                        return false;
+                    var self = roomDetailVue;
+                    //載入房間資訊
+                    var latestCheckOutTime = self.RoomDetail.latestCheckOutTime;
+                    //如未選擇開始日期
+                    var startDayTime = self.RoomDetail.checkIn;
+                    var starDayNotNull = startDayTime !== null && startDayTime !== undefined;
+                    if (starDayNotNull) {
+                        //取得RoomBookingState陣列中最接近開始日期的日期
+                        var firstLokedDay = self.RoomBookingState.reduce((closest, [start]) => {
+                                if (start > startDayTime.getTime() && (closest === null || start < closest)) {
+                                    return start;
+                                }
+                                return closest;
+                            },
+                            null);
+                        //檢查是否介於開始日期與鎖定日期之間
+                        var dateBetween = startDayTime.getTime() < date.getTime() && date.getTime() < firstLokedDay;
+                        //在開始日期之後
+                        var dateAfter = startDayTime.getTime() < date.getTime() && firstLokedDay === null;
+                        //var dateAfter = false;
+                        if (dateBetween || dateAfter) {
+                            return false;
+                        }
                     }
                     return true;
+                },
+                estimatedPrice: function() {
+                    var self = this;
+                    //計算加購項目
+                    var totalPrice = 0;
+                    self.roomDays = 0;
+                    var selectedServices = self.RoomDetail.selectedExtraServices;
+                    for (i = 0; i < selectedServices.length; i++) {
+                        totalPrice += selectedServices[i].servicePrice * selectedServices[i].serviceQuantity;
+                    }
+                    //計算住宿價格
+                    if (self.RoomDetail.checkIn !== null && self.RoomDetail.checkOut !== null) {
+                        var start = new Date(self.RoomDetail.checkIn).getTime();
+                        var end = new Date(self.RoomDetail.checkOut).getTime();
+                        var days = (end - start) / (1000 * 60 * 60 * 24);
+                        self.roomDays = days;
+                        var oneDay = (1000 * 60 * 60 * 24);
+                        for (var i = 0; i < days; i++) {
+                            var profitOfDay = self.RoomDetail.profitDictionary[start + oneDay * i] ?? 1;
+                            var roomBasePrice = self.RoomDetail.roomPrice;
+                            totalPrice += profitOfDay * roomBasePrice;
+                        }
+                    }
+                    self.RoomDetail.totalPrice = totalPrice;
+                },
+                addToCart: function() {
+                    var self = this;
+                    cartVue.addToCart(self.RoomDetail);
+                }
+            },
+            watch: {
+                RoomDetail: {
+                    deep: true,
+                    handler(newValue) { this.estimatedPrice(); }
                 },
             },
         });
     </script>
-    }
+}

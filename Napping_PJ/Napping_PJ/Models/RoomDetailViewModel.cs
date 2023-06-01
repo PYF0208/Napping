@@ -4,28 +4,40 @@ namespace Napping_PJ.Models
 {
     public class RoomDetailViewModel
     {
-        public int RoomId { get; set; }
-        public string RoomType { get; set; }
-        public string HotelName { get; set; }
-        public ICollection<RoomImage>? RoomImages { get; set; }
-        public DateTime CheckIn { get; set; }
-        public DateTime CheckOut { get; set; }
-        public int MaxGuests { get; set; }
-        public int TravelType { get; set; }
-        public string Note { get; set; }
-        public IEnumerable<RoomFeatureViewModel> RoomFeatures { get; set; }
-        public List<SelectedExtraServiceViewModel> SelectedExtraServices { get; set; }
+        public int roomId { get; set; }
+        public string roomType { get; set; }
+        public string hotelName { get; set; }
+        public ICollection<roomImagesViewModel>? roomImages { get; set; }
+        public int availableCheckInTime { get; set; }
+        public int latestCheckOutTime { get; set; }
+        public DateTime? checkIn { get; set; }
+        public DateTime? checkOut { get; set; }
+        public int maxGuests { get; set; }
+        public int travelType { get; set; }
+        public double roomPrice { get; set; }
+        public string note { get; set; }
+        public int totalPrice { get; set; }
+        public IEnumerable<roomFeatureViewModel> roomFeatures { get; set; }
+        public List<selectedExtraServiceViewModel> selectedExtraServices { get; set; }
+        public Dictionary<long, double> profitDictionary { get; set; }
     }
-    public class SelectedExtraServiceViewModel
+    public class selectedExtraServiceViewModel
     {
-        public int ExtraServiceId { get; set; }
-        public string Name { get; set; }
-        public int ServiceQuantity { get; set; }
+        public int extraServiceId { get; set; }
+        public string name { get; set; }
+        public string serviceImage { get; set; }
+        public int servicePrice { get; set; }
+        public int serviceQuantity { get; set; }
     }
-    public class RoomFeatureViewModel
+    public class roomFeatureViewModel
     {
-        public int FeatureId { get; set; }
-        public string Name { get; set; }
-        public string Image { get; set; }
+        public int featureId { get; set; }
+        public string name { get; set; }
+        public string image { get; set; }
+    }
+
+    public class roomImagesViewModel
+    {
+        public string image { get; set; }
     }
 }
