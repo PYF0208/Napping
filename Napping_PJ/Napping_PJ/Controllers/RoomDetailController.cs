@@ -121,6 +121,7 @@ namespace Napping_PJ.Controllers
 
             Customer loginedUser = await _context.Customers.FirstOrDefaultAsync(x => x.Email == userEmailClaim.Value);
             IQueryable<Promotion> promotions = _context.Promotions.Where(x => x.LevelId == loginedUser.LevelId);
+            return Ok();
 
         }
     }
