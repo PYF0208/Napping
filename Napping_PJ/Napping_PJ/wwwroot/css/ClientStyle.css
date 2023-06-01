@@ -5955,7 +5955,6 @@ img.lazy-image {
 
 .featured-section-four {
     position: relative;
-    padding: 140px 0px 250px;
     background: #ffffff;
 }
 
@@ -9667,7 +9666,7 @@ img.lazy-image {
 
 .result-container {
     position: static;
-    max-width: 97%;
+    max-width: 115em;
     margin: 0 auto;
 }
 
@@ -9690,13 +9689,11 @@ img.lazy-image {
         position: relative;
         display: inline-block;
         font-size: 50px;
-        height: 100%;
         line-height: 80px;
         color: #aaaaaa;
         width: 100%;
         margin-bottom: 10px;
         overflow: hidden;
-        width: 100%;
         height: 320px;
         z-index: 2;
     }
@@ -9741,7 +9738,7 @@ img.lazy-image {
     .result-box .heart-box {
         position: absolute;
         display: block;
-        left: 85%;
+        right: 0.3em;
     }
 
         .result-box .heart-box button {
