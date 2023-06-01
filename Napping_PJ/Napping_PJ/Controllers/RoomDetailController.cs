@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models.Entity;
 using Napping_PJ.Models;
@@ -23,43 +24,55 @@ namespace Napping_PJ.Controllers
         [Route("RoomDetail/GetRoomDetail/{roomId}")]
         public async Task<IActionResult> GetRoomDetail(int roomId)
         {
-            Room getRoom = await _context.Rooms.Include(x => x.Hotel).ThenInclude(x => x.ExtraServices).Include(x => x.RoomImages).Include(x => x.Features).FirstOrDefaultAsync(x => x.RoomId == roomId);
+            Room getRoom = await _context.Rooms.Include(x => x.Hotel).ThenInclude(x => x.HotelExtraServices).ThenInclude(x => x.ExtraService).Include(x => x.RoomImages).Include(x => x.Features).FirstOrDefaultAsync(x => x.RoomId == roomId);
             if (getRoom == null)
             {
-                return BadRequest("無此房型");
+                return BadRequest("/Home/Index");
             }
             RoomDetailViewModel CVM = new RoomDetailViewModel()
             {
-                RoomId = getRoom.RoomId,
-                RoomType = getRoom.Type,
-                HotelName = getRoom.Hotel.Name,
-                RoomImages = getRoom.RoomImages,
-                CheckIn = DateTime.Now,
-                CheckOut = DateTime.Now,
-                MaxGuests = getRoom.MaxGuests,
-                TravelType = 0,
-                Note = null,
-                RoomFeatures = getRoom.Features.Select(x =>
+                roomId = getRoom.RoomId,
+                roomType = getRoom.Type,
+                hotelName = getRoom.Hotel.Name,
+                roomImages = getRoom.RoomImages.Select(x => new roomImagesViewModel()
                 {
-                    return new RoomFeatureViewModel()
+                    image = x.Image,
+                }).ToList(),
+                availableCheckInTime = 16,
+                latestCheckOutTime = 12,
+                checkIn = null,
+                checkOut = null,
+                maxGuests = getRoom.MaxGuests,
+                travelType = 0,
+                roomPrice = getRoom.Price,
+                note = null,
+                totalPrice = 0,
+                roomFeatures = getRoom.Features.Select(x =>
+                {
+                    return new roomFeatureViewModel()
                     {
-                        FeatureId = x.FeatureId,
-                        Name = x.Name,
-                        Image = x.Image,
+                        featureId = x.FeatureId,
+                        name = x.Name,
+                        image = x.Image,
                     };
                 }),
-                //SelectedExtraServices = await GetExtraServices(getRoom.HotelId)
-                SelectedExtraServices = getRoom.Hotel.ExtraServices.Select(x =>
+                selectedExtraServices = getRoom.Hotel.HotelExtraServices.Select(x =>
                 {
-                    return new SelectedExtraServiceViewModel()
+                    return new selectedExtraServiceViewModel()
                     {
-                        ExtraServiceId = x.ExtraServiceId,
-                        Name = x.Name,
-                        ServiceQuantity = 0,
+                        extraServiceId = x.ExtraServiceId,
+                        name = x.ExtraService.Name,
+                        serviceImage = x.ExtraService.Image,
+                        servicePrice = x.ExtraServicePrice,
+                        serviceQuantity = 0,
                     };
-                }).ToList()
+                }).ToList(),
+                profitDictionary = new Dictionary<long, double>()
             };
-
+            await _context.Profits.Where(x => x.Date > DateTime.Today).ForEachAsync(x =>
+            {
+                CVM.profitDictionary.Add(new DateTimeOffset(x.Date).ToUnixTimeMilliseconds(), x.Number);
+            });
             //設置阻止循環引用
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
@@ -70,18 +83,31 @@ namespace Napping_PJ.Controllers
         [Route("RoomDetail/GetBookingState/{roomId}")]
         public async Task<IActionResult> GetBookingState(int roomId)
         {
-            List<DateTime> bookedDate = new List<DateTime>();
-            await _context.OrderDetails.Where(x => x.RoomId == roomId && (x.CheckIn >= DateTime.Today && x.CheckOut >= DateTime.Today)).ForEachAsync(x =>
-            {
-                var startDay = x.CheckIn.Date;
-                var endDay = x.CheckOut.Date;
-                var currentDay = startDay;
-                while (currentDay <= endDay)
-                {
-                    bookedDate.Add(currentDay.Date);
-                    currentDay = currentDay.AddDays(1);
-                }
-            });
+            List<long[]> bookedDate = new List<long[]>();
+
+            await _context.OrderDetails
+                .Where(x => x.RoomId == roomId && (x.CheckIn >= DateTime.Today && x.CheckOut >= DateTime.Today))
+                .ForEachAsync(
+                    x =>
+                    {
+                        bookedDate.Add(new long[2]
+                        {
+                            new DateTimeOffset(x.CheckIn).ToUnixTimeMilliseconds(),
+                            new DateTimeOffset(x.CheckOut).ToUnixTimeMilliseconds()
+                        });
+                    });
+            //List<DateTime> bookedDate = new List<DateTime>();
+            //await _context.OrderDetails.Where(x => x.RoomId == roomId && (x.CheckIn >= DateTime.Today && x.CheckOut >= DateTime.Today)).ForEachAsync(x =>
+            //{
+            //    var startDay = x.CheckIn;
+            //    var endDay = x.CheckOut;
+            //    var currentDay = startDay;
+            //    while (currentDay <= endDay)
+            //    {
+            //        bookedDate.Add(currentDay);
+            //        currentDay = currentDay.AddDays(1);
+            //    }
+            //});
             return Ok(bookedDate);
         }
     }
