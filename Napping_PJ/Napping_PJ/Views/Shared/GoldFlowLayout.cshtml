@@ -1,69 +1,68 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: white;
-            text-align: center;
-            padding-top: 50px;
-        }
 
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            
-        }
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: white;
+			text-align: center;
+			padding-top: 50px;
+		}
 
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 30px;
-            animation: rotate 1s infinite linear;
-        }
-        h1 {
-            color:  black;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
+		.container {
+			max-width: 400px;
+			margin: 0 auto;
+			background-color: white;
+			padding: 30px;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
 
-        p {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
+		}
 
-        .order-details {
-            text-align: center;
-        }
+		h1 {
+			color:black;
+			font-size: 24px;
+			margin-bottom: 10px;
+		}
 
-            .order-details p {
-                margin-bottom: 10px;
-            }
+		p {
+			font-size: 16px;
+			margin-bottom: 20px;
+		}
 
-        .button {
-            display: inline-block;
-            padding: 10px;
-            background-color: gray;
-            color: white;
-            
-            border-radius: 10px;
-        }
+		.order-details {
+			text-align: center;
+		}
 
-            .button:hover {
-                background-color: white;
-            }
-    </style>
+			.order-details p {
+				margin-bottom: 10px;
+			}
+        .textcarbo
+		{
+			text-align:right;
+		}
+
+		.button {
+			display: inline-block;
+			padding: 10px;
+			background-color: gray;
+			color: white;
+			border-radius: 10px;
+		}
+
+			.button:hover {
+				background-color: white;
+			}
+	</style>
 </head>
 <body>
-    <div class="container">
-        @RenderBody()
-        <button class="button" style="background-color: dimgray;"><a asp-area="" asp-controller="Home" asp-action="Index" style="text-decoration: none; color: white;">返回首頁</a></button>
+	<div class="container">
+		@RenderBody()
+		<button class="button" style="background-color: dimgray;"><a asp-area="" asp-controller="Home" asp-action="Index" style="text-decoration: none; color: white;">返回首頁</a></button>
 
-    </div>
+	</div>
+	<div class="textcarbo">本網站僅為教育練習使用，咖波原作者:亞拉</div>
 </body>
 </html>
