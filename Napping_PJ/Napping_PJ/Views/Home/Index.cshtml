@@ -88,7 +88,7 @@
 }
 
 
-<!-- Main Header -->
+@*<!-- Main Header -->
 <header class="main-header header-style-one alternate">
 
 	<!-- Header Upper -->
@@ -215,7 +215,7 @@
 		</div>
 	</div>
 </header>
-
+*@
 <div id="app">
 
 	<div class="sidebar-page-container">
@@ -503,11 +503,11 @@
         methods: {
             searchRoom: function () {
 
-					vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
-					vm.filterResultVM();
-				},
-			},
-		});
+                vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
+				vm.filterResultVM();
+            },
+        },
+    });
 
 </script>
 				}
