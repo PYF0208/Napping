@@ -110,5 +110,18 @@ namespace Napping_PJ.Controllers
             //});
             return Ok(bookedDate);
         }
+
+        public async Task<IActionResult> GetPromotions()
+        {
+            Claim userEmailClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+            if (userEmailClaim == null)
+            {
+                return BadRequest();
+            }
+
+            Customer loginedUser = await _context.Customers.FirstOrDefaultAsync(x => x.Email == userEmailClaim.Value);
+            IQueryable<Promotion> promotions = _context.Promotions.Where(x => x.LevelId == loginedUser.LevelId);
+
+        }
     }
 }

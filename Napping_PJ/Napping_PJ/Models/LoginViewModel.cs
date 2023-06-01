@@ -11,5 +11,6 @@ namespace Napping_PJ.Models
         [Display(Name ="密碼")]
         [DataType(DataType.Password)]
         public string Password { get; set; } = null!; 
+        public string ReturnUrl { get; set; } = "/Home/Index";
     }
 }

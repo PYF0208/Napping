@@ -94,12 +94,12 @@
                     passWordError: null
                 }
             },
-            mounted: function () {
+            mounted: function() {
                 let _this = this; //將this保留下來，避免CallBack後this已轉移對象，確保找的到mounted的對象
                 _this.baseURL = window.basePath;
             },
             methods: {
-                ValidField: function () {
+                ValidField: function() {
                     //console.log('ValidField')
                     let _this = this;
                     var request = {};
@@ -119,23 +119,22 @@
                             _this.errorMesseage.passWordError = err.response.data.passWordError;
                         })
                 },
-                TryLogin: function () {
+                TryLogin: function() {
                     let _this = this;
                     var request = {};
                     request.Email = _this.email;
                     request.Password = _this.password;
+                    var returnUrl = _this.getQueryParamValue('ReturnUrl');
+                    if (returnUrl !== null) {
+                        request.ReturnUrl = returnUrl;
+                    }
                     axios.post(`${_this.baseURL}Login/TryLogin`, request)
                         .then(res => {
                             console.log(res.data);
                             _this.errorMesseage.mainError = res.data.mainError;
                             _this.errorMesseage.emailError = res.data.emailError;
                             _this.errorMesseage.passWordError = res.data.passWordError;
-                            var returnUrl = _this.getQueryParamValue('ReturnUrl');
-                            if (returnUrl !== null) {
-                                location.href = returnUrl;
-                            } else {
-                                location.href = `${_this.baseURL}Home/Index`;
-                            }
+                            location.href = `${location.origin}${res.data}`;
                         })
                         .catch(err => {
                             console.log(err.response.data);
@@ -144,7 +143,7 @@
                             _this.errorMesseage.passWordError = err.response.data.passWordError;
                         });
                 },
-                GoogleLogin: function () {
+                GoogleLogin: function() {
                     let _this = this;
                     axios.post(`$ThirdPartyLogin/OauthGooleLogin`)
                         .then(res => {
@@ -162,7 +161,7 @@
                             //_this.errorMesseage.passWordError = err.response.data.passWordError;
                         });
                 },
-                getQueryParamValue: function (key) {
+                getQueryParamValue: function(key) {
                     var queryString = window.location.search.substr(1);
                     var queryParams = new URLSearchParams(queryString);
                     return queryParams.get(key);

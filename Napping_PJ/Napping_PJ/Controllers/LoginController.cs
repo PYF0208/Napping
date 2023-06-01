@@ -14,7 +14,7 @@ namespace Napping_PJ.Controllers
         public LoginController(db_a989f8_nappingContext context)
         {
             _context = context;
-        }        
+        }
         public IActionResult Index()
         {
             return View();
@@ -79,7 +79,7 @@ namespace Napping_PJ.Controllers
                     }
                     await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
                     //return RedirectToAction("Index", "Home", new { area = "" });
-                    return Ok();
+                    return Ok(loginViewModel.ReturnUrl);
 
                 }
                 else
@@ -98,5 +98,17 @@ namespace Napping_PJ.Controllers
 
             return BadRequest(error);
         }
+        public async Task<IActionResult> CheckIsLogined(string ReturnUrl)
+        {
+            Claim userEmailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            if (userEmailClaim == null)
+            {
+                return BadRequest($"/Login/Index");
+            }
+
+            Customer loginedUser = await _context.Customers.Include(x =>x.Level).FirstOrDefaultAsync(x => x.Email == userEmailClaim.Value);
+            return Ok(loginedUser.LevelId);
+        }
+
     }
 }

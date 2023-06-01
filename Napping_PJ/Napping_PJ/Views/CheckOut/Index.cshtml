@@ -1,0 +1,9 @@
+﻿@model IEnumerable<RoomDetailViewModel>
+
+@section Scripts
+    {
+    <script>
+        var modelData = @Html.Raw(Json.Serialize(Model));
+        console.log(modelData);
+    </script>
+    }

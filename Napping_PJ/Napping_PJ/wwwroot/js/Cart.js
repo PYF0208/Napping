@@ -11,6 +11,7 @@
     methods: {
         addToCart: async function (room) {
             var _this = this;
+            //確定已登入
             _this.checkIsLogined();
             //將房間物件加入cookie
             _this.rooms.push(room);
@@ -46,15 +47,38 @@
                 console.log(error.response.data);
             }
         },
-        checkIsLogined: function () {
-            axios.get(`${document.location.origin}/cart/CheckIsLogined`)
-                .then()
-                .catch(error => {
-                    console.log(error.response.data);
-                    location.href = `${location.origin}${error.response.data}`;
-                }
-                );
+        checkIsLogined: async function () {
+            return new Promise((resolve, reject) => {
+                 axios.get(`${document.location.origin}/Login/CheckIsLogined`)
+                    .then(response => {
+                        resolve(response.data);
+                    })
+                    .catch(error => {
+                            console.log(error.response.data);
+                            location.href = `${location.origin}${error.response.data}?ReturnUrl=${location.pathname}`;
+                        }
+                    );
+            });
         },
+        serviceQuanSub: async function (service) {
+            var self = this;
+            if (service.serviceQuantity > 0) {
+                service.serviceQuantity--;
+                await self.setSession(self.rooms);
+            }
+        },
+        serviceQuanAdd: async function (service) {
+            var self = this;
+            service.serviceQuantity++;
+            await self.setSession(self.rooms);
+        },
+        checkOut: function () {
+            var self = this;
+            //確定已登入
+            self.checkIsLogined();
+            //跳轉結帳畫面
+            location.href = location.origin + "/CheckOut/Index";
+        }
     },
     watch: {
         'rooms': function (newValue) {

@@ -26,7 +26,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
             _context = context;
         }
         
-        //[Authorize(Roles = "1")]
+        [Authorize(Roles = "1")]
         //[Authorize(Roles = "3")]
         public IActionResult Index()
         {
