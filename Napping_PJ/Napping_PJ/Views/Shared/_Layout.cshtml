@@ -13,11 +13,12 @@
     <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <link href="~/css/cart.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/vue2-animate/dist/vue2-animate.min.css" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 
 <body>
-    <header class="main-header header-style-one alternate">
+   @* <header class="main-header header-style-one alternate">
 
         <!-- Header Upper -->
         <div class="header-upper">
@@ -48,7 +49,7 @@
             </div>
         </div>
         <!--End Header Upper-->
-    </header>
+    </header>*@
     <div class="page-wrapper">
         <!-- Preloader -->
         <div class="preloader">
@@ -89,11 +90,11 @@
                                             <h4>Services</h4>
                                         </div>
                                         <ul class="links">
-                                            <li><a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後端</a></li>
-                                            <li><a href="rooms-grid.html">Our Rooms</a></li>
-                                            <li><a href="restaurant.html">Restaurant</a></li>
-                                            <li><a href="about.html">About Hotera</a></li>
-                                            <li><a href="contact.html">Contact</a></li>
+                                            <li><a href="#">管理您的預訂</a></li>
+                                            <li><a href="#">住客評語</a></li>
+                                            <li><a href="#">客服支援</a></li>
+                                            <li><a asp-area="" asp-controller="Home" asp-action="About">關於 Napping</a></li>
+                                            <li><a asp-area="" asp-controller="Home" asp-action="Privacy">隱私權和Cookie聲明</a></li>
                                         </ul>
                                     </div>
 
@@ -106,16 +107,16 @@
         </div>
 
 
-        <div class="footer-bottom">
-            <div class="auto-container">
-                <div class="inner clearfix">
-                    <div class="copyright">本網站僅為教育練習使用</div>
-                    <div class="bottom-links">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後台</a>|<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="footer-bottom">
+			<div class="auto-container">
+				<div class="inner clearfix">
+					<div class="copyright">本網站僅為教育練習使用</div>
+					<div class="bottom-links">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Napping</a>|<a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後台管理</a>
+					</div>
+				</div>
+			</div>
+		</div>
 
     </footer>
     <script src="~/lib/vue/vue.min.js"></script>
