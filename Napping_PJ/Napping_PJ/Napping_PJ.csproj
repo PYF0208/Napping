@@ -11,14 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Areas\Admin\Views\Shared\_Layout.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Areas\Admin\Views\Shared\_Layout.cshtml.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.16" />
@@ -31,36 +23,53 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Models\Entity\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Areas\Admin\Views\Customers\Index.cshtml" />
+    <None Include="Areas\Admin\Views\ExtraServices\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Feature\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Feature\Delete.cshtml" />
+    <None Include="Areas\Admin\Views\Feature\Details.cshtml" />
+    <None Include="Areas\Admin\Views\Feature\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Feature\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Hotels\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Hotels\Delete.cshtml" />
+    <None Include="Areas\Admin\Views\Hotels\Details.cshtml" />
+    <None Include="Areas\Admin\Views\Hotels\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Hotels\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Levels\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Orders\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Profits\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Profits\Delete.cshtml" />
+    <None Include="Areas\Admin\Views\Profits\Details.cshtml" />
+    <None Include="Areas\Admin\Views\Profits\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Profits\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Promotions\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Promotions\Delete.cshtml" />
+    <None Include="Areas\Admin\Views\Promotions\Details.cshtml" />
+    <None Include="Areas\Admin\Views\Promotions\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Promotions\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Roles\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Roles\_RoleCreatePartial.cshtml" />
+    <None Include="Areas\Admin\Views\Roles\_RoleListPartial.cshtml" />
+    <None Include="Areas\Admin\Views\Rooms\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Rooms\Delete.cshtml" />
+    <None Include="Areas\Admin\Views\Rooms\Details.cshtml" />
+    <None Include="Areas\Admin\Views\Rooms\Edit.cshtml" />
+    <None Include="Areas\Admin\Views\Rooms\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_AdminLayout.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <None Include="Areas\Admin\Views\_ViewImports.cshtml" />
+    <None Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <None Include="wwwroot\Images\13.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Areas\Admin\Views\Hotels\Create.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Areas\Admin\Views\Hotels\Delete.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Areas\Admin\Views\Hotels\Details.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Areas\Admin\Views\Hotels\Edit.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="Areas\Admin\Views\Hotels\Index.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
     <Content Update="wwwroot\Images\featured-image-15.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

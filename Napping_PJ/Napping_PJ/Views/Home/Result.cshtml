@@ -1,0 +1,206 @@
+﻿@{
+	ViewBag.Title = "Simple Map";
+}
+
+
+<!-- Main Header -->
+<header class="main-header header-style-one alternate">
+	<style>
+		#map {
+			height: 800px;
+			width: auto;
+		}
+	</style>
+
+	<!-- Header Upper -->
+	<div class="header-upper">
+		<div class="inner-container clearfix">
+			<!--Logo-->
+			<div class="logo-box">
+				<div class="logo">
+					<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+						<h3 style="color: red;">Napping</h3>
+					</a>
+				</div>
+			</div>
+			<div class="nav-outer clearfix">
+
+				<!-- Main Menu -->
+				<nav class="main-menu navbar-expand-md navbar-light">
+					<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
+					</div>
+				</nav>
+			</div>
+
+			<div class="other-links clearfix">
+				<div class="info">
+					<ul class="clearfix">
+						<partial name="_LoginPartial" />
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!--End Header Upper-->
+
+
+</header>
+
+<div class="sidebar-page-container">
+	<div class="circles-two">
+		<div class="c-1"></div>
+		<div class="c-2"></div>
+	</div>
+	<span class="dotted-pattern dotted-pattern-5"></span>
+	<span class="tri-pattern tri-pattern-8"></span>
+
+	<div class="result-container">
+		<div class="row clearfix">
+
+			<!--Content Side-->
+			<div id="app" class="content-side col-lg-8 col-md-12 col-sm-12">
+				<div class="blog-content">
+					<div class="row">
+						<!--Feature Box-->
+						@*<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp"
+						data-wow-delay="0ms" data-wow-duration="1500ms">
+						<div class="inner-box">
+						<div class="icon-box">
+						<div class="heart-box">
+						<button><i class="fa-regular fa-heart"></i></button>
+						</div>
+						<img src="https://taiwan.taiwanstay.net.tw/twpic/9215.jpg" />
+						</div>
+						<div class="text-box">
+						<a href="index-5.html">
+						<h3>凱旋新宿商旅</h3>
+						<h6><span>臺東縣</span> <span>臺東市</span></h6>
+						<div>
+						<h4>NT 2000/晚</h4>
+						</div>
+						</a>
+						</div>
+
+						</div>
+						</div>*@
+
+						<template v-for="item in resultVM">
+							<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+								<div class="inner-box">
+									<div class="icon-box">
+										<div class="heart-box">
+											<button><i class="fa-regular fa-heart"></i></button>
+										</div>
+										<img :src="item.image" />
+									</div>
+									<div class="text-box">
+										<a href="index-5.html">
+											<h3>{{item.name}}</h3>
+											<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
+											<div>
+												<h4>NT 2000/晚</h4>
+											</div>
+										</a>
+									</div>
+
+								</div>
+							</div>
+						</template>
+
+					</div>
+
+
+				</div>
+			</div>
+
+			<!--Sidebar Side-->
+			<div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
+				<aside class="sidebar blog-sidebar">
+					<!--Sidebar Widget-->
+					<div class="sidebar-widget search-box wow fadeInUp" data-wow-delay="0ms"
+						 data-wow-duration="1500ms">
+						<div class="widget-inner" id="map">
+							<div class="sidebar-title">
+								<h1>這裡會是地圖</h1>
+
+							</div>
+						</div>
+					</div>
+
+				</aside>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+@section Scripts {
+
+	<a href="~/lib/jquery/dist/jquery.min.map"></a>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	
+	<script src="~/lib/vue/vue.min.js"></script>
+	<script src="~/lib/axios/axios.min.js"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
+
+	<script>
+		const vm = new Vue({
+			el: "#app",
+			data: {
+				resultVM: [],
+				markers: [],
+				selectLocation: null,
+				map: null,
+				infowindowAll: {},
+				infoWindow: "",
+
+
+			},
+			mounted: function () {
+				let _this = this;
+				_this.filterResultVM();
+			},
+			methods: {
+				filterResultVM: function () {
+
+					let _this = this;
+					var request = {};
+					axios.get(`/api/Result/Get`).then(response => {
+
+						_this.resultVM = response.data;
+						_this.initMap();
+					})
+
+				},
+				initMap: function () {
+					let _this = this;
+					_this.map = new google.maps.Map(document.getElementById("map"), {
+						zoom: 14,
+						center: { lat: parseFloat(_this.resultVM[46].positionLat), lng: parseFloat(_this.resultVM[46].positionLon) },
+					});
+
+					_this.resultVM.forEach(location => {
+						const marker = new google.maps.Marker({
+							position: { lat: parseFloat(location.positionLat), lng: parseFloat(location.positionLon) },
+							map: _this.map,
+							icon: '/images/mapPin.png',
+							title: location.name,   //鼠標移至時顯示名稱
+						});
+						const infoWindow = new google.maps.InfoWindow({
+							content: `<button class="btn" onclick='showInfoWindow()'>${location.name}</button>`,
+						});
+
+						_this.markers.push(marker);
+						infoWindow.open(map, marker);
+					});
+
+				},
+				
+			},
+
+		});
+
+	</script>
+}

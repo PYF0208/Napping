@@ -38,6 +38,12 @@ namespace Napping_PJ
                 options.ClientId = googleAuthNSection["ClientId"];
                 options.ClientSecret = googleAuthNSection["ClientSecret"];
             });
+            //添加session服務
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30); // 時效30分鐘過期
+            });
+
             builder.Services.AddTransient<EncryptHelper>();
 
             var app = builder.Build();
@@ -57,7 +63,8 @@ namespace Napping_PJ
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            //啟動session
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

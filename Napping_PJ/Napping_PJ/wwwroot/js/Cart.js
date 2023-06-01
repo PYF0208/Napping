@@ -3,68 +3,72 @@
     data: {
         rooms: [],
     },
-    mounted: function () {
+    mounted: async function () {
         var _this = this;
-        _this.freshCart();
+        //_this.freshCart();
+        await _this.getSession();
     },
     methods: {
-        freshCart: function () {
+        addToCart: async function (room) {
             var _this = this;
-            _this.rooms = _this.getCartList('cartItem');
-        },
-        getRooms: async function () {
-            var _this = this;
-            _this.rooms = [];
-            await axios.post(`Cart/GetRooms`)
-                .then(response => {
-                    //console.log(response.data);
-                    _this.rooms = response.data;
-                })
-                .catch();
-        },
-        addToCart: function (room) {
-            var _this = this;
-            var cookieName = 'cartItem';
+            _this.checkIsLogined();
             //將房間物件加入cookie
-            var cartList = _this.getCartList(cookieName);
-            cartList.push(room);
+            _this.rooms.push(room);
             //console.log(cartList);
-            _this.rooms = cartList;
-            _this.setCookie(cookieName, cartList, 365);
+            await _this.setSession(_this.rooms);
         },
-        removeFromCart: function (room) {
+        removeFromCart: async function (room) {
             var _this = this;
             var cookieName = 'cartItem';
-            var cartList = _this.getCartList(cookieName);
-            var idx = cartList.findIndex(r => r.roomId == room.roomId);
-            cartList.splice(idx, 1);
-            _this.rooms = cartList;
-            _this.setCookie(cookieName, cartList, 365);
+            var idx = _this.rooms.findIndex(r => r.roomId == room.roomId);
+            _this.rooms.splice(idx, 1);
+            await _this.setSession(_this.rooms);
 
         },
-        setCookie: function (name, value, days) {
-            var _this = this;
-            var jsonStr = JSON.stringify(value);
-            var encodeStr = encodeURIComponent(jsonStr);
-            _this.$cookies.set(name, encodeStr, { expires: days });
-        },
-        getCartList: function (name) {
-            var _this = this;
-            var cartList = [];
+        setSession: async function (value) {
+            var self = this;
+            try {
+                //console.log(value);
+                var response = await axios.post(`${document.location.origin}/cart/SetSession`, value);
+                //console.log(response.data);
 
-            var cookies = document.cookie.split(';');
-
-            var encodedValue = _this.$cookies.get(name);
-            if (encodedValue) {
-                var decodedValue = decodeURIComponent(encodedValue);
-                cartList = JSON.parse(decodedValue);
+            } catch (error) {
+                console.log(error.response.data);
             }
-            return cartList;
+        },
+        getSession: async function () {
+            var self = this;
+            try {
+                var response = await axios.get(`${document.location.origin}/cart/GetSession`);
+                //console.log(response.data);
+                self.rooms = response.data;
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        },
+        checkIsLogined: function () {
+            axios.get(`${document.location.origin}/cart/CheckIsLogined`)
+                .then()
+                .catch(error => {
+                    console.log(error.response.data);
+                    location.href = `${location.origin}${error.response.data}`;
+                }
+                );
         },
     },
     watch: {
         'rooms': function (newValue) {
             //console.log('Cookie發生變化:', newValue);
         }
+    },
+    computed: {
+        cartTotal: function () {
+            var self = this;
+            var cartTotal = 0;
+            for (var i = 0; i < self.rooms.length; i++) {
+                cartTotal += self.rooms[i].totalPrice;
+            }
+            return cartTotal;
+        },
     },
 });

@@ -13,6 +13,7 @@
     <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <link href="~/css/cart.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/vue2-animate/dist/vue2-animate.min.css" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 
@@ -66,9 +67,9 @@
         <div class="top-pattern-layer-dark"></div>
 
 
-		<div class="widgets-section">
-			<div class="auto-container">
-				<div class="row clearfix">
+        <div class="widgets-section">
+            <div class="auto-container">
+                <div class="row clearfix">
 
 
                     <div class="column col-xl-3 col-lg-12 col-md-12 col-sm-12">
@@ -78,7 +79,29 @@
                             </div>
                         </div>
                     </div>
-  
+
+
+                    <div class="column col-xl-5 col-lg-8 col-md-12 col-sm-12">
+                        <div class="footer-widget links-widget">
+                            <div class="widget-content">
+                                <div class="row clearfix">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="widget-title">
+                                            <h4>Services</h4>
+                                        </div>
+                                        <ul class="links">
+                                            <li><a href="#">管理您的預訂</a></li>
+                                            <li><a href="#">住客評語</a></li>
+                                            <li><a href="#">客服支援</a></li>
+                                            <li><a asp-area="" asp-controller="Home" asp-action="About">關於 Napping</a></li>
+                                            <li><a asp-area="" asp-controller="Home" asp-action="Privacy">隱私權和Cookie聲明</a></li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,7 +112,7 @@
 				<div class="inner clearfix">
 					<div class="copyright">本網站僅為教育練習使用</div>
 					<div class="bottom-links">
-						<a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後台</a>|<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Napping</a>|<a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後台管理</a>
 					</div>
 				</div>
 			</div>
@@ -97,7 +120,6 @@
 
     </footer>
     <script src="~/lib/vue/vue.min.js"></script>
-    <script src="~/lib/vue-cookies/vue-cookies.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
@@ -106,6 +128,7 @@
     <script src="~/js/appear.js"></script>
     <script src="~/lib/wow/wow.min.js"></script>
     <script src="~/js/Cart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.11/pako.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

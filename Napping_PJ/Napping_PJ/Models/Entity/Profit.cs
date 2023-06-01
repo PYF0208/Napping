@@ -5,15 +5,8 @@ namespace Napping_PJ.Models.Entity
 {
     public partial class Profit
     {
-        public Profit()
-        {
-            OrderDetails = new HashSet<OrderDetail>();
-        }
-
         public int ProfitId { get; set; }
         public DateTime Date { get; set; }
         public double Number { get; set; }
-
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

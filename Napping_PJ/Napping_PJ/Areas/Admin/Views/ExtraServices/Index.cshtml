@@ -6,7 +6,6 @@
 
 <div id="app" class="container">
 
-    <input v-for="item in ExtraServiceViewModel"  />
     <div class="form-group">
         @*篩選欄位*@
         <div class="row" style="width:50%;margin-left:auto;margin-right:0px">
@@ -18,7 +17,7 @@
     <div class="form-group">
         @*新增按鍵*@
         <button type="button" @@click="showInsertPage " class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">
-            新增加購服務選項
+            新增服務選項
         </button>
 
     </div>
@@ -27,10 +26,9 @@
             <thead>
                 <tr>
                     <td>編輯</td>
-                    <td>加購服務編號</td>
-                    <td>加購服務名稱</td>
-                    <td>價格</td>
-                    <td>旅店名稱</td>
+                    <td>服務編號</td>
+                    <td>服務名稱</td>
+                    <td>服務圖示</td>
                 </tr>
             </thead>
             <tbody>
@@ -42,8 +40,7 @@
                         </td>
                         <td>{{ item.extraServiceId }}</td>
                         <td><input v-model="item.extraServiceName" /></td>
-                        <td><input v-model="item.price" /></td>
-                        <td>{{ item.hotelName }}</td>
+                        <td><input v-model="item.image" /></td>
                     </template>
                     <template v-else>
                         <td>
@@ -52,8 +49,9 @@
                         </td>
                         <td>{{ item.extraServiceId }}</td>
                         <td>{{ item.extraServiceName }}</td>
-                        <td>{{ item.price }}</td>
-                        <td>{{ item.hotelName }}</td>
+                        <td>
+                            <i :class="item.image"></i>
+                        </td>
                     </template>
                 </tr>
             </tbody>
@@ -65,24 +63,24 @@
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitleId">新增加購服務選項</h5>
+                        <h5 class="modal-title" id="modalTitleId">新增服務選項</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="form-label">加購服務名稱:</label>
+                            <label class="form-label">服務名稱:</label>
                             <input class="form-control" v-model="extraServiceName" />
                         </div>
                         <div class="form-group">
-                            <label class="form-label">價格:</label>
-                            <input class="form-control" v-model="price" />
+                            <label class="form-label">服務圖示:</label>
+                            <input class="form-control" v-model="image" />
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">旅店名稱:</label>
-                            <select class="form-control" v-model="hotelId">
-                                <option v-for="item in HotelsViewModel" :value="item.hotelId">{{ item.name }}</option>
-                            </select>
-                        </div>
+                        @* <div class="form-group">
+                        <label class="form-label">旅店名稱:</label>
+                        <select class="form-control" v-model="hotelId">
+                        <option v-for="item in HotelsViewModel" :value="item.hotelId">{{ item.name }}</option>
+                        </select>
+                        </div>*@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -103,29 +101,22 @@
             el: '#app',
             data: {
                 ExtraServiceViewModel: [],
-                HotelsViewModel:[],
                 filter: "",
                 originalExtraServiceName: "",
-                originalPrice: "",
-                originalHotelId: "",
-                originalHotelName: "",
+                originalImage: "",
                 extraServiceName: "",
-                price: "",
-                hotelId: "",
-                hotelName: ""
+                image: "",
             },
             mounted: function () {
                 let _this = this;
                 _this.filterExtraServices();
-                _this.getHotels();
             },
             methods: {
                 filterExtraServices: function () {
                     let _this = this;
                     var request = {};
                     request.ExtraServiceId = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
-                    request.Price = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
-                    request.ExtraServiceName = request.HotelName =_this.filter;
+                    request.ExtraServiceName = request.Image = _this.filter;
                     axios.post('ExtraServices/FilterExtraServices', request)
                         .then(function (response) {
                             //alert(JSON.stringify(response.data));
@@ -139,14 +130,14 @@
                             _this.ExtraServiceViewModel = ExtraServiceList;
                         });
                 },
-                getHotels: function () {
-                    let _this = this;
-                    axios.get('ExtraServices/GetHotels')
-                        .then(function (response) {
-                            //alert(JSON.stringify(response.data));
-                            _this.HotelsViewModel = response.data;
-                        });
-                },
+                //getHotels: function () {
+                //    let _this = this;
+                //    axios.get('ExtraServices/GetHotels')
+                //        .then(function (response) {
+                //            //alert(JSON.stringify(response.data));
+                //            _this.HotelsViewModel = response.data;
+                //        });
+                //},
                 update: function (item) {
                     //alert("update");
                     let _this = this;
@@ -154,9 +145,8 @@
 
                         ExtraServiceId: item.extraServiceId,
                         ExtraServiceName: item.extraServiceName,
-                        Price: item.price,
-                        HotelId: item.hotelId,
-                      
+                        Image: item.image,
+
                     };
                     axios.put(`ExtraServices/PutExtraServices?Id=${item.extraServiceId}`, request).then(response => {
                         alert(response.data);
@@ -174,9 +164,7 @@
                         if (item.Edit == true) {
                             item.Edit = false;
                             item.extraServiceName = _this.originalExtraServiceName;
-                            item.price = _this.originalPrice;
-                            item.hotelId = _this.originalHotelId;
-                            item.hotelName = _this.originalHotelName;
+                            item.image = _this.originalImage;
                         }
                         ExtraServiceList.push(item);
                     }
@@ -191,9 +179,7 @@
                         if (extraServiceId == item.extraServiceId) {
                             item.Edit = true;
                             _this.originalExtraServiceName = item.extraServiceName;
-                            _this.originalPrice = item.price;
-                            _this.originalHotelId = item.hotelId;
-                            _this.originalHotelName = item.hotelName;
+                            _this.originalImage = item.image;
                         }
                         ExtraServiceList.push(item);
                     }
@@ -219,16 +205,14 @@
                     var esViewModel = {
                         ExtraServiceId: 0,
                         ExtraServiceName: _this.extraServiceName,
-                        Price: _this.price,
-                        HotelId: _this.hotelId
-                      
+                        Image: _this.image,
                     };
                     axios.post('ExtraServices/PostExtraServices', esViewModel).then(response => {
                         alert(response.data);
                         $('#insertPage').modal('hide');
                         _this.filterExtraServices();
                         _this.extraServiceName = "";
-                        _this.price = "";
+                        _this.image = "";
 
                     });
                 }
