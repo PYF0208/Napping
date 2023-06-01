@@ -14,7 +14,7 @@ namespace Napping_PJ.Models
 		public string Region { get; set; }
 		public double Price { get; set; }
 		public int MaxGuests { get; set; }
-
+		public int RoomId { get; set; }
 		public float PositionLat { get; set; }
 		public float PositionLon { get; set; }
 		public bool IsLike { get; set; }

@@ -43,12 +43,15 @@
 	</style>
 	<style>
 		.fa-solid.fa-heart {
-			color: white;
+			mix-blend-mode: difference;
+            color: rgba(192,192,192,0.5);
 			transition: color 0.3s ease-in-out;
 		}
 
 			.fa-heart:hover,
 			.fa-solid.fa-heart.is-Liked {
+
+				mix-blend-mode:normal; 
 				color: red;
 			}
 
@@ -85,7 +88,7 @@
 }
 
 
-<!-- Main Header -->
+@*<!-- Main Header -->
 <header class="main-header header-style-one alternate">
 
 	<!-- Header Upper -->
@@ -212,7 +215,7 @@
 		</div>
 	</div>
 </header>
-
+*@
 <div id="app">
 
 	<div class="sidebar-page-container">
@@ -240,7 +243,7 @@
 											<img :src="item.image" />
 										</div>
 										<div class="text-box">
-											<a :href="'/Home/HotelPage/'+item.hotelId">
+											<a :href="'/RoomDetail/'+item.roomId">
 												<h3>{{item.name}}</h3>
 												<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
 												<div>
@@ -501,7 +504,7 @@
             searchRoom: function () {
 
                 vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
-
+				vm.filterResultVM();
             },
         },
     });

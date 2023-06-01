@@ -18,38 +18,134 @@
 </head>
 
 <body>
-   @* <header class="main-header header-style-one alternate">
+	<!-- Main Header -->
+	<header class="main-header header-style-one alternate">
 
-        <!-- Header Upper -->
-        <div class="header-upper">
-            <div class="inner-container clearfix">
-                <!--Logo-->
-                <div class="logo-box">
-                    <div class="logo">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><h1 style="color: white;">Napping</h1></a>
-                    </div>
-                </div>
-                <div class="nav-outer clearfix">
+		<!-- Header Upper -->
+		<div class="header-upper">
+			<div class="inner-container clearfix">
+				<!--Logo-->
+				<div class="logo-box">
+					<div class="logo">
+						<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+							<h3 style="">Napping</h3>
+						</a>
+					</div>
+				</div>
+				<div class="nav-outer clearfix">
+					<!-- Main Menu -->
+					<nav class="main-menu navbar-expand-md navbar-light">
+						<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
+							<div class="d-flex" style="align-items: center; column-gap: 12px;" id="homeIndexOnlyContainer">
+								<template id="homeIndexOnly">  @*首頁header中間的元素都在這*@
+								<div class="form-group" id="vueApp">
+									<template>
+										<div class="demo-date-picker">
+											<div class="block">
+												<el-date-picker v-model="timeValue"
+																type="daterange"
+																range-separator="至"
+																start-placeholder="入住時間"
+																end-placeholder="退房時間"
+																:size="size" />
+											</div>
+										</div>
+									</template>
+								</div>
+								<div class="form-group">
+									<div class="field-inner">
+										<div class="check-sel-box">
+											<div class="check-sel-btn">
+												<span class="adult-info">2</span><span> 位成人</span>
+												<span class="child-info">0</span><span> 位兒童</span>
+											</div>
+											<ul class="check-sel-droplist">
+												<li>
+													<div class="sel-title">成人人數：</div>
+													<div class="clearfix">
+														<div class="radio-block adult-block">
+															<input type="radio"
+																   name="adult-group" id="radio-1" value="0"><label for="radio-1">0</label>
+														</div>
+														<div class="radio-block adult-block">
+															<input type="radio"
+																   name="adult-group" id="radio-2" value="1"><label for="radio-2">1</label>
+														</div>
+														<div class="radio-block adult-block">
+															<input type="radio"
+																   name="adult-group" id="radio-3" value="2" checked><label for="radio-3">2</label>
+														</div>
+														<div class="radio-block adult-block">
+															<input type="radio"
+																   name="adult-group" id="radio-4" value="3"><label for="radio-4">3</label>
+														</div>
+														<div class="radio-block adult-block">
+															<input type="radio"
+																   name="adult-group" id="radio-5" value="4"><label for="radio-5">4</label>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="sel-title">兒童人數：</div>
+													<div class="clearfix">
 
-                    <!-- Main Menu -->
-                    <nav class="main-menu navbar-expand-md navbar-light">
-                        <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
-                        </div>
-                    </nav>
-                </div>
+														<div class="radio-block child-block">
+															<input type="radio"
+																   name="child-group" id="radio-6" value="0" checked><label for="radio-6">0</label>
+														</div>
+														<div class="radio-block child-block">
+															<input type="radio"
+																   name="child-group" id="radio-7" value="1"><label for="radio-7">1</label>
+														</div>
+														<div class="radio-block child-block">
+															<input type="radio"
+																   name="child-group" id="radio-8" value="2"><label for="radio-8">2</label>
+														</div>
+														<div class="radio-block child-block">
+															<input type="radio"
+																   name="child-group" id="radio-9" value="3"><label for="radio-9">3</label>
+														</div>
+														<div class="radio-block child-block">
+															<input type="radio"
+																   name="child-group" id="radio-10" value="4"><label for="radio-10">4</label>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" id="search">
+									<div class="field-inner">
+										<div class="btn btn-light" @@click="searchRoom()">
+											<i class="fa-solid fa-magnifying-glass"></i>
+											搜尋
+										</div>
+									</div>
+								</div>
+								<div id="likeButton">
+									<div class="btn btn-light" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
+										<i class="fa-regular fa-heart"></i>
+										喜愛清單
+									</div>
+								</div>
+								</template>
+							</div>
+						</div>
+					</nav>
+				</div>
 
-                <div class="other-links clearfix">
-                    <div class="info">
-                        <ul class="clearfix">
-                            <partial name="_LoginPartial" />
-                        </ul>
-                    </div>
-                </div>
 
-            </div>
-        </div>
-        <!--End Header Upper-->
-    </header>*@
+				<div class="other-links clearfix">
+					<div class="info">
+						<ul class="clearfix">
+							<partial name="_LoginPartial" />
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
     <div class="page-wrapper">
         <!-- Preloader -->
         <div class="preloader">
@@ -117,8 +213,19 @@
 				</div>
 			</div>
 		</div>
-
     </footer>
+	<script>
+		// 確認當前頁面是否為首頁
+		if (window.location.pathname === '/' || window.location.pathname.toLowerCase() === '/home/index') {
+			// 使用 JavaScript 取得模板元素和容器元素
+			const template = document.getElementById('homeIndexOnly');
+			const container = document.getElementById('homeIndexOnlyContainer');
+
+			// 複製模板內容並插入到容器元素中
+			const clone = template.content.cloneNode(true);
+			container.appendChild(clone);
+		}
+	</script>
     <script src="~/lib/vue/vue.min.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>

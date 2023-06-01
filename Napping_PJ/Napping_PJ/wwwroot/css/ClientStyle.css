@@ -465,9 +465,8 @@ figure {
     transform: translateX(101%);
 }
 
-img {
-    display: inline-block;
-    max-width: 100%;
+.image-layer img {
+    width: inherit;
     height: auto;
 }
 
@@ -5956,7 +5955,6 @@ img.lazy-image {
 
 .featured-section-four {
     position: relative;
-    padding: 140px 0px 250px;
     background: #ffffff;
 }
 
@@ -6774,7 +6772,7 @@ img.lazy-image {
     .page-banner .inner-container {
         max-width: 800px;
         position: relative;
-        padding: 290px 0px 230px;
+        padding: 230px 0px 230px;
     }
 
     .page-banner.ext-banner .inner-container {
@@ -9668,7 +9666,7 @@ img.lazy-image {
 
 .result-container {
     position: static;
-    max-width: 97%;
+    max-width: 115em;
     margin: 0 auto;
 }
 
@@ -9691,13 +9689,11 @@ img.lazy-image {
         position: relative;
         display: inline-block;
         font-size: 50px;
-        height: 100%;
         line-height: 80px;
         color: #aaaaaa;
         width: 100%;
         margin-bottom: 10px;
         overflow: hidden;
-        width: 100%;
         height: 320px;
         z-index: 2;
     }
@@ -9708,55 +9704,53 @@ img.lazy-image {
         object-fit: cover;
     }
 
-.result-box h3 {
-    font-family: 'Dancing Script', cursive;
-    font-family: 'Noto Serif TC', serif;
-    font-size: 28px;
-    text-transform: capitalize;
-    margin-bottom: 10px;
+    .result-box h3 {
+        font-family: 'Dancing Script', cursive;
+        font-family: 'Noto Serif TC', serif;
+        font-size: 28px;
+        text-transform: capitalize;
+        margin-bottom: 10px;
+    }
 
-}
+    .result-box h4 {
+        font-size: 24px;
+        text-transform: capitalize;
+        text-align: left;
+        margin-bottom: 0px;
+    }
 
-.result-box h4 {
-    font-size: 24px;
-    text-transform: capitalize;
-    text-align: left;
-    margin-bottom: 0px;
-}
+    .result-box h6 {
+        color: #9b9fa6;
+        font-size: 14px;
+        text-transform: capitalize;
+        text-align: left;
+        margin-bottom: 0px;
+    }
 
-.result-box h6 {
-    color: #9b9fa6;
-    font-size: 14px;
-    text-transform: capitalize;
-    text-align: left;
-    margin-bottom: 0px;
-}
-
-.result-box .text {
-    position: relative;
-    display: block;
-    color: #9b9fa6;
-    font-size: 16px;
-    line-height: 1.7em;
-}
-
-.result-box .heart-box {
-    position: absolute;
-    display: block;
-    top: 2%;
-    left: 88%;
-}
-
-    .result-box .heart-box button {
+    .result-box .text {
         position: relative;
         display: block;
-        background-color: transparent;
         color: #9b9fa6;
-        font-size: 34px;
+        font-size: 16px;
         line-height: 1.7em;
     }
 
-.result-box a:hover {
-    color: #000000;
-    text-decoration: none;
-}
+    .result-box .heart-box {
+        position: absolute;
+        display: block;
+        right: 0.3em;
+    }
+
+        .result-box .heart-box button {
+            position: relative;
+            display: block;
+            background-color: transparent;
+            color: #9b9fa6;
+            font-size: 34px;
+            line-height: 1.7em;
+        }
+
+    .result-box a:hover {
+        color: #000000;
+        text-decoration: none;
+    }
