@@ -1,12 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models;
+using Napping_PJ.Models.Entity;
 using Napping_PJ.Utility;
+using System.Security.Claims;
 using System.Text;
 
 namespace Napping_PJ.Controllers
 {
 	public class BankController : Controller
 	{
+		private readonly db_a989f8_nappingContext _Context;
+		public BankController(db_a989f8_nappingContext context)
+		{
+			_Context = context;
+		}
+		
 		private BankInfoModel _bankInfoModel = new BankInfoModel
 		{
 			MerchantID = "MS149051454",
@@ -18,6 +27,7 @@ namespace Napping_PJ.Controllers
 			AuthUrl = "https://ccore.newebpay.com/MPG/mpg_gateway",
 			CloseUrl = "https://core.newebpay.com/API/CreditCard/Close"
 		};
+
 		public IActionResult Index2()
 		{
 			return PartialView();
@@ -25,8 +35,47 @@ namespace Napping_PJ.Controllers
 
 
 		[HttpPost]
-		public async Task SpgatewayPayBillAsync(string ordernumber, int amount, string payType)
+		//[Route("Bank/SpgatewayPayBillAsync/")]
+		public async Task SpgatewayPayBillAsync()
 		{
+			Claim userEmailClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+			if (userEmailClaim == null)
+			{
+				return;
+			}
+			var user = _Context.Customers.FirstOrDefault(x => x.Email == userEmailClaim.Value);
+			Order order = new Order
+			{
+				CustomerId = user.CustomerId,
+				Date = DateTime.Now,
+				PaymentId = 1,
+			};
+			_Context.Orders.Add(order);
+			_Context.SaveChanges();
+
+
+			OrderDetail Detail = new OrderDetail
+			{
+				CheckIn = DateTime.Now,
+				CheckOut = DateTime.MaxValue,
+				RoomId = 140,
+				ProfitId = 5,
+				OrderId = order.OrderId,
+				NumberOfGuests = 5,
+				TravelType = "放鬆旅遊",
+			};
+			_Context.OrderDetails.Add(Detail);
+			_Context.SaveChanges();
+			OrderDetailExtraService ODE = new OrderDetailExtraService
+			{
+				OrderDetailId = Detail.OrderDetailId,
+				ExtraServiceName = "按摩",
+				Number = 1,
+
+			};
+			//存回DB 訂單、明細、加購
+
+
 			string version = "1.5";
 
 			// 目前時間轉換 +08:00, 防止傳入時間或Server時間時區不同造成錯誤
@@ -44,9 +93,9 @@ namespace Napping_PJ.Controllers
 				Version = version,
 				// * 商店訂單編號
 				//MerchantOrderNo = $"T{DateTime.Now.ToString("yyyyMMddHHmm")}",
-				MerchantOrderNo = ordernumber,
+				MerchantOrderNo = order.OrderId.ToString(),
 				// * 訂單金額
-				Amt = amount,
+				Amt = 2133213,
 				// * 商品資訊
 				ItemDesc = "商品資訊(自行修改)",
 				// 繳費有效期限(適用於非即時交易)
@@ -78,27 +127,27 @@ namespace Napping_PJ.Controllers
 
 			};
 
-			if (string.Equals(payType, "CREDIT"))
+			if (string.Equals("CREDIT", "CREDIT"))
 			{
 				tradeInfo.CREDIT = 1;
 			}
-			else if (string.Equals(payType, "WEBATM"))
+			else if (string.Equals("WEBATM", "WEBATM"))
 			{
 				tradeInfo.WEBATM = 1;
 			}
-			else if (string.Equals(payType, "VACC"))
+			else if (string.Equals("VACC", "VACC"))
 			{
 				// 設定繳費截止日期
 				tradeInfo.ExpireDate = taipeiStandardTimeOffset.AddDays(1).ToString("yyyyMMdd");
 				tradeInfo.VACC = 1;
 			}
-			else if (string.Equals(payType, "CVS"))
+			else if (string.Equals("CVS", "CVS"))
 			{
 				// 設定繳費截止日期
 				tradeInfo.ExpireDate = taipeiStandardTimeOffset.AddDays(1).ToString("yyyyMMdd");
 				tradeInfo.CVS = 1;
 			}
-			else if (string.Equals(payType, "BARCODE"))
+			else if (string.Equals("BARCODE", "BARCODE"))
 			{
 				// 設定繳費截止日期
 				tradeInfo.ExpireDate = taipeiStandardTimeOffset.AddDays(1).ToString("yyyyMMdd");
