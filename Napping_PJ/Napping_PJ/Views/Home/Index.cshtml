@@ -53,6 +53,31 @@
 			}
 
 	</style>
+	<style>
+		.info-window {
+      max-width: 300px;
+    }
+    .info-window__image {
+      width: 100%;
+      height: auto;
+    }
+    .info-window__title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 8px 0;
+    }
+    .info-window__description {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .info-window__link {
+      font-size: 14px;
+      color: #007bff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+	</style>
 }
 
 ﻿@{
@@ -166,9 +191,10 @@
 								</div>
 							</div>
 							<div id="likeButton">
-								<button type="button" class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
+								<div class="btn btn-light" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
+									<i class="fa-regular fa-heart"></i>
 									喜愛清單
-								</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -204,8 +230,8 @@
 					<div class="blog-content">
 						<div class="row">
 							<!--Feature Box-->
-							<template v-for="item in resultVM">
-								<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+								<template  v-for="item in containsHotel">
+								<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="3000ms" data-wow-duration="2000ms">
 									<div class="inner-box">
 										<div class="icon-box">
 											<div class="heart-box">
@@ -222,11 +248,9 @@
 												</div>
 											</a>
 										</div>
-
 									</div>
 								</div>
 							</template>
-
 						</div>
 					</div>
 				</div>
@@ -273,7 +297,7 @@
                                         <h3>{{item.hotelName}}</h3>
                                         <h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
                                         <div>
-                                            <h4>從&ensp;<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span>&ensp;起</h4>
+                                            <h4>起價&ensp;<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span></h4>
                                             <h4>建立時間:{{item.createDate | formatDateTime }}</h4>
                                         </div>
                                     </a>
@@ -296,147 +320,185 @@
 
 
 @section Scripts {
-
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw"></script>
 	<a href="~/lib/jquery/dist/jquery.min.map"></a>
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw&callback=initMap"></script>
 	<script src="~/lib/vue/vue.min.js"></script>
 	<script src="~/lib/axios/axios.min.js"></script>
 	<script src="~/lib/element-ui/index.min.js"></script>
 	<script>
-		let map;
-		function initMap() {
-			map = new google.maps.Map(document.getElementById("map"), {
-				center: { lat: 25.105497, lng: 121.597366 },
-				zoom: 14,
-			});
-		}
-		window.initMap = initMap;
-	</script>
+    const vm = new Vue({
+        el: "#app",
+        data: {
+            resultVM: [],
+            markers: [],
+            selectLocation: null,
+            map: null,
+            infoWindowAll: {},
+            infoWindow: "",
+            likeVM: [],
+            baseURL: "",
+            numOfGuests: 2,
+			containsHotel:[],
+        },
+        computed: {
 
-	<script>
-		const vm = new Vue({
-			el: "#app",
-			data: {
-				resultVM: [],
-				likeVM: [],
-				baseURL: "",
-				numOfGuests: 2,
+        },
+        filters: {
+            formatDateTime(value) {
+                const date = new Date(value);
+                const year = date.getFullYear();
+                const month = ("0" + (date.getMonth() + 1)).slice(-2);
+                const day = ("0" + date.getDate()).slice(-2);
+                const hours = ("0" + date.getHours()).slice(-2);
+                const minutes = ("0" + date.getMinutes()).slice(-2);
+                return `${year}-${month}-${day} ${hours}:${minutes}`;
+            }
+        },
+        mounted: function () {
+            let _this = this;
+            _this.filterResultVM();
+            _this.baseURL = window.location.origin;
+        },
+        methods: {
+			getInfoWindowContent:function(img,title,desc){
+				  
+        return `<div class="info-window">
+          <img class="info-window__image" src="${img}" alt="Image">
+          <h3 class="info-window__title">${title}</h3>
+          <p class="info-window__description">${desc}</p>
+          <a class="info-window__link" href="#">Read More</a>
+        </div>`;
 			},
-			computed: {
 
-			},
-			filters: {
-				formatDateTime(value) {
-					const date = new Date(value);
-					const year = date.getFullYear();
-					const month = ("0" + (date.getMonth() + 1)).slice(-2);
-					const day = ("0" + date.getDate()).slice(-2);
-					const hours = ("0" + date.getHours()).slice(-2);
-					const minutes = ("0" + date.getMinutes()).slice(-2);
-					return `${year}-${month}-${day} ${hours}:${minutes}`;
-				}
-			},
-			mounted: function () {
-				let _this = this;
-				_this.filterResultVM();
-				_this.baseURL = window.location.origin;
-			},
-			methods: {
-				filterResultVM: function () {
-					let _this = this;
-					axios.get(`/api/Result/Get`).then(response => {
+            filterResultVM: function () {
+                let _this = this;
+                axios.get(`/api/Result/Get`).then(response => {
+                    _this.resultVM = response.data.filter(x => {
+                        if (_this.numOfGuests >= 5) {
+                            return x.maxGuests == 6;
+                        } else if (_this.numOfGuests >= 3) {
+                            return x.maxGuests == 4;
+                        }
+                        return x.maxGuests == 2;
+                    });
+                    _this.initMap();
+                });
+            },
+            initMap: function () {
+                let _this = this;
+                _this.map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 14,
+                    center: { lat: parseFloat(_this.resultVM[46].positionLat), lng: parseFloat(_this.resultVM[46].positionLon) },
+                });
+				//const mapPrice = document.createElement("div");
+				//mapPrice.className="price-tag";
+				//mapPrice.textContent=""
 
-						_this.resultVM = response.data.filter(x => {
 
-							if (_this.numOfGuests >= 5) {
-								return x.maxGuests == 6;
-							} else if (_this.numOfGuests >= 3) {
-								return x.maxGuests == 4;
-							}
-
-							return x.maxGuests == 2;
-
-						});
-
+                _this.map.addListener("bounds_changed", function () {
+                    let x = _this.map.getBounds();
+					_this.containsHotel=[];
+                    for (let i = 0; i < _this.resultVM.length; i++) {
+                        if (x.contains({ lat: parseFloat(_this.resultVM[i].positionLat), lng: parseFloat(_this.resultVM[i].positionLon) })) {
+                            _this.containsHotel.push(_this.resultVM[i])
+                        }                   
+                    }
+                })
+                _this.resultVM.forEach(location => {				
+                    const marker = new google.maps.Marker({
+                        position: { lat: parseFloat(location.positionLat), lng: parseFloat(location.positionLon) },
+                        map: _this.map,
+                        //icon: '/images/mapPin.png',
+                        title: location.name,
+						label: {
+						   color: "white",
+						   text:location.name,
+						   className:"btn btn-primary",
+						},		
+                    });
+					const infoWindow = new google.maps.InfoWindow({
+						content: _this.getInfoWindowContent(location.image,location.name,location.price),
+						maxWidth:200,
 					});
+                    
+                    _this.markers.push(marker);
+				   marker.addListener('click',function(){
+					   infoWindow.open(map,marker)
+				   });
+                });
+            },
+            getLikes: function () {
+                let _this = this;
+                axios.get(`/Like/GetLikes`).then(response => {
+                    //alert(JSON.stringify(response.data));
+                    _this.likeVM = response.data;
+                }).catch(error => {
+                    //console.log(error.response.data);
+                    location.href = _this.baseURL + error.response.data;
+                });
+            },
+            clickLike: function (id) {
+                let _this = this;
+                var request = { params: { hotelId: id } };
+                axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
+                    _this.filterResultVM();
+                    _this.getLikes();
+                }).catch(error => {
+                    //console.log(error.response.data);
+                    location.href = _this.baseURL + error.response.data;
+                });
+            },
+        }
+    });
+</script>
+<script>
+    var likeapp = new Vue({
+        el: '#likeButton',
+        data: {
 
-				},
-				getLikes: function () {
-					let _this = this;
-					axios.get(`/Like/GetLikes`).then(response => {
-						//alert(JSON.stringify(response.data));
-						_this.likeVM = response.data;
-					}).catch(error => {
-						//console.log(error.response.data);
-						location.href = _this.baseURL + error.response.data;
-					});
-				},
-				clickLike: function (id) {
-					let _this = this;
-					var request = { params: { hotelId: id } };
-					axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
-						_this.filterResultVM();
-						_this.getLikes();
-					}).catch(error => {
-						//console.log(error.response.data);
-						location.href = _this.baseURL + error.response.data;
-					});
-				},
+        },
+        mounted: function () {
 
-			}
+        },
+        methods: {
 
-		});
-	</script>
+        },
+    });
 
-	<script>
-		var likeapp = new Vue({
-			el: '#likeButton',
-			data: {
+</script>
+<script>
+    var app = new Vue({
+        el: '#vueApp',
+        data: {
+            size: 'default',
+            timeValue: null,
+        },
+        mounted: function () {
 
-			},
-			mounted: function () {
+        },
+        methods: {
+            submitForm() {
+                // 提交後想做什麼邏輯
+                console.log("開始日期:", this.timeValue[0]);
+                console.log("结束日期:", this.timeValue[1]);
+            },
 
-			},
-			methods: {
+        },
+    });
 
-			},
-		});
+</script>
+<script>
+    var searchApp = new Vue({
+        el: '#search',
+        data: {
 
-	</script>
-	<script>
-		var app = new Vue({
-			el: '#vueApp',
-			data: {
-				size: 'default',
-				timeValue: null,
-			},
-			mounted: function () {
+        },
+        mounted: function () {
 
-			},
-			methods: {
-				submitForm() {
-					// 提交後想做什麼邏輯
-					console.log("開始日期:", this.timeValue[0]);
-					console.log("结束日期:", this.timeValue[1]);
-				},
-
-			},
-		});
-
-	</script>
-
-	<script>
-		var searchApp = new Vue({
-			el: '#search',
-			data: {
-
-			},
-			mounted: function () {
-
-			},
-			methods: {
-				searchRoom: function () {
+        },
+        methods: {
+            searchRoom: function () {
 
 					vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
 					vm.filterResultVM();
@@ -444,5 +506,5 @@
 			},
 		});
 
-	</script>
+</script>
 				}
