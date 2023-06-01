@@ -7,9 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Admin\Controllers\ExtraServicesController.cs" />
-    <Compile Remove="Areas\Admin\Controllers\HotelsController.cs" />
-    <Compile Remove="Areas\Admin\Controllers\OrdersController.cs" />
     <Compile Remove="Models\CustomerViewModel.cs" />
   </ItemGroup>
 
