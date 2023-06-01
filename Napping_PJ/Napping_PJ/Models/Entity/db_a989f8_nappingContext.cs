@@ -248,11 +248,15 @@ namespace Napping_PJ.Models.Entity
             {
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.PersonOfBooking)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Customer");
+                    .HasConstraintName("FK_Orders_Customers");
 
                 entity.HasOne(d => d.Payment)
                     .WithMany(p => p.Orders)
@@ -282,6 +286,8 @@ namespace Napping_PJ.Models.Entity
                     .HasName("PK_OrderDetailExtraServices_1");
 
                 entity.Property(e => e.Odesid).HasColumnName("ODESId");
+
+                entity.Property(e => e.ExtraServiceName).HasMaxLength(50);
 
                 entity.HasOne(d => d.OrderDetail)
                     .WithMany(p => p.OrderDetailExtraServices)
