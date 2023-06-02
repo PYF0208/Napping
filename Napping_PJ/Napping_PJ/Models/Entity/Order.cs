@@ -12,6 +12,7 @@ namespace Napping_PJ.Models.Entity
 
         public int OrderId { get; set; }
         public int CustomerId { get; set; }
+        public string? PersonOfBooking { get; set; }
         public DateTime Date { get; set; }
         public int PaymentId { get; set; }
 

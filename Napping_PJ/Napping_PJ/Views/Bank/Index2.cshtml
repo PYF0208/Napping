@@ -1,0 +1,19 @@
+﻿<form method="post" action="/bank/SpgatewayPayBill">
+    <div>
+        訂單編號:<input type="text" name="ordernumber" />
+    </div>
+    <div>
+        金額:<input type="text" name="amount" />
+    </div>
+    <div>
+        付款方式:
+        <select name="payType">
+            <option value="CREDIT">信用卡</option>
+            <option value="WEBATM">WEBATM</option>
+            <option value="VACC">ATM 轉帳</option>
+            <option value="CVS">超商代碼繳費</option>
+            <option value="BARCODE">超商條碼繳費</option>
+        </select>
+    </div>
+    <button type="submit">送出</button>
+</form>
