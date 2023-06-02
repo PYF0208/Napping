@@ -13,8 +13,8 @@ namespace Napping_PJ.Models
         public DateTime? checkIn { get; set; }
         public DateTime? checkOut { get; set; }
         public int maxGuests { get; set; }
-        public int travelType { get; set; }
-        public double roomPrice { get; set; }
+        public string travelType { get; set; }
+        public double basePrice { get; set; }
         public string note { get; set; }
         public int totalPrice { get; set; }
         public IEnumerable<roomFeatureViewModel> roomFeatures { get; set; }

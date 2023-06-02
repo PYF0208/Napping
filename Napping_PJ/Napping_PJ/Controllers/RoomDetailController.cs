@@ -43,8 +43,8 @@ namespace Napping_PJ.Controllers
                 checkIn = null,
                 checkOut = null,
                 maxGuests = getRoom.MaxGuests,
-                travelType = 0,
-                roomPrice = getRoom.Price,
+                travelType = "商務",
+                basePrice = getRoom.Price,
                 note = null,
                 totalPrice = 0,
                 roomFeatures = getRoom.Features.Select(x =>
@@ -69,6 +69,7 @@ namespace Napping_PJ.Controllers
                 }).ToList(),
                 profitDictionary = new Dictionary<long, double>()
             };
+            
             await _context.Profits.Where(x => x.Date > DateTime.Today).ForEachAsync(x =>
             {
                 CVM.profitDictionary.Add(new DateTimeOffset(x.Date).ToUnixTimeMilliseconds(), x.Number);
@@ -110,7 +111,7 @@ namespace Napping_PJ.Controllers
             //});
             return Ok(bookedDate);
         }
-
+        [Route("RoomDetail/GetPromotions")]
         public async Task<IActionResult> GetPromotions()
         {
             Claim userEmailClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
@@ -120,8 +121,20 @@ namespace Napping_PJ.Controllers
             }
 
             Customer loginedUser = await _context.Customers.FirstOrDefaultAsync(x => x.Email == userEmailClaim.Value);
-            IQueryable<Promotion> promotions = _context.Promotions.Where(x => x.LevelId == loginedUser.LevelId);
-            return Ok();
+            List<promotionViewModel> promotions = new List<promotionViewModel>();
+            await _context.Promotions.Where(x => x.LevelId == loginedUser.LevelId)
+                .ForEachAsync(x =>
+                {
+                    promotions.Add(new promotionViewModel()
+                    {
+                        levelId = x.LevelId,
+                        startDate =x.StartDate ,
+                        endDate =x.EndDate ,
+                        name = x.Name,
+                        discount = x.Discount,
+                    });
+                });
+            return Ok(promotions);
 
         }
     }

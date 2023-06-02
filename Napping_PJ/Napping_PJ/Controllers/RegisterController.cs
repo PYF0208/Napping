@@ -201,7 +201,7 @@ namespace Napping_PJ.Controllers
         //    // 根據 id 取得 Google 帳戶 Email，以執行任何基於該 Email 的操作
         //    string googleAccountEmail = authenticateResult.Principal.FindFirst(ClaimTypes.Email)?.Value;
         //    // 根據 id 取得 Google 帳戶 name，以執行任何基於該 name 的操作
-        //    string googleAccountName = authenticateResult.Principal.FindFirst(ClaimTypes.Name)?.Value;
+        //    string googleAccountName = authenticateResult.Principal.FindFirst(ClaimTypes.name)?.Value;
         //    // 根據 id 取得 Google 帳戶 Type，以執行任何基於該 Type 的操作
         //    string OAuthAccountType = authenticateResult.Principal.Identities.ToList()[0].AuthenticationType.ToLower();
         //    //查詢新會員的ID
@@ -211,7 +211,7 @@ namespace Napping_PJ.Controllers
         //        Customer newCustomer = new Customer()
         //        {
         //            Email = googleAccountEmail,
-        //            Name = googleAccountEmail
+        //            name = googleAccountEmail
         //        };
         //        //寫入Customers資料表
         //        _context.Customers.Add(newCustomer);
@@ -243,7 +243,7 @@ namespace Napping_PJ.Controllers
         //        string passwodHash = PasswordHasher.HashPassword(passWord, Email);
         //        Customer newCustomer = new Customer()
         //        {
-        //            Name = Email,
+        //            name = Email,
         //            Email = Email,
         //            Password = passwodHash
         //        };

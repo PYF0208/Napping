@@ -86,15 +86,69 @@
                     </template>
 
                 </div>
-                <template v-if="levealId >= 0">
+                <template v-if="levealId >= 0 && Promotions.length > 0">
                     <div class="row mb-2 text-center"><h4>促銷優惠</h4></div>
-                    <div class="row mb-5"></div>
+                    <div class="row mb-5" v-for="p in Promotions">
+                        {{p.name}}: {{p.startDate.substring(0, 10)}}~{{p.endDate.substring(0, 10)}}  折扣{{p.discount}}/日
+                    </div>
                 </template>
                 <div class="row mb-2 text-center"><h4>預估價格</h4></div>
                 <div class="row mb-5">
                     <div class="col-6 mb-5">
-                        住宿<span class="fs-4">{{roomDays}}</span>日，共<span class="fs-4">{{RoomDetail.totalPrice}}</span>元。
-                    </div><div class="col-6 mb-5">
+                        <div class="card">
+                            <div class="card-body mx-4">
+                                <div class="container">
+                                    <div class="row">
+                                        <ul class="list-unstyled">
+                                            <li class="text-black mt-1">住宿<span class="fs-4">{{roomDays}}</span>日</li>
+                                        </ul>
+                                        <hr>
+                                        <div class="col-xl-10">
+                                            <p>房價</p>
+                                        </div>
+                                        <div class="col-xl-2">
+                                            <p class="float-end">
+                                                ${{tRoomPrice}}
+                                            </p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xl-10">
+                                            <p>加購</p>
+                                        </div>
+                                        <div class="col-xl-2">
+                                            <p class="float-end">
+                                                ${{tServicePrice}}
+                                            </p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xl-10">
+                                            <p>折扣</p>
+                                        </div>
+                                        <div class="col-xl-2">
+                                            <p class="float-end">
+                                                ${{tPromotionPrice}}
+                                            </p>
+                                        </div>
+                                        <hr style="border: 2px solid black;">
+                                    </div>
+                                    <div class="row text-black">
+
+                                        <div class="col-xl-12">
+                                            <p class="float-end fw-bold">
+                                                共: ${{RoomDetail.totalPrice}}
+                                            </p>
+                                        </div>
+                                        <hr style="border: 2px solid black;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-5">
                         <button class="btn btn-info" @@click="addToCart">加入購物車</button>
                     </div>
                 </div>
@@ -122,6 +176,10 @@
                 roomId: -1,
                 levealId: -1,
                 roomDays: 0,
+                Promotions: [],
+                tRoomPrice: 0,
+                tServicePrice: 0,
+                tPromotionPrice: 0,
             },
             mounted: async function () {
                 var _this = this;
@@ -131,6 +189,7 @@
                 _this.startOption.disabledDate = _this.disabledStartDate;
                 _this.endOption.disabledDate = _this.disabledEndDate;
                 _this.levealId = await cartVue.checkIsLogined();
+                _this.getPromotions();
             },
             methods: {
                 getRoomDetail: function (roomId) {
@@ -206,38 +265,100 @@
                     var self = this;
                     //計算加購項目
                     var totalPrice = 0;
+                    var tRoomPrice = 0;
+                    var tServicePrice = 0;
+                    var tPromotionPrice = 0;
                     self.roomDays = 0;
                     var selectedServices = self.RoomDetail.selectedExtraServices;
                     for (i = 0; i < selectedServices.length; i++) {
-                        totalPrice += selectedServices[i].servicePrice * selectedServices[i].serviceQuantity;
+                        tServicePrice += selectedServices[i].servicePrice * selectedServices[i].serviceQuantity;
                     }
+                    self.tServicePrice = tServicePrice;
                     //計算住宿價格
+                    var start = new Date(self.RoomDetail.checkIn);
+                    var end = new Date(self.RoomDetail.checkOut);
+                    var days = Math.max(Math.ceil((end - start) / (1000 * 60 * 60 * 24)), 0);
+                    self.roomDays = days;
+                    var oneDay = (1000 * 60 * 60 * 24);
                     if (self.RoomDetail.checkIn !== null && self.RoomDetail.checkOut !== null) {
-                        var start = new Date(self.RoomDetail.checkIn).getTime();
-                        var end = new Date(self.RoomDetail.checkOut).getTime();
-                        var days = (end - start) / (1000 * 60 * 60 * 24);
-                        self.roomDays = days;
-                        var oneDay = (1000 * 60 * 60 * 24);
                         for (var i = 0; i < days; i++) {
-                            var profitOfDay = self.RoomDetail.profitDictionary[start + oneDay * i] ?? 1;
-                            var roomBasePrice = self.RoomDetail.roomPrice;
-                            totalPrice += profitOfDay * roomBasePrice;
+                            var day16Start = new Date(start.getTime() + (i * oneDay));
+                            var day12End = new Date(day16Start.getTime() + (i * oneDay / 24 * 20));
+                            //查每晚的利潤成數
+                            var profitOfDay = self.checkProfit(self.RoomDetail.profitDictionary, day16Start.getTime(), day12End.getTime());
+                            var roomBasePrice = self.RoomDetail.basePrice;
+                            tRoomPrice += profitOfDay * roomBasePrice;
                         }
                     }
-                    self.RoomDetail.totalPrice = totalPrice;
+                    self.tRoomPrice = tRoomPrice;
+                    //查每晚的促銷折扣
+                    if (self.Promotions.length > 0) {
+                        for (var i = 0; i < days; i++) {
+                            var checkDate = new Date(start.getTime() + oneDay * i);
+                            var promotOfDay = self.checkPromot(self.Promotions, checkDate);
+                            tPromotionPrice += promotOfDay;
+                        }
+                    }
+                    self.tPromotionPrice = tPromotionPrice;
+                    self.RoomDetail.totalPrice = tServicePrice + tRoomPrice - tPromotionPrice;
                 },
                 addToCart: function () {
                     var self = this;
                     cartVue.addToCart(self.RoomDetail);
                 },
-                getPromotions:function() {
-
+                getPromotions: function () {
+                    var self = this;
+                    axios.get(`${location.origin}/RoomDetail/GetPromotions`)
+                        .then(response => {
+                            //console.log(response.data);
+                            self.Promotions = response.data;
+                        })
+                        .catch(error => {
+                            console.log(error.response.data);
+                        });
+                },
+                checkProfit: function (profitDictionary, min, max) {
+                    for (var key in profitDictionary) {
+                        var oneDay = (1000 * 60 * 60 * 24);
+                        //將key時間設成當天晚上12點
+                        var value = parseInt(key) + oneDay;
+                        if (min <= value && value <= max) {
+                            return profitDictionary[key];
+                        }
+                    }
+                    return 1;
+                },
+                checkPromot: function (Promotions, checkDate) {
+                    var loopDate = checkDate.getTime();
+                    for (var key in Promotions) {
+                        keyStart = new Date(Promotions[key].startDate);
+                        keyEnd = new Date(Promotions[key].endDate);
+                        if (keyStart.getTime() <= loopDate && loopDate <= keyEnd.getTime()) {
+                            return Promotions[key].discount;
+                        }
+                    }
+                    return 0;
+                },
+                setTimeToOfficialHours: function () {
+                    var self = this;
+                    if (self.RoomDetail.checkIn !== null) {
+                        var start = self.RoomDetail.checkIn;
+                        start.setHours(self.RoomDetail.availableCheckInTime);
+                    }
+                    if (self.RoomDetail.checkOut !== null) {
+                        var end = self.RoomDetail.checkOut;
+                        end.setHours(self.RoomDetail.latestCheckOutTime);
+                    }
                 },
             },
             watch: {
                 RoomDetail: {
                     deep: true,
-                    handler(newValue) { this.estimatedPrice(); }
+                    handler(newValue) {
+                        //設置時間為飯店的行政時間，checkin、checkout
+                        this.setTimeToOfficialHours();
+                        this.estimatedPrice();
+                    }
                 },
             },
         });

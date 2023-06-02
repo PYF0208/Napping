@@ -44,7 +44,7 @@
 					<tr v-for="item in OrdersViewModel ">
 						@*v-for="item in FeatureVMs"*@
 						<td>{{item.orderId}}</td>
-						<td>{{ item.customerName}}</td>
+						<td>{{ item.customername}}</td>
 
 						<td>{{item.paymentType}}</td>
 						<td><input type="datetime-local" class="form-control" v-model="item.date" disabled /></td>
@@ -128,7 +128,7 @@
 								<input class="form-control" v-model="orderId" disabled />
 							</div>
 							<div class="form-group">
-								<label class="form-label">會員名稱:{{customerName}}</label>								
+								<label class="form-label">會員名稱:{{customername}}</label>								
 								<input class="form-control" v-model="customerId"  disabled />
 							</div>
 
