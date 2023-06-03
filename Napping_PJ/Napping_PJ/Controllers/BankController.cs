@@ -48,7 +48,7 @@ namespace Napping_PJ.Controllers
 			{
 				CustomerId = user.CustomerId,
 				Date = DateTime.Now,
-				PaymentId = 1,
+				
 			};
 			_Context.Orders.Add(order);
 			_Context.SaveChanges();
@@ -59,7 +59,7 @@ namespace Napping_PJ.Controllers
 				CheckIn = DateTime.Now,
 				CheckOut = DateTime.MaxValue,
 				RoomId = 140,
-				ProfitId = 5,
+				
 				OrderId = order.OrderId,
 				NumberOfGuests = 5,
 				TravelType = "放鬆旅遊",

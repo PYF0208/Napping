@@ -32,20 +32,19 @@ namespace Napping_PJ.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IEnumerable<OrdersViewModel>> GetOrder()
         {
-            var ord = _context.Orders.Include(o => o.OrderDetails).Include(x => x.Customer).Include(x => x.Payment).Select(o => new OrdersViewModel
+            var ord = _context.Orders.Include(o => o.OrderDetails).Include(x => x.Customer).Include(x => x.Payments).Select(o => new OrdersViewModel
             {
 
                 CustomerId = o.CustomerId,
                 OrderId = o.OrderId,
-                PaymentId = o.PaymentId,
                 Date = o.Date,
                 CustomerName = o.Customer.Name,
-                PaymentType=o.Payment.Type,
+                PaymentType = o.Payments.OrderBy(x => x.OrderId).Last().Type,
                 /* 訂單明細*/
-                
+
 
             }) ;
-
+            
             return ord;
         }
         [HttpGet]
@@ -56,7 +55,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 Date = o.Date,
                 OrderId = o.OrderId,
                 PaymentId = o.PaymentId,
-                Status = o.Status,
+             
                 Type = o.Type,
             });
             return Pa;
@@ -109,7 +108,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
             var order = await _context.Orders
 
                 .Include(o => o.Customer)
-                .Include(o => o.Payment)
+               
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
             {
@@ -134,7 +133,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 _context.Orders.Add(new Order()
                 {
                     CustomerId = order.CustomerId,
-                    PaymentId = order.PaymentId,
                     Date = order.Date,
 
                 });
@@ -169,7 +167,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
             }
             ord.OrderId = order.OrderId;
             ord.CustomerId = order.CustomerId;
-            ord.PaymentId = order.PaymentId;
             ord.Date = order.Date;
             try
             {
@@ -202,7 +199,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
             var order = await _context.Orders
                 .Include(o => o.Customer)
-                .Include(o => o.Payment)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
             {

@@ -26,7 +26,7 @@ namespace Napping_PJ.Models
         public int extraServiceId { get; set; }
         public string name { get; set; }
         public string serviceImage { get; set; }
-        public int servicePrice { get; set; }
+        public double servicePrice { get; set; }
         public int serviceQuantity { get; set; }
     }
     public class roomFeatureViewModel

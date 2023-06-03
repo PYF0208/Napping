@@ -11,7 +11,7 @@
 		public int HotelId { get; set; }
 		public string HotelName { get; set; } = null!;
 
-		public int ExtraServicePrice { get; set; }
+		public double ExtraServicePrice { get; set; }
 
 
 

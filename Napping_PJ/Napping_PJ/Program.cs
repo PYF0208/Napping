@@ -1,8 +1,12 @@
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Helpers;
 using Napping_PJ.Models.Entity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using Hangfire.SqlServer;
+using Napping_PJ.Services;
 
 namespace Napping_PJ
 {
@@ -18,9 +22,16 @@ namespace Napping_PJ
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddControllersWithViews();
-
-            // 加入身份驗證服務
-            builder.Services.AddAuthentication(o =>
+            //定期寄送生日信
+			builder.Services.AddHangfire(configuration => configuration
+			   .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+			   .UseSimpleAssemblyNameTypeSerializer()
+			   .UseRecommendedSerializerSettings()
+			   .UseSqlServerStorage(builder.Configuration.GetConnectionString("AzureJP")));
+			builder.Services.AddHangfireServer();
+			builder.Services.AddTransient<IBirthday, Birthday>();
+			// 加入身份驗證服務
+			builder.Services.AddAuthentication(o =>
             {
                 o.DefaultScheme = "Application";
                 o.DefaultSignInScheme = "External";
@@ -58,8 +69,8 @@ namespace Napping_PJ
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseRouting();
+			app.UseHangfireDashboard(); //定期寄送生日信
+			app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
