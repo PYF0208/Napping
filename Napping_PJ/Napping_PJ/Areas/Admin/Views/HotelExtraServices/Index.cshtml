@@ -31,8 +31,8 @@
 				@*表格內容*@
 				<tbody>
 					<tr v-for="item in ExtraServiceViewModel">
-						<td>{{item.hotelname}}</td>
-						<td><i :class="item.image"></i>{{item.extraServicename}}</td>
+						<td>{{item.hotelName}}</td>
+						<td><i :class="item.image"></i>{{item.extraServiceName}}</td>
 						<td>{{item.extraServicePrice}}</td>
 						<td>
 							<a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
@@ -57,13 +57,13 @@
 							<div class="form-group">
 								<label class="form-label">旅店名稱:</label>
 								<select class="form-control" v-model="hotelId">
-									<option v-for="item in Hotelnames" :value="item.hotelId">{{ item.name }}</option>
+									<option v-for="item in HotelNames" :value="item.hotelId">{{ item.name }}</option>
 								</select>
 							</div>
 							<div class="form-group">
 								<label class="form-label">服務名稱:</label>
 								<select class="form-control" v-model="extraServiceId">
-									<option v-for="item in ExtraServicenames" :value="item.extraServiceId">{{ item.extraServicename }}</option>
+									<option v-for="item in ExtraServiceNames" :value="item.extraServiceId">{{ item.extraServiceName }}</option>
 								</select>
 							</div>
 							<div class="form-group">
@@ -92,13 +92,13 @@
 							<div class="form-group">
 								<label class="form-label">旅店名稱:</label>
 								<select class="form-control" v-model="insertHotelId">
-									<option v-for="item in Hotelnames" :value="item.hotelId">{{ item.name }}</option>
+									<option v-for="item in HotelNames" :value="item.hotelId">{{ item.name }}</option>
 								</select>
 							</div>
 							<div class="form-group">
 								<label class="form-label">服務名稱:</label>
 								<select class="form-control" v-model="insertExtraServiceId">
-									<option v-for="item in ExtraServicenames" :value="item.extraServiceId">{{ item.extraServicename }}</option>
+									<option v-for="item in ExtraServiceNames" :value="item.extraServiceId">{{ item.extraServiceName }}</option>
 								</select>
 							</div>
 							<div class="form-group">
@@ -149,7 +149,7 @@
 			methods: {
 				getExtraServiceName:function(){
 					let _this = this;
-					axios.get('HotelExtraServices/GetExtraServicename')
+					axios.get('HotelExtraServices/GetExtraServiceName')
 						.then(function (response) {
 							//alert(JSON.stringify(response.data));
 							_this.ExtraServiceNames = response.data;
@@ -157,7 +157,7 @@
 				},
 				getHotelName: function () {
 				    let _this = this;
-					axios.get('HotelExtraServices/GetHotelname')
+					axios.get('HotelExtraServices/GetHotelName')
 				        .then(function (response) {
 				            //alert(JSON.stringify(response.data));
 							_this.HotelNames = response.data;
