@@ -26,7 +26,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
             _context = context;
         }
         
-        //[Authorize(Roles = "1")]
+        [Authorize(Roles = "1")]
         //[Authorize(Roles = "3")]
         public IActionResult Index()
         {
@@ -156,7 +156,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> AddRole([FromBody][Bind("RoleId,Name")] RoleViewModel roleViewModel)
+        public async Task<IActionResult> AddRole([FromBody][Bind("RoleId,name")] RoleViewModel roleViewModel)
         {
             if (ModelState.IsValid)
             {

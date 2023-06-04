@@ -248,17 +248,19 @@ namespace Napping_PJ.Models.Entity
             {
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.NameOfBooking)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PhoneOfBooking)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Customer");
-
-                entity.HasOne(d => d.Payment)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.PaymentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Orders_Payments");
+                    .HasConstraintName("FK_Orders_Customers");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -267,6 +269,8 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.CheckOut).HasColumnType("datetime");
 
+                entity.Property(e => e.EspriceTotal).HasColumnName("ESPriceTotal");
+
                 entity.Property(e => e.TravelType).HasMaxLength(50);
 
                 entity.HasOne(d => d.Order)
@@ -274,6 +278,12 @@ namespace Napping_PJ.Models.Entity
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Orders");
+
+                entity.HasOne(d => d.Room)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.RoomId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderDetails_Rooms");
             });
 
             modelBuilder.Entity<OrderDetailExtraService>(entity =>
@@ -282,6 +292,10 @@ namespace Napping_PJ.Models.Entity
                     .HasName("PK_OrderDetailExtraServices_1");
 
                 entity.Property(e => e.Odesid).HasColumnName("ODESId");
+
+                entity.Property(e => e.EstotalPrice).HasColumnName("ESTotalPrice");
+
+                entity.Property(e => e.ExtraServiceName).HasMaxLength(50);
 
                 entity.HasOne(d => d.OrderDetail)
                     .WithMany(p => p.OrderDetailExtraServices)
@@ -294,9 +308,13 @@ namespace Napping_PJ.Models.Entity
             {
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
-                entity.Property(e => e.Status).HasMaxLength(50);
-
                 entity.Property(e => e.Type).HasMaxLength(50);
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.Payments)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Payments_Orders");
             });
 
             modelBuilder.Entity<Profit>(entity =>

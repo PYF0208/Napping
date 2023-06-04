@@ -14,14 +14,14 @@
                         <div class="col"><img class="img-fluid" :src="room.roomImages[0].image"></div>
                         <div class="col main align-items-center">
                             <div class="col">
-                                <div class="row text-muted">{{room.hotelName}}</div>
+                                <div class="row text-muted">{{room.hotelname}}</div>
                                 <div class="row">{{room.roomType}}</div>
                             </div>
                             <div class="col">&euro; {{room.totalPrice}} </div>
                         </div>
                         <div class="row">
                             <span class="optionDiv bg-info" v-for="service in room.selectedExtraServices">
-                                <label>{{service.name}}</label><a href="#">-</a><a href="#" class="border">{{service.serviceQuantity}}</a><a href="#">+</a>
+                                <label>{{service.name}}</label><a @@click="serviceQuanSub(service)">-</a><a href="#" class="border">{{service.serviceQuantity}}</a><a @@click="serviceQuanAdd(service)">+</a>
                             </span>
                         </div>
                         <div>
@@ -44,7 +44,7 @@
                         <div class="col">TOTAL PRICE</div>
                         <div class="col text-right">&euro; {{cartTotal}}</div>
                     </div>
-                    <button class="btn">CHECKOUT</button>
+                    <button class="btn" @@click="checkOut">CHECKOUT</button>
                 </div>
             </div>
             <button type="button" class="top-0 end-0 position-absolute" data-bs-dismiss="offcanvas"><i class="fa-regular fa-circle-xmark fa-2xl"></i></button>

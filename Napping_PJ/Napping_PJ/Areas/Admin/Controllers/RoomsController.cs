@@ -172,7 +172,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		// GET: Admin/Rooms/Create
 		public IActionResult Create()
 		{
-			ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "Name");
+			ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "name");
 			return View();
 		}
 
@@ -211,7 +211,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return NotFound();
 			}
-			ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "Name", room.HotelId);
+			ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "name", room.HotelId);
 			return View(room);
 		}
 

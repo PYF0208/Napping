@@ -82,7 +82,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		//{
 		//	return _context.ExtraServices.Where(h =>
 		//	h.HotelId == hotel.HotelId ||
-		//	h.Hotel.Name.Contains(hotel.Name)||
+		//	h.Hotel.name.Contains(hotel.name)||
 		//	h.Hotel.Star.Contains(hotel.Star)||
 		//	h.Hotel.Image.Contains(hotel.Image)||
 		//	h.Hotel.ContactName.Contains(hotel.ContactName)||
@@ -93,7 +93,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		//	h.Hotel.Address.Contains(hotel.Address)).Select(h => new HotelsViewModel
 		//	{
 		//		HotelId = hotel.HotelId,
-		//		Name = hotel.Name,
+		//		name = hotel.name,
 		//		Star = hotel.Star,
 		//		Image = hotel.Image,
 		//		ContactName = hotel.ContactName,
