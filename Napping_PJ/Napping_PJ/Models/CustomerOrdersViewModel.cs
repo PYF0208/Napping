@@ -4,6 +4,7 @@
     {
         public string NameOfBooking { get; set; } = null!;
         public DateTime OrderDate { get; set; }
+        public int? Status { get; set; }
         //Orders表
 
         public int OrderId { get; set; }

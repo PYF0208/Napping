@@ -7,8 +7,9 @@
         <li class="breadcrumb-item active">
             查詢訂單:<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
-                    <input class="form-control" type="text" placeholder="訂單編號" aria-label="訂單編號" aria-describedby="btnNavbarSearch" />
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                    <input class="form-control" type="text" placeholder="訂單編號"
+                           v-model="orderId" aria-label="訂單編號" aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button" @@click="filterCustomerOrders(orderId)"><i class="fas fa-search"></i></button>
                 </div>
             </form>
         </li>
@@ -24,9 +25,9 @@
                         </div>
                         <div class="col-4">
                             <ul style="list-style:none">
-                                <li>{{item.hotelName}}</li>
-                                <li>{{item.city}} {{item.region}}</li>
-                                <li>已退房</li>
+                                <li><h2>{{item.hotelName}}</h2></li>
+                                <li><h4>{{item.city}} {{item.region}}</h4></li>
+                                <li><h4>{{item.status}}</h4></li>
                             </ul>
                         </div>
                         <div class="col-4">
@@ -41,17 +42,27 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" id="modal-btn" name="modal-btn">訂單明細</a>
+                        <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="setItem(item)">訂單明細</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
         </div>
-            @* 訂單明細*@
-            @*<div class="col-6">
+    </template>
+</div>
+<!-- OrderDetailModal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">訂單明細</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
                 <div class="card bg-light text-black mb-4">
-                    <div class="card-body bg-secondary">訂單編號:{{item.orderId}}</div>
-                    <div class="card-body bg-success">已退房</div>
+                    <div class="card-body bg-secondary text-white">訂單編號:{{item.orderId}}</div>
+                    <div class="card-body bg-success text-white"><h5>{{item.status}}</h5></div>
                     <div class="row">
                         <div class="col-12">
                             <ul style="list-style:none">
@@ -79,17 +90,25 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-6">
                             <ul style="list-style:none">
                                 <li>住客資訊</li>
-                                <li>{{item.nameOfBooking}}</li>
+                                <li><h5>{{item.nameOfBooking}}</h5></li>
                                 <li>預訂總人數</li>
-                                <li>{{item.numberOfGuests}}</li>
-                                <li>付款方式</li>
-                                <li>{{item.paymentType}}</li>
-                                <li>總金額</li>
-                                <li>{{item.totalPrice}}</li>
+                                <li><h5>{{item.numberOfGuests}}</h5></li>
                             </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul style="list-style:none">
+                                <li>付款方式</li>
+                                <li><h5>{{item.paymentType}}</h5></li>
+                                <li>總金額</li>
+                                <li><h5>{{item.totalPrice}}</h5></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-black stretched-link" href="#">聯絡Napping客服中心</a>
                                 <div class="small text-black"><i class="fas fa-angle-right"></i></div>
@@ -97,25 +116,23 @@
                         </div>
                     </div>
                 </div>
-            </div>*@
-    </template>
-    <div>
-        <input class="modal-btn" type="checkbox" id="modal-btn" name="modal-btn" />
-        <label for="modal-btn">Open Modal</label>
-        <div class="modal">
-            <div class="modal-wrap">
-                <img src="https://assets.codepen.io/1462889/sl3.jpg" alt="">
-                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
 @section Scripts{
     <script>
         var app = new Vue({
             el: '#app',
             data: {
                 CustomerOrders: [],
+                orderId: "",
             },
             mounted: function () {
                 let _this = this;
@@ -151,6 +168,59 @@
                         _this.CustomerOrders = response.data;
                     });
                 },
+                setItem: function (selectedItem) {
+                    let _this = this;
+                    exampleModal.item = selectedItem;
+                },
+                filterCustomerOrders: function (orderId) {
+                    let _this = this;
+                    var okOrderId = isNaN(Number(_this.orderId)) ? 0 : Number(_this.orderId);
+                    axios.get(`/CustomerOrders/FilterCustomerOrders?orderId=${okOrderId}`).then(response => {
+                        if (typeof response.data === 'string') {
+                            alert(response.data);
+                        }
+                        else {
+                            _this.CustomerOrders = response.data;
+                        }
+                    });
+                },
+            },
+        });
+    </script>
+    <script>
+        var exampleModal = new Vue({
+            el: '#exampleModal',
+            data: {
+                item: {},
+            },
+            mounted: function () {
+
+            },
+            filters: {
+                formatDateTime(value) {
+                    const date = new Date(value);
+
+                    // 定義星期幾的名稱
+                    const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+                    // 獲取日期的年、月、日、小時和分鐘
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                    // 獲取星期幾的索引，並根據索引獲取對應的名稱
+                    const weekday = weekdays[date.getDay()];
+
+                    // 格式化為指定的字符串形式
+                    const formattedDateTime = `${year}-${month}-${day} ${weekday} ${hours}:${minutes}`;
+
+                    return formattedDateTime;
+                }
+            },
+            method: {
+
             },
         });
     </script>
