@@ -8,14 +8,20 @@ using Newtonsoft.Json.Linq;
 
 using Hangfire.SqlServer;
 using Napping_PJ.Services;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Net.Mail;
 
 namespace Napping_PJ
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+		//private readonly IBackgroundJobClient backgroundJobs;
+		
+		public static void Main(string[] args)
+		{
+
+			
+			var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("AzureJP") ?? throw new InvalidOperationException("Connection string 'AzureJP' not found.");
@@ -23,6 +29,8 @@ namespace Napping_PJ
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddControllersWithViews();
+
+            
             //定期寄送生日信
 			builder.Services.AddHangfire(configuration => configuration
 			   .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
@@ -30,7 +38,9 @@ namespace Napping_PJ
 			   .UseRecommendedSerializerSettings()
 			   .UseSqlServerStorage(builder.Configuration.GetConnectionString("AzureJP")));
 			builder.Services.AddHangfireServer();
-			builder.Services.AddTransient<IBirthday, Birthday>();
+            
+			builder.Services.AddScoped<IBirthday, Birthday>();
+            builder.Services.AddTransient<IChangePaymentStatusService, ChangePaymentStatusService>(); 
 			// 加入身份驗證服務
 			builder.Services.AddAuthentication(o =>
             {
@@ -68,6 +78,7 @@ namespace Napping_PJ
                 app.UseHsts();
             }
 
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 			app.UseHangfireDashboard(); //定期寄送生日信
@@ -89,7 +100,15 @@ namespace Napping_PJ
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 			});
-            app.Run();
+			using (var Scope = app.Services.CreateScope())
+			{
+				var Services = Scope.ServiceProvider;
+				var EmailSender = Services.GetRequiredService<IBirthday>();
+				BackgroundJob.Enqueue(() => EmailSender.SendBirthDayMail());
+
+			}  //這邊執行背景發送生日信
+			app.Run();
         }
-    }
+
+	}
 }

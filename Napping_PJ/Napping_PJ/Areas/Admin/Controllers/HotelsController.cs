@@ -4,11 +4,13 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Areas.Admin.Models;
 using Napping_PJ.Models.Entity;
+using Napping_PJ.Services;
 using NuGet.Common;
 
 namespace Napping_PJ.Areas.Admin.Controllers
@@ -18,16 +20,21 @@ namespace Napping_PJ.Areas.Admin.Controllers
 	{
 		private readonly db_a989f8_nappingContext _context;
 
+
 		public HotelsController(db_a989f8_nappingContext context)
 		{
 			_context = context;
+
 		}
 
 		// GET: Admin/Hotels
 		public async Task<IActionResult> Index()
 		{
+
 			return View();
 		}
+
+
 		[HttpGet]
 
 		public async Task<IEnumerable<HotelsViewModel>> GetHotelsService()

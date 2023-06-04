@@ -17,7 +17,6 @@ namespace Napping_PJ.Models.Entity
         public DateTime CheckOut { get; set; }
         public int NumberOfGuests { get; set; }
         public string TravelType { get; set; } = null!;
-        public double? TotalPrice { get; set; }
         public string? Note { get; set; }
         public double? RoomTotalPrice { get; set; }
         public double? DiscountTotalPrice { get; set; }

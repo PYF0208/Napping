@@ -160,7 +160,7 @@ namespace Napping_PJ.Services
 <tr>
 <td class=""pad"" style=""padding-bottom:10px;padding-left:20px;padding-right:30px;padding-top:10px;"">
 <div style=""color:#e2d7c1;direction:ltr;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;font-weight:400;letter-spacing:0px;line-height:150%;text-align:left;mso-line-height-alt:27px;"">
-<p style=""margin: 0;"">尊貴的{m.Name}會員您好:<br>在此祝賀您{m.Birthday}生日快樂<br><br>Napping全體員工祝賀您有美好的一天<br>
+<p style=""margin: 0;"">尊貴的{m.Name}會員您好:<br>在此祝賀您生日快樂<br><br>Napping全體員工祝賀您有美好的一天<br>
 </p>
 </div>
 </td>
@@ -227,7 +227,7 @@ namespace Napping_PJ.Services
 </table><!-- End -->
 </body>
 </html>",
-						//$"尊貴的{sendmailviewmodel.LevelName}會員您好:<br>獻上{sendmailviewmodel.PromotionName}促銷<br>促銷折扣為:{sendmailviewmodel.Discount}<br>優惠起始時間為:{sendmailviewmodel.StartDate}<br>優惠結束時間為:{sendmailviewmodel.EndDate}",
+						
 						IsBodyHtml = true,
 						BodyEncoding = Encoding.UTF8,
 					};

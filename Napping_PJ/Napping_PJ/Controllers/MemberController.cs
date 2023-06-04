@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models;
 using Napping_PJ.Models.Entity;
+using Napping_PJ.Services;
 using System.Security.Claims;
 
 namespace Napping_PJ.Controllers
@@ -9,14 +11,17 @@ namespace Napping_PJ.Controllers
     public class MemberController : Controller
     {
         private readonly db_a989f8_nappingContext _context;
+	
 
-        public MemberController(db_a989f8_nappingContext context)
+		public MemberController(db_a989f8_nappingContext context)
         {
             _context = context;
-        }
+			
+		}
 
         public async Task<IActionResult> Index()
         {
+            
             Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == User.FindFirstValue(ClaimTypes.Email));
             MemberViewModel memberViewModel = new MemberViewModel()
             {
@@ -60,5 +65,6 @@ namespace Napping_PJ.Controllers
 
             return View(memberViewModel);
         }
-    }
+		
+	}
 }
