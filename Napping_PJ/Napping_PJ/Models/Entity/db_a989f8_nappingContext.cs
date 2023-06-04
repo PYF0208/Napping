@@ -269,6 +269,8 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.CheckOut).HasColumnType("datetime");
 
+                entity.Property(e => e.EspriceTotal).HasColumnName("ESPriceTotal");
+
                 entity.Property(e => e.TravelType).HasMaxLength(50);
 
                 entity.HasOne(d => d.Order)

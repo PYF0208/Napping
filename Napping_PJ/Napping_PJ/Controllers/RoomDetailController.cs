@@ -40,13 +40,12 @@ namespace Napping_PJ.Controllers
                 }).ToList(),
                 availableCheckInTime = 16,
                 latestCheckOutTime = 12,
-                checkIn = null,
-                checkOut = null,
+                checkIn = DateTime.Now,
+                checkOut = DateTime.Now,
                 maxGuests = getRoom.MaxGuests,
                 travelType = "商務",
                 basePrice = getRoom.Price,
                 note = null,
-                totalPrice = 0,
                 roomFeatures = getRoom.Features.Select(x =>
                 {
                     return new roomFeatureViewModel()
@@ -85,7 +84,7 @@ namespace Napping_PJ.Controllers
         public async Task<IActionResult> GetBookingState(int roomId)
         {
             List<long[]> bookedDate = new List<long[]>();
-
+            //取得已booking的紀錄
             await _context.OrderDetails
                 .Where(x => x.RoomId == roomId && (x.CheckIn >= DateTime.Today && x.CheckOut >= DateTime.Today))
                 .ForEachAsync(
@@ -97,18 +96,33 @@ namespace Napping_PJ.Controllers
                             new DateTimeOffset(x.CheckOut).ToUnixTimeMilliseconds()
                         });
                     });
-            //List<DateTime> bookedDate = new List<DateTime>();
-            //await _context.OrderDetails.Where(x => x.RoomId == roomId && (x.CheckIn >= DateTime.Today && x.CheckOut >= DateTime.Today)).ForEachAsync(x =>
-            //{
-            //    var startDay = x.CheckIn;
-            //    var endDay = x.CheckOut;
-            //    var currentDay = startDay;
-            //    while (currentDay <= endDay)
-            //    {
-            //        bookedDate.Add(currentDay);
-            //        currentDay = currentDay.AddDays(1);
-            //    }
-            //});
+            //取得session內的紀錄
+            Claim userEmailClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+            Customer loginCustomer = await _context.Customers.FirstOrDefaultAsync(x=>x.Email == userEmailClaim.Value);
+            if (loginCustomer == null)
+            {
+                return BadRequest("未登入");
+            }
+
+            List<RoomDetailViewModel> roomDetailViewModels = new List<RoomDetailViewModel>();
+            byte[] cartByte = HttpContext.Session.Get($"{loginCustomer.CustomerId}_cartItem");
+            if (cartByte != null)
+            {
+                string cartJson = System.Text.Encoding.UTF8.GetString(cartByte);
+                roomDetailViewModels = JsonConvert.DeserializeObject<List<RoomDetailViewModel>>(cartJson);
+            }
+
+            roomDetailViewModels.Where(x =>
+                x.roomId == roomId && (x.checkIn.ToLocalTime() >= DateTime.Today && x.checkOut.ToLocalTime() >= DateTime.Today));
+            foreach (var item in roomDetailViewModels)
+            {
+                bookedDate.Add(new long[2]
+                {
+                    new DateTimeOffset(item.checkIn.ToLocalTime()).ToUnixTimeMilliseconds(),
+                    new DateTimeOffset(item.checkOut.ToLocalTime()).ToUnixTimeMilliseconds()
+                });
+            }
+
             return Ok(bookedDate);
         }
         [Route("RoomDetail/GetPromotions")]

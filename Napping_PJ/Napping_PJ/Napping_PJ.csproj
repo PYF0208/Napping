@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Cart\**" />
+    <Content Remove="Views\Cart\**" />
+    <EmbeddedResource Remove="Views\Cart\**" />
+    <None Remove="Views\Cart\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Admin\Controllers\OrdersController.cs" />
     <Compile Remove="Models\CustomerViewModel.cs" />
   </ItemGroup>
 
