@@ -5,17 +5,13 @@
             width: auto;
         }
 
-        .filters-section.style-four .form-box {
-            max-width: 400px;
-        }
-
-        .demo-date-picker {
-            display: flex;
-            width: 100%;
-            padding: 0;
-            flex-wrap: wrap;
-            z-index: 9999;
-        }
+		.demo-date-picker {
+			display: flex;
+			width: 100%;
+			padding: 0;
+			flex-wrap: wrap;
+			z-index: 9999;
+		}
 
             .demo-date-picker .block {
                 padding: 30px 0;
@@ -28,22 +24,22 @@
                     border-right: none;
                 }
 
-            .demo-date-picker .demonstration {
-                display: block;
-                color: var(--el-text-color-secondary);
-                font-size: 14px;
-                margin-bottom: 20px;
-            }
-    </style>
-    <style>
-        #map {
-            height: 800px;
-            width: auto;
-        }
-    </style>
-    <style>
-        .fa-solid.fa-heart {
-            mix-blend-mode: difference;
+			.demo-date-picker .demonstration {
+				display: block;
+				color: var(--el-text-color-secondary);
+				font-size: 14px;
+				margin-bottom: 20px;
+			}
+	</style>
+	<style>
+		#map {
+			height: 54.5em;
+			width: auto;
+		}
+	</style>
+	<style>
+		.fa-solid.fa-heart {
+			mix-blend-mode: difference;
             color: rgba(192,192,192,0.5);
             transition: color 0.3s ease-in-out;
         }
@@ -90,135 +86,6 @@
     ViewBag.Title = "Simple Map";
 }
 
-
-@*<!-- Main Header -->
-<header class="main-header header-style-one alternate">
-
-	<!-- Header Upper -->
-	<div class="header-upper">
-		<div class="inner-container clearfix">
-			<!--Logo-->
-			<div class="logo-box">
-				<div class="logo">
-					<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-						<h3 style="">Napping</h3>
-					</a>
-				</div>
-			</div>
-			<div class="nav-outer clearfix">
-				<!-- Main Menu -->
-				<nav class="main-menu navbar-expand-md navbar-light">
-					<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
-						<div class="d-flex" style="align-items: center; column-gap: 12px;">
-
-							<div class="form-group" id="vueApp">
-								<template>
-									<div class="demo-date-picker">
-										<div class="block">
-											<el-date-picker v-model="timeValue"
-															type="daterange"
-															range-separator="至"
-															start-placeholder="入住時間"
-															end-placeholder="退房時間"
-															:size="size" />
-										</div>
-									</div>
-								</template>
-							</div>
-							<div class="form-group">
-								<div class="field-inner">
-									<div class="check-sel-box">
-										<div class="check-sel-btn">
-											<span class="adult-info">2</span><span> 位成人</span>
-											<span class="child-info">0</span><span> 位兒童</span>
-										</div>
-										<ul class="check-sel-droplist">
-											<li>
-												<div class="sel-title">成人人數：</div>
-												<div class="clearfix">
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-1" value="0"><label for="radio-1">0</label>
-													</div>
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-2" value="1"><label for="radio-2">1</label>
-													</div>
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-3" value="2" checked><label for="radio-3">2</label>
-													</div>
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-4" value="3"><label for="radio-4">3</label>
-													</div>
-													<div class="radio-block adult-block">
-														<input type="radio"
-															   name="adult-group" id="radio-5" value="4"><label for="radio-5">4</label>
-													</div>
-												</div>
-											</li>
-											<li>
-												<div class="sel-title">兒童人數：</div>
-												<div class="clearfix">
-
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-6" value="0" checked><label for="radio-6">0</label>
-													</div>
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-7" value="1"><label for="radio-7">1</label>
-													</div>
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-8" value="2"><label for="radio-8">2</label>
-													</div>
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-9" value="3"><label for="radio-9">3</label>
-													</div>
-													<div class="radio-block child-block">
-														<input type="radio"
-															   name="child-group" id="radio-10" value="4"><label for="radio-10">4</label>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="form-group" id="search">
-								<div class="field-inner">
-									<div class="btn btn-light" @@click="searchRoom()">
-										<i class="fa-solid fa-magnifying-glass"></i>
-										搜尋
-									</div>
-								</div>
-							</div>
-							<div id="likeButton">
-								<div class="btn btn-light" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
-									<i class="fa-regular fa-heart"></i>
-									喜愛清單
-								</div>
-							</div>
-						</div>
-					</div>
-				</nav>
-			</div>
-
-
-			<div class="other-links clearfix">
-				<div class="info">
-					<ul class="clearfix">
-						<partial name="_LoginPartial" />
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-</header>
-*@
 <div id="app">
 
     <div class="sidebar-page-container">
@@ -229,37 +96,42 @@
         <span class="dotted-pattern dotted-pattern-5"></span>
         <span class="tri-pattern tri-pattern-8"></span>
 
-        <div class="result-container">
-            <div class="row clearfix">
-                <!--Content Side-->
-                <div class="content-side col-lg-8 col-md-12 col-sm-12">
-                    <div class="blog-content">
-                        <div class="row">
-                            <!--Feature Box-->
-                            <template v-for="item in containsHotel">
-                                <div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="3000ms" data-wow-duration="2000ms">
-                                    <div class="inner-box">
-                                        <div class="icon-box">
-                                            <div class="heart-box">
-                                                <button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
-                                            </div>
-                                            <img :src="item.image" />
-                                        </div>
-                                        <div class="text-box">
-                                            <a :href="'/RoomDetail/'+item.roomId">
-                                                <h3>{{item.name}}</h3>
-                                                <h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
-                                                <div>
-                                                    <h4><span>NT </span><span>{{item.price}}</span><span>/每晚</span></h4>
-                                                </div>
-                                            </a>
-                                        </div>
+		<div class="result-container">
+			<div class="row clearfix" style="height: 100vh;">
+				<!--Content Side-->
+				<div class="content-side col-lg-8 col-md-12 col-sm-12">
+					<div class="blog-content">
+						<div class="row">
+							<!--Feature Box-->
+                            <template v-if="containsHotel.length == 0">
+                                    <div class="result-box notfound">
+                                        <h1>沒有收尋到符合的房型QQ</h1>
                                     </div>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-                </div>
+                                </template>
+								<template v-else v-for="item in containsHotel">
+								<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="3000ms" data-wow-duration="2000ms">
+									<div class="inner-box">
+										<div class="icon-box">
+											<div class="heart-box">
+												<button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
+											</div>
+											<img :src="item.image" />
+										</div>
+										<div class="text-box">
+											<a :href="'/RoomDetail/'+item.roomId">
+												<h3>{{item.name}}</h3>
+												<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
+												<div>
+													<h4><span>NT </span><span>{{item.price}}</span><span>/每晚</span></h4>
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</template>
+						</div>
+					</div>
+				</div>
 
                 <!--Sidebar Side-->
                 <div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
@@ -290,7 +162,7 @@
                         <p>您還沒有收藏任何旅店唷!</p>
                     </template>
                     <template v-else>
-                        <div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms" v-for="item in likeVM">
+                        <div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="500ms" v-for="item in likeVM">
                             <div class="inner-box">
                                 <div class="icon-box">
                                     <div class="heart-box">
@@ -323,9 +195,6 @@
 
 </div>
 
-<li class="nav-item">
-    <a class="nav-link text-dark" asp-controller="Bank" asp-action="Index2">a-room</a>
-</li>
 
 @section Scripts {
     <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw"></script>

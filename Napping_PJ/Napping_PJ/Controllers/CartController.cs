@@ -24,6 +24,10 @@ namespace Napping_PJ.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSession([FromBody] RoomDetailViewModel roomDetailViewModel)
         {
+	        if (roomDetailViewModel == null || roomDetailViewModel.checkIn == null || roomDetailViewModel.checkOut == null)
+	        {
+		        return BadRequest("請選擇時間");
+	        }
             var roomCheckInTime = roomDetailViewModel.checkIn.ToLocalTime();
             var roomCheckOutTime = roomDetailViewModel.checkOut.ToLocalTime();
             //確定登入者
@@ -38,17 +42,17 @@ namespace Napping_PJ.Controllers
             //1確認OrderDetail
             Task<bool> isBookedTask = _context.OrderDetails.Include(x => x.Order).ThenInclude(x => x.Payments)
                 .AnyAsync(x => x.RoomId == roomDetailViewModel.roomId
-                               && x.Order.Date >= DateTime.Today
+                               && x.CheckIn.Date >= DateTime.Today
                                && x.Order.Payments.OrderBy(x => x.PaymentId).Last().Status < 3
-                               && (roomCheckInTime >= x.CheckIn && roomCheckInTime <= x.CheckIn)
+                               && ((roomCheckInTime >= x.CheckIn && roomCheckInTime <= x.CheckIn)
                                || (roomCheckOutTime >= x.CheckOut && roomCheckOutTime <= x.CheckOut)
-                               || (roomCheckInTime <= x.CheckOut && roomCheckOutTime >= x.CheckOut));
+                               || (roomCheckInTime <= x.CheckOut && roomCheckOutTime >= x.CheckOut)));
             //2確認Session
             bool isInCart = roomDetailViewModels.Any(x =>
-                x.roomId == roomDetailViewModel.roomId 
-                && (roomCheckInTime >= x.checkIn && roomCheckInTime <= x.checkIn)
+                x.roomId == roomDetailViewModel.roomId
+                && ((roomCheckInTime >= x.checkIn && roomCheckInTime <= x.checkIn)
                 || (roomCheckOutTime >= x.checkOut && roomCheckOutTime <= x.checkOut)
-                || (roomCheckInTime <= x.checkOut && roomCheckOutTime >= x.checkOut));
+                || (roomCheckInTime <= x.checkOut && roomCheckOutTime >= x.checkOut)));
 
             await Task.WhenAll(isBookedTask); // 等待isBooked完成
 

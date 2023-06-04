@@ -1,15 +1,15 @@
 ﻿@model IEnumerable<RoomDetailViewModel>
-<div id="checkOut" class="mt-5 mb-5">
+<div id="checkOut">
     <div class="container">
         <div class="py-5 text-center">
             <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-            <h2>Checkout form</h2>
-            <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
+            <h2>結帳房型</h2>
+            <p class="lead">注意!!房型在下單後將為您保留十分鐘，如十分鐘未付款將取消訂單</p>
         </div>
         <div class="row">
             <div class="col-md-4 order-md-2 mb-4">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted">Your cart</span>
+                    <span class="text-muted">您下訂的房型</span>
                     <span class="badge badge-secondary badge-pill">3</span>
                 </h4>
                 <ul class="list-group mb-3 sticky-top">
@@ -28,42 +28,42 @@
                             </div>
                             <div>
                                 <small v-for="" v-if="" class="text-muted me-1 p-1">
-                                    折扣打這裡
+                                    折扣<a class="text-danger"> {{-item.tPromotionPrice}}</a>
                                 </small>
                             </div>
                         </div>
-                        <span class="text-muted">${{item.totalPrice}}</span>
+                        <span class="text-muted">${{item.tRoomPrice+item.tServicePrice-item.tPromotionPrice}}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Total (USD)</span>
-                        <strong>$這裡加總</strong>
+                        <span>總金額 <i class="fa-solid fa-dollar-sign fa-fade"></i></span>
+                        <strong>${{checkOutItem.reduce((sum, item) => sum + item.tRoomPrice + item.tServicePrice - item.tPromotionPrice, 0)}}</strong>
                     </li>
                 </ul>
                 <form class="card p-2">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code">
+                        <input type="text" class="form-control" placeholder="優惠碼">
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-secondary">Redeem</button>
+                            <button type="submit" class="btn btn-secondary">使用</button>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="col-md-8 order-md-1">
-                <h4 class="mb-3">Billing address</h4>
+                <h4 class="mb-3">訂房資訊</h4>
                 <form class="needs-validation" novalidate="" asp-controller="Bank" asp-action="SpgatewayPayBill">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="firstName">姓名</label>
-                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value="" required="">
-                            <div class="invalid-feedback"> Valid first name is required. </div>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="王小明" value="" required="">
+                            <div class="invalid-feedback"> 請輸入您的姓名. </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="phone">Phone <span class="text-muted">(Optional)</span></label>
+                            <label for="phone">連絡電話 <span class="text-muted">(Optional)</span></label>
                             <input type="number" class="form-control" id="phone" name="phone" placeholder="0987654321" required="">
-                            <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
+                            <div class="invalid-feedback"> 請輸入您的聯絡電話. </div>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">去付款</button>
                 </form>
             </div>
         </div>

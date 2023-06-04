@@ -23,7 +23,7 @@ namespace Napping_PJ.Controllers
             MerchantID = "MS149051454",
             HashKey = "ibbQy58FRSf0D5ffF18SbQFDibc8Gn1r",
             HashIV = "CXqLErYe6D2QvqMP",
-            ReturnURL = "https://www.youtube.com/",
+            ReturnURL = $"https://localhost:7265/CheckOut/CheckOutReturn",
             NotifyURL = "http://yourWebsitUrl/Bank/SpgatewayNotify",
             CustomerURL = "http://yourWebsitUrl/Bank/SpgatewayCustomer",
             AuthUrl = "https://ccore.newebpay.com/MPG/mpg_gateway",
@@ -40,7 +40,7 @@ namespace Napping_PJ.Controllers
         //[Route("Bank/SpgatewayPayBillAsync/")]
         public async Task SpgatewayPayBillAsync(string firstName, string phone)
         {
-            #region MyRegion
+            #region 寫入訂單
             var userEmialClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
             if (userEmialClaim == null)
             {
@@ -85,8 +85,11 @@ namespace Napping_PJ.Controllers
                     CheckIn = rDVM.checkIn,
                     CheckOut = rDVM.checkOut,
                     NumberOfGuests = rDVM.maxGuests,
-                    TravelType = "",
-                    Note = "",
+                    TravelType = "who care",
+	                RoomTotalPrice = rDVM.tRoomPrice,
+                    DiscountTotalPrice = rDVM.tPromotionPrice,
+                    EspriceTotal = rDVM.tServicePrice,
+                    Note = rDVM.note,
                     Order = newOrder,
                 };
 
@@ -107,6 +110,7 @@ namespace Napping_PJ.Controllers
             
             _Context.Orders.Add(newOrder);
             await _Context.SaveChangesAsync();
+            //清空購物車
             HttpContext.Session.Remove($"{loginUser.CustomerId}_cartItem");
             #endregion
 

@@ -24,12 +24,12 @@
             <tbody>
                 <tr v-for="(role,index) in rolesIndexViewModel.Roles">
                     <template v-if="!role.Edit">
-                        <td>{{role.name}}</td>
+                        <td>{{role.Name}}</td>
                         <td class="col-2"><button class="btn-info" @@click="RemoveRole(role)">Delete</button></td>
                         <td class="col-2"><button class="btn-info" @@click="EditRole(role,index)">Edit</button></td>
                     </template>
                     <template v-else>
-                        <td><input v-model="editRolename" type="text" /></td>
+                        <td><input v-model="editRoleName" type="text" /></td>
                         <td class="col-2"><button class="btn-info" @@click="UpdateRole(role,index)">Update</button></td>
                         <td class="col-2"><button class="btn-info" @@click="CancelRole(index)">Cancel</button></td>
                     </template>
@@ -40,7 +40,7 @@
             <div class="col-10">
                 <div class="input-group mb-3">
                     <label class="input-group-text">角色名稱</label>
-                    <input v-model="newRolename" class="form-control" autocomplete="off" aria-required="true" />
+                    <input v-model="newRoleName" class="form-control" autocomplete="off" aria-required="true" />
                 </div>
             </div>
             <div class="col-2">
@@ -63,11 +63,11 @@
                     <td>{{item.customer.CustomerId}}</td>
                     <td>{{item.customer.Email}}</td>
                     <td>
-                        <button class="btn-info me-1" v-for="SRole in item.SelectedRole" :value="SRole.RoleId" @@click="() => RemoveRoleToUser(item.customer.CustomerId,SRole.RoleId)">{{SRole.name}}</button>
+                        <button class="btn-info me-1" v-for="SRole in item.SelectedRole" :value="SRole.RoleId" @@click="() => RemoveRoleToUser(item.customer.CustomerId,SRole.RoleId)">{{SRole.Name}}</button>
                     </td>
                     <td>
                         <select @@change="AddUserRole(item.customer.CustomerId,event.target.value)">
-                            <option v-for="Role in rolesIndexViewModel.Roles" :value="Role.RoleId">{{Role.name}}</option>
+                            <option v-for="Role in rolesIndexViewModel.Roles" :value="Role.RoleId">{{Role.Name}}</option>
                         </select>
                     </td>
                 </tr>

@@ -1,20 +1,20 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Napping</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Napping_PJ.styles.css" asp-append-version="true" />
-    <link href="~/css/flaticon.css" rel="stylesheet" />
-    <link href="~/css/responsive.css" rel="stylesheet" />
-    <link href="~/css/clientstyle.css" rel="stylesheet" />
-    <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
-    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
-    <link href="~/css/cart.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://unpkg.com/vue2-animate/dist/vue2-animate.min.css" />
-    @await RenderSectionAsync("Styles", required: false)
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Napping</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/Napping_PJ.styles.css" asp-append-version="true" />
+	<link href="~/css/flaticon.css" rel="stylesheet" />
+	<link href="~/css/responsive.css" rel="stylesheet" />
+	<link href="~/css/clientstyle.css" rel="stylesheet" />
+	<link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
+	<link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+	<link href="~/css/cart.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://unpkg.com/vue2-animate/dist/vue2-animate.min.css" />
+	@await RenderSectionAsync("Styles", required: false)
 </head>
 
 <body>
@@ -34,107 +34,107 @@
 				</div>
 				<div class="nav-outer clearfix">
 					<!-- Main Menu -->
-					<nav class="main-menu navbar-expand-md navbar-light">
+					<nav class="main-menu navbar-expand-lg navbar-light">
 						<div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
 							<div class="d-flex" style="align-items: center; column-gap: 12px;" id="homeIndexOnlyContainer">
-								<template id="homeIndexOnly">  @*首頁header中間的元素都在這*@
-								<div class="form-group" id="vueApp">
-									<template>
-										<div class="demo-date-picker">
-											<div class="block">
-												<el-date-picker v-model="timeValue"
-																type="daterange"
-																range-separator="至"
-																start-placeholder="入住時間"
-																end-placeholder="退房時間"
-																:size="size" />
+								<template id="homeIndexOnly">
+									@*首頁header中間的元素都在這*@
+									<div class="form-group" id="vueApp">
+										<template>
+											<div class="demo-date-picker">
+												<div class="block">
+													<el-date-picker v-model="timeValue"
+																	type="daterange"
+																	range-separator="至"
+																	start-placeholder="入住時間"
+																	end-placeholder="退房時間"
+																	:size="size" />
+												</div>
 											</div>
-										</div>
-									</template>
-								</div>
-								<div class="form-group">
-									<div class="field-inner">
-										<div class="check-sel-box">
-											<div class="check-sel-btn">
-												<span class="adult-info">2</span><span> 位成人</span>
-												<span class="child-info">0</span><span> 位兒童</span>
-											</div>
-											<ul class="check-sel-droplist">
-												<li>
-													<div class="sel-title">成人人數：</div>
-													<div class="clearfix">
-														<div class="radio-block adult-block">
-															<input type="radio"
-																   name="adult-group" id="radio-1" value="0"><label for="radio-1">0</label>
+										</template>
+									</div>
+									<div class="form-group">
+										<div class="field-inner">
+											<div class="check-sel-box">
+												<div class="check-sel-btn">
+													<span class="adult-info">2</span><span> 位成人</span>
+													<span class="child-info">0</span><span> 位兒童</span>
+												</div>
+												<ul class="check-sel-droplist">
+													<li>
+														<div class="sel-title">成人人數：</div>
+														<div class="clearfix">
+															<div class="radio-block adult-block">
+																<input type="radio"
+																	   name="adult-group" id="radio-1" value="0"><label for="radio-1">0</label>
+															</div>
+															<div class="radio-block adult-block">
+																<input type="radio"
+																	   name="adult-group" id="radio-2" value="1"><label for="radio-2">1</label>
+															</div>
+															<div class="radio-block adult-block">
+																<input type="radio"
+																	   name="adult-group" id="radio-3" value="2" checked><label for="radio-3">2</label>
+															</div>
+															<div class="radio-block adult-block">
+																<input type="radio"
+																	   name="adult-group" id="radio-4" value="3"><label for="radio-4">3</label>
+															</div>
+															<div class="radio-block adult-block">
+																<input type="radio"
+																	   name="adult-group" id="radio-5" value="4"><label for="radio-5">4</label>
+															</div>
 														</div>
-														<div class="radio-block adult-block">
-															<input type="radio"
-																   name="adult-group" id="radio-2" value="1"><label for="radio-2">1</label>
-														</div>
-														<div class="radio-block adult-block">
-															<input type="radio"
-																   name="adult-group" id="radio-3" value="2" checked><label for="radio-3">2</label>
-														</div>
-														<div class="radio-block adult-block">
-															<input type="radio"
-																   name="adult-group" id="radio-4" value="3"><label for="radio-4">3</label>
-														</div>
-														<div class="radio-block adult-block">
-															<input type="radio"
-																   name="adult-group" id="radio-5" value="4"><label for="radio-5">4</label>
-														</div>
-													</div>
-												</li>
-												<li>
-													<div class="sel-title">兒童人數：</div>
-													<div class="clearfix">
+													</li>
+													<li>
+														<div class="sel-title">兒童人數：</div>
+														<div class="clearfix">
 
-														<div class="radio-block child-block">
-															<input type="radio"
-																   name="child-group" id="radio-6" value="0" checked><label for="radio-6">0</label>
+															<div class="radio-block child-block">
+																<input type="radio"
+																	   name="child-group" id="radio-6" value="0" checked><label for="radio-6">0</label>
+															</div>
+															<div class="radio-block child-block">
+																<input type="radio"
+																	   name="child-group" id="radio-7" value="1"><label for="radio-7">1</label>
+															</div>
+															<div class="radio-block child-block">
+																<input type="radio"
+																	   name="child-group" id="radio-8" value="2"><label for="radio-8">2</label>
+															</div>
+															<div class="radio-block child-block">
+																<input type="radio"
+																	   name="child-group" id="radio-9" value="3"><label for="radio-9">3</label>
+															</div>
+															<div class="radio-block child-block">
+																<input type="radio"
+																	   name="child-group" id="radio-10" value="4"><label for="radio-10">4</label>
+															</div>
 														</div>
-														<div class="radio-block child-block">
-															<input type="radio"
-																   name="child-group" id="radio-7" value="1"><label for="radio-7">1</label>
-														</div>
-														<div class="radio-block child-block">
-															<input type="radio"
-																   name="child-group" id="radio-8" value="2"><label for="radio-8">2</label>
-														</div>
-														<div class="radio-block child-block">
-															<input type="radio"
-																   name="child-group" id="radio-9" value="3"><label for="radio-9">3</label>
-														</div>
-														<div class="radio-block child-block">
-															<input type="radio"
-																   name="child-group" id="radio-10" value="4"><label for="radio-10">4</label>
-														</div>
-													</div>
-												</li>
-											</ul>
+													</li>
+												</ul>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="form-group" id="search">
-									<div class="field-inner">
-										<div class="btn btn-light" @@click="searchRoom()">
-											<i class="fa-solid fa-magnifying-glass"></i>
-											搜尋
+									<div class="form-group" id="search">
+										<div class="field-inner">
+											<div class="btn btn-light" @@click="searchRoom()">
+												<i class="fa-solid fa-magnifying-glass"></i>
+												搜尋
+											</div>
 										</div>
 									</div>
-								</div>
-								<div id="likeButton">
-									<div class="btn btn-light" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
-										<i class="fa-regular fa-heart"></i>
-										喜愛清單
+									<div id="likeButton">
+										<div class="btn btn-light" data-bs-toggle="modal" data-bs-target="#likeList" @@click="vm.getLikes()">
+											<i class="fa-regular fa-heart"></i>
+											喜愛清單
+										</div>
 									</div>
-								</div>
 								</template>
 							</div>
 						</div>
 					</nav>
 				</div>
-
 
 				<div class="other-links clearfix">
 					<div class="info">
@@ -146,35 +146,35 @@
 			</div>
 		</div>
 	</header>
-    <div class="page-wrapper">
-        <!-- Preloader -->
-        <div class="preloader">
-            <div class="icon"></div>
-        </div>
-        @RenderBody()
+	<div class="page-wrapper">
+		<!-- Preloader -->
+		<div class="preloader">
+			<div class="icon"></div>
+		</div>
+		@RenderBody()
 
-    </div>
+	</div>
 
-    <!--購物車-->
-    <partial name="_CartPartial" />
-    <!--購物車-->
+	<!--購物車-->
+	<partial name="_CartPartial" />
+	<!--購物車-->
 
-    <footer class="main-footer">
-        <div class="top-pattern-layer-dark"></div>
-
-
-        <div class="widgets-section">
-            <div class="auto-container">
-                <div class="row clearfix">
+	<footer class="main-footer">
+		<div class="top-pattern-layer-dark"></div>
 
 
-                    <div class="column col-xl-3 col-lg-12 col-md-12 col-sm-12">
-                        <div class="footer-widget about-widget">
-                            <div class="logo">
-                                <h3>Napping</h3>
-                            </div>
-                        </div>
-                    </div>
+		<div class="widgets-section">
+			<div class="auto-container">
+				<div class="row clearfix">
+
+
+					<div class="column col-xl-3 col-lg-12 col-md-12 col-sm-12">
+						<div class="footer-widget about-widget">
+							<div class="logo">
+								<h3>Napping</h3>
+							</div>
+						</div>
+					</div>
 
 
                     <div class="column col-xl-5 col-lg-8 col-md-12 col-sm-12">
@@ -194,13 +194,13 @@
                                         </ul>
                                     </div>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 
 		<div class="footer-bottom">
@@ -208,12 +208,12 @@
 				<div class="inner clearfix">
 					<div class="copyright">本網站僅為教育練習使用</div>
 					<div class="bottom-links">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Napping</a>|<a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後台管理</a>
+						<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Napping</a>|<a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">後台管理</a>
 					</div>
 				</div>
 			</div>
 		</div>
-    </footer>
+	</footer>
 	<script>
 		// 確認當前頁面是否為首頁
 		if (window.location.pathname === '/' || window.location.pathname.toLowerCase() === '/home/index') {
@@ -226,16 +226,16 @@
 			container.appendChild(clone);
 		}
 	</script>
-    <script src="~/lib/vue/vue.min.js"></script>
-    <script src="~/lib/axios/axios.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-    <script src="~/js/site.js"></script>
-    <script src="~/js/appear.js"></script>
-    <script src="~/lib/wow/wow.min.js"></script>
-    <script src="~/js/Cart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.11/pako.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+	<script src="~/lib/vue/vue.min.js"></script>
+	<script src="~/lib/axios/axios.min.js"></script>
+	<script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+	<script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+	<script src="~/js/site.js"></script>
+	<script src="~/js/appear.js"></script>
+	<script src="~/lib/wow/wow.min.js"></script>
+	<script src="~/js/Cart.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/1.0.11/pako.min.js"></script>
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
