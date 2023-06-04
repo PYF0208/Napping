@@ -112,9 +112,9 @@ namespace Napping_PJ.Controllers
                 roomDetailViewModels = JsonConvert.DeserializeObject<List<RoomDetailViewModel>>(cartJson);
             }
 
-            roomDetailViewModels.Where(x =>
+            var filterList = roomDetailViewModels.Where(x =>
                 x.roomId == roomId && (x.checkIn.ToLocalTime() >= DateTime.Today && x.checkOut.ToLocalTime() >= DateTime.Today));
-            foreach (var item in roomDetailViewModels)
+            foreach (var item in filterList)
             {
                 bookedDate.Add(new long[2]
                 {

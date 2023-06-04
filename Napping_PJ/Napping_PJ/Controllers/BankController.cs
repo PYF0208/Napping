@@ -53,28 +53,28 @@ namespace Napping_PJ.Controllers
 		}
 
 
-		[HttpPost]
-		//[Route("Bank/SpgatewayPayBillAsync/")]
-		public async Task SpgatewayPayBillAsync(string firstName, string phone)
-		{
-			#region MyRegion
-			var userEmialClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
-			if (userEmialClaim == null)
-			{
-				return;
-			}
-			Customer loginUser = await _Context.Customers.FirstOrDefaultAsync(x => x.Email == userEmialClaim.Value);
-			byte[] cartBytes = HttpContext.Session.Get($"{loginUser.CustomerId}_cartItem");
-			if (cartBytes == null)
-			{
-				return;
-			}
-			string json = System.Text.Encoding.UTF8.GetString(cartBytes);
-			IEnumerable<RoomDetailViewModel> roomDetailViewModels = JsonConvert.DeserializeObject<IEnumerable<RoomDetailViewModel>>(json);
-			if (roomDetailViewModels.Count() == 0)
-			{
-				return;
-			}
+        [HttpPost]
+        //[Route("Bank/SpgatewayPayBillAsync/")]
+        public async Task SpgatewayPayBillAsync(string firstName, string phone)
+        {
+            #region 寫入訂單
+            var userEmialClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+            if (userEmialClaim == null)
+            {
+                return;
+            }
+            Customer loginUser = await _Context.Customers.FirstOrDefaultAsync(x => x.Email == userEmialClaim.Value);
+            byte[] cartBytes = HttpContext.Session.Get($"{loginUser.CustomerId}_cartItem");
+            if (cartBytes == null)
+            {
+                return;
+            }
+            string json = System.Text.Encoding.UTF8.GetString(cartBytes);
+            IEnumerable<RoomDetailViewModel> roomDetailViewModels = JsonConvert.DeserializeObject<IEnumerable<RoomDetailViewModel>>(json);
+            if (roomDetailViewModels.Count() == 0)
+            {
+                return;
+            }
 
 			var newOrder = new Order
 			{
@@ -94,18 +94,21 @@ namespace Napping_PJ.Controllers
 				Type = "信用卡"
 			});
 
-			foreach (var rDVM in roomDetailViewModels)
-			{
-				var newOrderDetail = new OrderDetail
-				{
-					RoomId = rDVM.roomId,
-					CheckIn = rDVM.checkIn,
-					CheckOut = rDVM.checkOut,
-					NumberOfGuests = rDVM.maxGuests,
-					TravelType = "",
-					Note = "",
-					Order = newOrder,
-				};
+            foreach (var rDVM in roomDetailViewModels)
+            {
+                var newOrderDetail = new OrderDetail
+                {
+                    RoomId = rDVM.roomId,
+                    CheckIn = rDVM.checkIn,
+                    CheckOut = rDVM.checkOut,
+                    NumberOfGuests = rDVM.maxGuests,
+                    TravelType = "who care",
+	                RoomTotalPrice = rDVM.tRoomPrice,
+                    DiscountTotalPrice = rDVM.tPromotionPrice,
+                    EspriceTotal = rDVM.tServicePrice,
+                    Note = rDVM.note,
+                    Order = newOrder,
+                };
 
 				newOrderDetail.OrderDetailExtraServices = rDVM.selectedExtraServices.Where(x => x.serviceQuantity > 0)
 					.Select(x =>
@@ -119,13 +122,14 @@ namespace Napping_PJ.Controllers
 						};
 					}).ToList();
 
-				newOrder.OrderDetails.Add(newOrderDetail);
-			}
-
-			_Context.Orders.Add(newOrder);
-			await _Context.SaveChangesAsync();
-			HttpContext.Session.Remove($"{loginUser.CustomerId}_cartItem");
-			#endregion
+                newOrder.OrderDetails.Add(newOrderDetail);
+            }
+            
+            _Context.Orders.Add(newOrder);
+            await _Context.SaveChangesAsync();
+            //清空購物車
+            HttpContext.Session.Remove($"{loginUser.CustomerId}_cartItem");
+            #endregion
 
 			//這邊抓訂單ID  INCLUDE payment.Status.orderby().last() 1未付款2已付款3已取消   (10分鐘到要自動add一筆同訂單ID的出來 然後state為3)
 			var jobid = BackgroundJob.Schedule(() =>  paymentStatusService.ChangePaymentStatus(newOrder.OrderId, PaymentStatusEnum.Cancel) ,TimeSpan.FromMinutes(10));

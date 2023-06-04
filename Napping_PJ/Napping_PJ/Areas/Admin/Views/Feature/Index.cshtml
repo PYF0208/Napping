@@ -39,7 +39,7 @@
 					<tr v-for="item in FeatureVMs">
 						<td>{{item.featureId}}</td>
 						<td>{{item.name}}</td>
-						<td>{{item.image}}</td>
+						<td><i :class="item.image"></i> {{item.image}}</td>
 						<td>
 							<a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
 							<a class="btn delete" @@click="deleteFeature(item.featureId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
@@ -93,7 +93,7 @@
 						<div class="modal-body">
 							<div class="form-group">
 								<label class="form-label">名稱</label>
-								<input class="form-control" v-model="insertname" />
+								<input class="form-control" v-model="insertName" />
 							</div>
 							<div class="form-group">
 								<label class="form-label">圖示</label>
