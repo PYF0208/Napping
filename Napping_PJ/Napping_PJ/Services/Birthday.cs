@@ -18,7 +18,7 @@ namespace Napping_PJ.Services
 		}
 
 
-		public bool SendBirthDayMail(MemberViewModel cus)
+		public bool SendBirthDayMail()
 		{
 			var Member = _context.Customers;
 
@@ -28,7 +28,7 @@ namespace Napping_PJ.Services
 
 
 				//if m is birth
-				if (m.Birthday != cus.Birthday) { continue; };
+				if (m.Birthday != DateTime.Today) { continue; };
 				//send
 				try
 				{

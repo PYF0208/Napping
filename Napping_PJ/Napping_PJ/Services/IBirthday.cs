@@ -4,7 +4,7 @@ namespace Napping_PJ.Services
 {
 	public interface IBirthday
 	{
-		public bool SendBirthDayMail(MemberViewModel cus);
+		public bool SendBirthDayMail();
 
 	}
 }
