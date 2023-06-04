@@ -40,7 +40,7 @@ namespace Napping_PJ.Controllers
 			MerchantID = "MS149051454",
 			HashKey = "ibbQy58FRSf0D5ffF18SbQFDibc8Gn1r",
 			HashIV = "CXqLErYe6D2QvqMP",
-			ReturnURL = "https://www.youtube.com/",
+			ReturnURL = $"https://localhost:7265/CheckOut/CheckOutReturn",
 			NotifyURL = "http://yourWebsitUrl/Bank/SpgatewayNotify",
 			CustomerURL = "http://yourWebsitUrl/Bank/SpgatewayCustomer",
 			AuthUrl = "https://ccore.newebpay.com/MPG/mpg_gateway",
