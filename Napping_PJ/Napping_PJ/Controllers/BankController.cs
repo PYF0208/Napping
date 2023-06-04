@@ -84,13 +84,14 @@ namespace Napping_PJ.Controllers
 				OrderDetails = new List<OrderDetail>(),
 				PhoneOfBooking = phone,
 				NameOfBooking = firstName,
+				Status =(int)PaymentStatusEnum.NotPay,
 			};
 
 			newOrder.Payments.Add(new Payment()
 			{
 				Order = newOrder,
 				Date = DateTime.Now,
-				Status = 1,
+				Status = (int)PaymentStatusEnum.NotPay,
 				Type = "信用卡"
 			});
 
@@ -132,7 +133,7 @@ namespace Napping_PJ.Controllers
             #endregion
 
 			//這邊抓訂單ID  INCLUDE payment.Status.orderby().last() 1未付款2已付款3已取消   (10分鐘到要自動add一筆同訂單ID的出來 然後state為3)
-			var jobid = BackgroundJob.Schedule(() =>  paymentStatusService.ChangePaymentStatus(newOrder.OrderId, PaymentStatusEnum.Cancel) ,TimeSpan.FromMinutes(10));
+			var jobid = BackgroundJob.Schedule(() =>  paymentStatusService.CheckPaymentStatus(newOrder.OrderId) ,TimeSpan.FromMinutes(2));
 
 			string version = "1.5";
 

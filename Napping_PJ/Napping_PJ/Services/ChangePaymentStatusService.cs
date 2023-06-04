@@ -11,6 +11,15 @@ namespace Napping_PJ.Services
 		{
 			this.db = db;
 		}
+		public void CheckPaymentStatus(int orderId)
+		{
+			var result = db.Orders.FirstOrDefault(x => x.OrderId == orderId);
+			if (result == null) throw new Exception("查無ID");
+			if (result.Status == (int)PaymentStatusEnum.NotPay)
+			{
+				ChangePaymentStatus(orderId, PaymentStatusEnum.Cancel);
+			}
+		}
 		public void ChangePaymentStatus(int orderId, PaymentStatusEnum status)
 		{
 			var result = db.Orders.FirstOrDefault(x => x.OrderId == orderId);
