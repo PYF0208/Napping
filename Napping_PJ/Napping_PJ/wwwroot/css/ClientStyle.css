@@ -874,7 +874,8 @@ figure {
 ***/
 
 .header-style-one.alternate {
-    position: fixed;
+    /*position: fixed;*/
+    height: 150px
 }
 
     .header-style-one.alternate .header-span {
@@ -8889,7 +8890,7 @@ img.lazy-image {
 
 .sidebar-page-container {
     position: relative;
-    padding: 110px 0px 0px 0px;
+    /*padding: 110px 0px 0px 0px;*/
 }
 
     .sidebar-page-container.blog-single {

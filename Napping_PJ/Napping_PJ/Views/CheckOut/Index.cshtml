@@ -28,15 +28,15 @@
                             </div>
                             <div>
                                 <small v-for="" v-if="" class="text-muted me-1 p-1">
-                                    折扣打這裡
+                                    {{-item.tPromotionPrice}}
                                 </small>
                             </div>
                         </div>
-                        <span class="text-muted">${{item.totalPrice}}</span>
+                        <span class="text-muted">${{item.tRoomPrice+item.tServicePrice-item.tPromotionPrice}}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Total (USD)</span>
-                        <strong>$這裡加總</strong>
+                        <span>Total <i class="fa-solid fa-dollar-sign fa-fade"></i></span>
+                        <strong>${{checkOutItem.reduce((sum, item) => sum + item.tRoomPrice + item.tServicePrice - item.tPromotionPrice, 0)}}</strong>
                     </li>
                 </ul>
                 <form class="card p-2">

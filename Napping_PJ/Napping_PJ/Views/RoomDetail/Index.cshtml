@@ -17,8 +17,8 @@
                         <div v-for="(image,index) in RoomDetail.roomImages" :class="{'carousel-item' :'ture','active' : index === 0,' h-100' : 'true'}">
                             <img :src="image.image" class="d-block w-100 h-100" alt="image.image" style="object-fit: cover">
                             <div class="carousel-caption d-none d-md-block">
-                                <h5>First slide label</h5>
-                                <p>Some representative placeholder content for the first slide.</p>
+                                <h5>圖片主題</h5>
+                                <p>圖片簡述</p>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                             <i :class="Service.serviceImage + ' fa-2xl'"></i>
                         </div>
                         <div class="overflow-wrap word-wrap-break-word">
-                            {{Service.name}}
+                            {{Service.name}}<i class="fa-solid fa-dollar-sign fa-fade"></i>{{Service.servicePrice}}
                         </div>
                         <div>
                             <input type="number" class="form-control" v-model="Service.serviceQuantity" />
@@ -100,7 +100,7 @@
                                 <div class="container">
                                     <div class="row">
                                         <ul class="list-unstyled">
-                                            <li class="text-black mt-1">住宿<span class="fs-4">{{roomDays}}</span>日</li>
+                                            <li class="text-black mt-1">住宿 <span class="fs-4">{{roomDays}}</span> 日</li>
                                         </ul>
                                         <hr>
                                         <div class="col-xl-10">
@@ -108,7 +108,7 @@
                                         </div>
                                         <div class="col-xl-2">
                                             <p class="float-end">
-                                                ${{RoomDetail.tRoomPrice}}
+                                                <i class="fa-solid fa-dollar-sign fa-fade"></i>{{RoomDetail.tRoomPrice}}
                                             </p>
                                         </div>
                                         <hr>
@@ -119,7 +119,7 @@
                                         </div>
                                         <div class="col-xl-2">
                                             <p class="float-end">
-                                                ${{RoomDetail.tServicePrice}}
+                                                <i class="fa-solid fa-dollar-sign fa-fade"></i>{{RoomDetail.tServicePrice}}
                                             </p>
                                         </div>
                                         <hr>
@@ -130,7 +130,7 @@
                                         </div>
                                         <div class="col-xl-2">
                                             <p class="float-end">
-                                                ${{RoomDetail.tPromotionPrice}}
+                                                <i class="fa-solid fa-dollar-sign fa-fade"></i>{{RoomDetail.tPromotionPrice}}
                                             </p>
                                         </div>
                                         <hr style="border: 2px solid black;">
@@ -139,7 +139,7 @@
 
                                         <div class="col-xl-12">
                                             <p class="float-end fw-bold">
-                                                共: ${{totalPrice}}
+                                                共: <i class="fa-solid fa-dollar-sign fa-fade"></i>{{totalPrice}}
                                             </p>
                                         </div>
                                         <hr style="border: 2px solid black;">
@@ -148,8 +148,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 mb-5">
-                        <button class="btn btn-info" @@click="addToCart">加入購物車</button>
+                    <div class="col-6 mb-5 d-flex flex-column justify-content-between">
+                        <div class="input-group h-75">
+                            <span class="input-group-text bg-light">備註</span>
+                            <textarea class="form-control" v-model="RoomDetail.note" aria-label="With textarea"></textarea>
+                        </div>
+                        <button class="btn btn-info w-100" @@click="addToCart">加入購物車</button>
                     </div>
                 </div>
             </div>

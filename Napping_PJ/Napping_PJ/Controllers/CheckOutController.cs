@@ -1,9 +1,15 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Specialized;
+using System.Linq.Expressions;
+using System.Security.Claims;
+using System.Text;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Models;
 using Napping_PJ.Models.Entity;
+using Napping_PJ.Utility;
 using Newtonsoft.Json;
+using Exception = System.Exception;
 
 namespace Napping_PJ.Controllers
 {
@@ -23,12 +29,66 @@ namespace Napping_PJ.Controllers
             {
                 return BadRequest("購物車為空");
             }
-            //重計價格
-
-
             string json = System.Text.Encoding.UTF8.GetString(cartBytes);
             IEnumerable<RoomDetailViewModel> roomDetailViewModels = JsonConvert.DeserializeObject<IEnumerable<RoomDetailViewModel>>(json);
             return View(roomDetailViewModels);
+        }
+        /// <summary>
+        /// 支付完成返回網址
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> CheckOutReturn()
+        {
+            // 接收參數
+            StringBuilder receive = new StringBuilder();
+            foreach (var item in Request.Form)
+            {
+                receive.AppendLine(item.Key + "=" + item.Value + "<br>");
+            }
+            ViewData["ReceiveObj"] = receive.ToString();
+
+            // 解密訊息
+            IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
+            string HashKey = Config.GetSection("HashKey").Value;//API 串接金鑰
+            string HashIV = Config.GetSection("HashIV").Value;//API 串接密碼
+
+            string TradeInfoDecrypt = CryptoUtil.DecryptAESHex(Request.Form["TradeInfo"], HashKey, HashIV);
+            NameValueCollection decryptTradeCollection = HttpUtility.ParseQueryString(TradeInfoDecrypt);
+            //將Order付款狀態碼改成2
+            ViewBag.OrderInfo = new
+            {
+                orderId = decryptTradeCollection["MerchantOrderNo"],
+                totalPrice = decryptTradeCollection["Amt"]
+            };
+            if (decryptTradeCollection["Status"] == "SUCCESS")
+            {
+                Payment newPayment = new Payment()
+                {
+                    Date = DateTime.Now,
+                    OrderId = Int32.Parse(decryptTradeCollection["MerchantOrderNo"]),
+                    Status = 2,
+                    Type = decryptTradeCollection["PaymentType"]
+                };
+                try
+                {
+                    _Context.Payments.Add(newPayment);
+                    await _Context.SaveChangesAsync();
+                    return View("Success");
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+            receive.Length = 0;
+            foreach (String key in decryptTradeCollection.AllKeys)
+            {
+                receive.AppendLine(key + "=" + decryptTradeCollection[key] + "<br>");
+            }
+            ViewData["TradeInfo"] = receive.ToString();
+
+            return View("Error");
+            //return View();
         }
     }
 }
