@@ -67,7 +67,7 @@ namespace Napping_PJ.Controllers
 				{
 					Date = DateTime.Now,
 					OrderId = Int32.Parse(decryptTradeCollection["MerchantOrderNo"]),
-					Status = 2,
+					Status = (int)PaymentStatusEnum.Paid,
 					Type = decryptTradeCollection["PaymentType"]
 				};
 				try
