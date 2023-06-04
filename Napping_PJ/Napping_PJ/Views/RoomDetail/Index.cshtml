@@ -108,7 +108,7 @@
                                         </div>
                                         <div class="col-xl-2">
                                             <p class="float-end">
-                                                ${{tRoomPrice}}
+                                                ${{RoomDetail.tRoomPrice}}
                                             </p>
                                         </div>
                                         <hr>
@@ -119,7 +119,7 @@
                                         </div>
                                         <div class="col-xl-2">
                                             <p class="float-end">
-                                                ${{tServicePrice}}
+                                                ${{RoomDetail.tServicePrice}}
                                             </p>
                                         </div>
                                         <hr>
@@ -130,7 +130,7 @@
                                         </div>
                                         <div class="col-xl-2">
                                             <p class="float-end">
-                                                ${{tPromotionPrice}}
+                                                ${{RoomDetail.tPromotionPrice}}
                                             </p>
                                         </div>
                                         <hr style="border: 2px solid black;">
@@ -139,7 +139,7 @@
 
                                         <div class="col-xl-12">
                                             <p class="float-end fw-bold">
-                                                共: ${{RoomDetail.totalPrice}}
+                                                共: ${{totalPrice}}
                                             </p>
                                         </div>
                                         <hr style="border: 2px solid black;">
@@ -177,9 +177,7 @@
                 levealId: -1,
                 roomDays: 0,
                 Promotions: [],
-                tRoomPrice: 0,
-                tServicePrice: 0,
-                tPromotionPrice: 0,
+                totalPrice: 0,
             },
             mounted: async function () {
                 var _this = this;
@@ -197,6 +195,8 @@
                     axios.get(`GetRoomDetail/${roomId}`).then(response => {
                         //console.log(response.data);
                         _this.RoomDetail = response.data;
+                        _this.RoomDetail.checkIn = null;
+                        _this.RoomDetail.checkOut = null;
                     }).catch(
                         error => {
                             console.log(error.response.data);
@@ -273,7 +273,7 @@
                     for (i = 0; i < selectedServices.length; i++) {
                         tServicePrice += selectedServices[i].servicePrice * selectedServices[i].serviceQuantity;
                     }
-                    self.tServicePrice = tServicePrice;
+                    self.RoomDetail.tServicePrice = tServicePrice;
                     //計算住宿價格
                     var start = new Date(self.RoomDetail.checkIn);
                     var end = new Date(self.RoomDetail.checkOut);
@@ -290,7 +290,7 @@
                             tRoomPrice += profitOfDay * roomBasePrice;
                         }
                     }
-                    self.tRoomPrice = tRoomPrice;
+                    self.RoomDetail.tRoomPrice = tRoomPrice;
                     //查每晚的促銷折扣
                     if (self.Promotions.length > 0) {
                         for (var i = 0; i < days; i++) {
@@ -299,12 +299,15 @@
                             tPromotionPrice += promotOfDay;
                         }
                     }
-                    self.tPromotionPrice = tPromotionPrice;
-                    self.RoomDetail.totalPrice = tServicePrice + tRoomPrice - tPromotionPrice;
+                    self.RoomDetail.tPromotionPrice = tPromotionPrice;
+                    self.totalPrice = tServicePrice + tRoomPrice - tPromotionPrice;
                 },
-                addToCart: function () {
+                addToCart: async function () {
                     var self = this;
-                    cartVue.addToCart(self.RoomDetail);
+                    await cartVue.addToCart(self.RoomDetail);
+                    await self.getBookingState(self.RoomDetail.roomId);
+                    self.RoomDetail.checkIn = null;
+                    self.RoomDetail.checkOut = null;
                 },
                 getPromotions: function () {
                     var self = this;
