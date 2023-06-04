@@ -23,6 +23,9 @@ namespace Napping_PJ.Controllers
             {
                 return BadRequest("購物車為空");
             }
+            //重計價格
+
+
             string json = System.Text.Encoding.UTF8.GetString(cartBytes);
             IEnumerable<RoomDetailViewModel> roomDetailViewModels = JsonConvert.DeserializeObject<IEnumerable<RoomDetailViewModel>>(json);
             return View(roomDetailViewModels);

@@ -10,28 +10,46 @@
     },
     methods: {
         addToCart: async function (room) {
-            var _this = this;
+            var self = this;
             //確定已登入
-            _this.checkIsLogined();
+            self.checkIsLogined();
             //將房間物件加入cookie
-            _this.rooms.push(room);
-            //console.log(cartList);
-            await _this.setSession(_this.rooms);
+            try {
+                //console.log(value);
+                var response = await axios.post(`${document.location.origin}/cart/AddSession`, room);
+                //console.log(response.data);
+                self.getSession();
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
         },
         removeFromCart: async function (room) {
-            var _this = this;
-            var cookieName = 'cartItem';
-            var idx = _this.rooms.findIndex(r => r.roomId == room.roomId);
-            _this.rooms.splice(idx, 1);
-            await _this.setSession(_this.rooms);
+            var self = this;
+            //確定已登入
+            self.checkIsLogined();
+            //將房間物件加入cookie
+            try {
+                //console.log(value);
+                var response = await axios.post(`${document.location.origin}/cart/RemoveSession`, room);
+                //console.log(response.data);
+                await self.getSession();
+                if (typeof roomDetailVue !== 'undefined') {
+                    //console.log('走起');
+                    roomDetailVue.getBookingState(roomDetailVue.RoomDetail.roomId);
+                }
 
+            } catch (error) {
+                console.log(error.response.data);
+            }
         },
         setSession: async function (value) {
             var self = this;
             try {
                 //console.log(value);
-                var response = await axios.post(`${document.location.origin}/cart/SetSession`, value);
+                var response = await axios.post(`${document.location.origin}/cart/AddSession`, value);
                 //console.log(response.data);
+                self.getSession();
 
             } catch (error) {
                 console.log(error.response.data);
@@ -49,14 +67,14 @@
         },
         checkIsLogined: async function () {
             return new Promise((resolve, reject) => {
-                 axios.get(`${document.location.origin}/Login/CheckIsLogined`)
+                axios.get(`${document.location.origin}/Login/CheckIsLogined`)
                     .then(response => {
                         resolve(response.data);
                     })
                     .catch(error => {
-                            console.log(error.response.data);
-                            location.href = `${location.origin}${error.response.data}?ReturnUrl=${location.pathname}`;
-                        }
+                        console.log(error.response.data);
+                        location.href = `${location.origin}${error.response.data}?ReturnUrl=${location.pathname}`;
+                    }
                     );
             });
         },
@@ -78,6 +96,7 @@
             self.checkIsLogined();
             //跳轉結帳畫面
             location.href = location.origin + "/CheckOut/Index";
+
         }
     },
     watch: {
@@ -90,7 +109,7 @@
             var self = this;
             var cartTotal = 0;
             for (var i = 0; i < self.rooms.length; i++) {
-                cartTotal += self.rooms[i].totalPrice;
+                cartTotal += self.rooms[i].tRoomPrice + self.rooms[i].tServicePrice + self.rooms[i].tPromotionPrice;
             }
             return cartTotal;
         },

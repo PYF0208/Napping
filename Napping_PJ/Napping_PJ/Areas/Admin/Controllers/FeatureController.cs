@@ -139,7 +139,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FeatureId,Name,Image")] Feature feature)
+        public async Task<IActionResult> Create([Bind("FeatureId,name,Image")] Feature feature)
         {
             if (ModelState.IsValid)
             {
@@ -171,7 +171,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FeatureId,Name,Image")] Feature feature)
+        public async Task<IActionResult> Edit(int id, [Bind("FeatureId,name,Image")] Feature feature)
         {
             if (id != feature.FeatureId)
             {
