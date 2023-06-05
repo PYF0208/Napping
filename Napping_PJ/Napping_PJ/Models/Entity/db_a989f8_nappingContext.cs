@@ -293,7 +293,7 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.Odesid).HasColumnName("ODESId");
 
-                entity.Property(e => e.EstotalPrice).HasColumnName("ESTotalPrice");
+                entity.Property(e => e.SingleServicePrice).HasColumnName("SingleServicePrice");
 
                 entity.Property(e => e.ExtraServiceName).HasMaxLength(50);
 

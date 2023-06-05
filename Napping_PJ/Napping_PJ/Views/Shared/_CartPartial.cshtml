@@ -46,7 +46,7 @@
                         <div class="col">總金額</div>
                         <div class="col text-right"><i class="fa-solid fa-dollar-sign fa-fade"></i> {{cartTotal}}</div>
                     </div>
-                    <button class="btn btn-success" @@click="checkOut">我要下訂</button>
+                    <a class="btn btn-success p-2" asp-controller="CheckOut" asp-action="Index">我要下訂</a>
                 </div>
             </div>
             <button type="button" class="m-2 top-0 end-0 position-absolute" data-bs-dismiss="offcanvas"><i class="fa-regular fa-circle-xmark fa-2xl"></i></button>

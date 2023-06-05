@@ -8,6 +8,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Claims;
 using System.Text;
+using Napping_PJ.Enums;
 using Newtonsoft.Json;
 
 namespace Napping_PJ.Controllers
@@ -43,7 +44,7 @@ namespace Napping_PJ.Controllers
             Task<bool> isBookedTask = _context.OrderDetails.Include(x => x.Order).ThenInclude(x => x.Payments)
                 .AnyAsync(x => x.RoomId == roomDetailViewModel.roomId
                                && x.CheckIn.Date >= DateTime.Today
-                               && x.Order.Payments.OrderBy(x => x.PaymentId).Last().Status < 3
+                               && x.Order.Status < (int)PaymentStatusEnum.Cancel
                                && ((roomCheckInTime >= x.CheckIn && roomCheckInTime <= x.CheckIn)
                                || (roomCheckOutTime >= x.CheckOut && roomCheckOutTime <= x.CheckOut)
                                || (roomCheckInTime <= x.CheckOut && roomCheckOutTime >= x.CheckOut)));
@@ -174,5 +175,6 @@ namespace Napping_PJ.Controllers
 
             return BadRequest("尚未登入");
         }
+        
     }
 }

@@ -16,8 +16,8 @@ namespace Napping_PJ.Models.Entity
         public string NameOfBooking { get; set; } = null!;
         public string PhoneOfBooking { get; set; } = null!;
         public DateTime Date { get; set; }
-        public int? Status { get; set; }
-        public string? PaymentType { get; set; }
+        public int Status { get; set; }
+        public string PaymentType { get; set; } = null!;
 
         public virtual Customer Customer { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
