@@ -28,11 +28,12 @@
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
-						<th>RoomId</th>
-						<th>HotelId</th>
-						<th>Type</th>
-						<th>Price</th>
-						<th>MaxGuests</th>
+						<th>房型編號</th>
+						<th>飯店名稱</th>
+						<th>圖片</th>
+						<th>房型</th>
+						<th>價錢</th>
+						<th>最大容客數</th>
 						<th>房型特徵</th>
 						<th>操作</th>
 
@@ -43,7 +44,25 @@
 				<tbody>
 					<tr v-for="item in displayRooms">
 						<td>{{item.roomId}}</td>
-						<td>{{item.hotelId}}</td>
+						<td>{{item.name}}</td>
+						<td>
+							<div v-if="item.pic.length >0" :id="'carouselExampleAutoplaying'+item.roomId" class="carousel slide" >
+								<div class="carousel-inner">
+									<div :class="{'carousel-item':true,'active': idx==0 }" v-for="(pic,idx) in item.pic">
+										<img :src="pic.image" class="d-block w-100" style="height:150px; width:150px" alt="...">
+									</div>
+								</div>
+								<button class="carousel-control-prev" type="button" :data-bs-target="'#carouselExampleAutoplaying'+item.roomId"  data-bs-slide="prev">
+									<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Previous</span>
+								</button>
+								<button class="carousel-control-next" type="button" :data-bs-target="'#carouselExampleAutoplaying'+item.roomId"  data-bs-slide="next">
+									<span class="carousel-control-next-icon" aria-hidden="true"></span>
+									<span class="visually-hidden">Next</span>
+								</button>
+							</div>
+							<div v-else>暫時無圖片</div>
+						</td>
 						<td>{{item.type}}</td>
 						<td>{{item.price}}</td>
 						<td>{{item.maxGuests}}</td>
@@ -124,24 +143,28 @@
 						</div>
 						<div class="modal-body">
 							<div class="form-group">
-								<label class="form-label">hotelId</label>
-								<input class="form-control" v-model="hotelId" />
+								<label class="form-label">飯店名稱</label>
+								@*<input class="form-control" v-model="hotelId" />*@
+								<select class="form-control" v-model="hotelId">
+									<option v-for="item in HotelNames" :value="item.hotelId">{{ item.name }}</option>
+								</select>
 							</div>
 							<div class="form-group">
-								<label class="form-label">type</label>
+								<label class="form-label">房型</label>
 								<input class="form-control" v-model="type" />
 							</div>
 							<div class="form-group">
-								<label class="form-label">price</label>
+								<label class="form-label">圖片</label>
+								<input type="url" class="form-control" v-model="image">
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">價位</label>
 								<input class="form-control" v-model="price" />
 							</div>
 							<div class="form-group">
-								<label class="form-label">maxGuests</label>
+								<label class="form-label">最大容客數</label>
 								<input class="form-control" v-model="maxGuests" />
-							</div>
-							<div class="form-group">
-								<label class="form-label">featureId</label>
-								<input class="form-control" v-model="featureId" />
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -171,6 +194,7 @@
 				RoomsViewModel: [],
 				displayRooms:[],
 				FeatureViewModel: [],
+				HotelNames:[],
 				featureId: "",
 				name: "",
 				image: "",
@@ -191,6 +215,7 @@
 			mounted: function () {
 				let _this = this;
 				_this.getRooms();
+				_this.getHotelName();
 				_this.getFeature();
 				let obs = new IntersectionObserver(function(){
 					var newData = _this.RoomsViewModel.slice(_this.count,_this.count+10);
@@ -220,13 +245,13 @@
 						_this.Feature = FeatureList;
 					})
 				},
-				edit: function (item) {
-					$("#editModal").modal("show");
-					let _this = this;
-					_this.featureId = item.featureId;
-					_this.name = item.name;
-					_this.image = item.image;
-				},
+				//edit: function (item) {
+				//	$("#editModal").modal("show");
+				//	let _this = this;
+				//	_this.featureId = item.featureId;
+				//	_this.name = item.name;
+				//	_this.image = item.image;
+				//},
 				update: function () {
 					//alert("UPDATE");
 					let _this = this;
@@ -240,14 +265,20 @@
 					//alert("有！！");
 					let _this = this;
 					var request = {};
-					request.RoomId = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
-					request.HotelId = request.Type = request.Price = request.MaxGuests = _this.filter;
-					axios.post('Rooms/FilterRooms', request).then(function (response) {
+					axios.post('Rooms/GetRooms', request).then(function (response) {
 						_this.displayRooms = response.data.slice(0, 10);
 						_this.RoomsViewModel = response.data;
 					})
 						.catch(function (error) {
 							console.log(error);
+						});
+				},
+				getHotelName: function () {
+					let _this = this;
+					axios.get('HotelExtraServices/GetHotelname')
+						.then(function (response) {
+							//alert(JSON.stringify(response.data));
+							_this.HotelNames = response.data;
 						});
 				},
 				edit: function (roomId) {
@@ -294,7 +325,7 @@
 						HotelId: _this.hotelId,
 						Type: _this.type,
 						Price: _this.price,
-						MaxGuests: _this.maxGuests
+						MaxGuests: _this.maxGuests,
 					};
 					axios.post("Rooms/CreateRooms", req)
 						.then(response => {
