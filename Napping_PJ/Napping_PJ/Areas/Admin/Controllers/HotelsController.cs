@@ -84,8 +84,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		}
 
 		[HttpPost]
-		public IEnumerable<HotelsViewModel> FilterHotels(
-			[FromBody] HotelsViewModel hotel)
+		public IEnumerable<HotelsViewModel> FilterHotels([FromBody] HotelsViewModel hotel)
 		{
 			return _context.Hotels.Where(h =>
 			h.HotelId == hotel.HotelId ||
