@@ -368,6 +368,8 @@ namespace Napping_PJ.Models.Entity
 
                 entity.Property(e => e.NameOfBooking).HasMaxLength(20);
 
+                entity.Property(e => e.PaymentType).HasMaxLength(50);
+
                 entity.Property(e => e.PhoneOfBooking)
                     .HasMaxLength(20)
                     .IsUnicode(false);
@@ -408,8 +410,6 @@ namespace Napping_PJ.Models.Entity
                     .HasName("PK_OrderDetailExtraServices_1");
 
                 entity.Property(e => e.Odesid).HasColumnName("ODESId");
-
-                entity.Property(e => e.EstotalPrice).HasColumnName("ESTotalPrice");
 
                 entity.Property(e => e.ExtraServiceName).HasMaxLength(50);
 
