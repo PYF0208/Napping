@@ -19,7 +19,7 @@
                                 <div class="row">入住{{formateDate(room.checkIn)}}</div>
                                 <div class="row">退房{{formateDate(room.checkOut)}}</div>
                             </div>
-                            <div class="col"><i class="fa-solid fa-dollar-sign fa-fade"></i> {{room.tRoomPrice + room.tServicePrice + room.tPromotionPrice}} </div>
+                            <div class="col"><i class="fa-solid fa-dollar-sign fa-fade"></i> {{room.tRoomPrice + room.tServicePrice - room.tPromotionPrice}} </div>
                         </div>
                         <div class="row">
                             <span class="optionDiv bg-light" v-for="service in room.selectedExtraServices">
