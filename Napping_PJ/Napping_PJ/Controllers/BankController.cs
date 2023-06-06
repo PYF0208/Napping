@@ -15,11 +15,11 @@ namespace Napping_PJ.Controllers
 {
 	public class BankController : Controller
 	{
-		private readonly db_a989f8_nappingContext _Context;
+		private readonly db_a989f8_napping_20230603T1646ZContext _Context;
 		private readonly IBackgroundJobClient backgroundJobs;
 		private readonly IChangePaymentStatusService paymentStatusService;
 
-		public BankController(db_a989f8_nappingContext context, IBackgroundJobClient backgroundJobs, IChangePaymentStatusService paymentStatusService)
+		public BankController(db_a989f8_napping_20230603T1646ZContext context, IBackgroundJobClient backgroundJobs, IChangePaymentStatusService paymentStatusService)
 		{
 			_Context = context;
 			this.backgroundJobs = backgroundJobs;

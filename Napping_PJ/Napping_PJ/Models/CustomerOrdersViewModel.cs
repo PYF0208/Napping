@@ -4,7 +4,24 @@
     {
         public string NameOfBooking { get; set; } = null!;
         public DateTime OrderDate { get; set; }
-        public int? Status { get; set; }
+        public int Status { get; set; }
+        public string StatusDisplay
+        {
+            get
+            {
+                switch (Status)
+                {
+                    case 1:
+                        return "未付款";
+                    case 2:
+                        return "已付款";
+                    case 3:
+                        return "已取消";
+                    default:
+                        return "未知狀態";
+                }
+            }
+        }
         //Orders表
 
         public int OrderId { get; set; }

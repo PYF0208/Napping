@@ -1,6 +1,26 @@
 ﻿@{
     Layout = "_COLayout";
 }
+@section Styles{
+    <style>
+        .square-image {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%; /* 创建一个高度等于宽度的正方形 */
+            position: relative;
+            overflow: hidden;
+        }
+
+            .square-image img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* 调整图像以适应正方形区域 */
+            }
+    </style>
+}
 <div id="app">
     <h3 class="mt-4">管理您的訂單</h3>
     <ol class="breadcrumb mb-4">
@@ -21,28 +41,30 @@
                     <div class="card-body">訂單編號:{{item.orderId}}</div>
                     <div class="row">
                         <div class="col-4">
-                            <img :src="item.hotelImage" style="max-width: 100%;" />
+                                <div class="square-image">
+                                    <img :src="item.hotelImage" style="padding: 20px;" />
+                                </div>
                         </div>
                         <div class="col-4">
                             <ul style="list-style:none">
                                 <li><h2>{{item.hotelName}}</h2></li>
                                 <li><h4>{{item.city}} {{item.region}}</h4></li>
-                                <li><h4>{{item.status}}</h4></li>
+                                <li><h4><i :class="exampleModal.changeStatus(item.status)"></i>{{item.statusDisplay}}</h4></li>
                             </ul>
                         </div>
                         <div class="col-4">
                             <ul style="list-style:none">
-                                <li>預訂日期</li>
-                                <li>{{item.orderDate| formatDateTime}}</li>
-                                <li>入住日期</li>
-                                <li>{{item.checkIn| formatDateTime}}</li>
-                                <li>退房日期</li>
-                                <li>{{item.checkOut| formatDateTime}}</li>
+                                <li><h4>預訂日期</h4></li>
+                                <li><h4>{{item.orderDate| formatDateTime}}</h4></li>
+                                <li><h4>入住日期</h4></li>
+                                <li><h4>{{item.checkIn| formatDateTime}}</h4></li>
+                                <li><h4>退房日期</h4></li>
+                                <li><h4>{{item.checkOut| formatDateTime}}</h4></li>
                             </ul>
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="setItem(item)">點擊查看訂單明細</a>
+                        <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="setItem(item);showCheckOut(item.status,item.orderId)">點擊查看訂單明細</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -62,7 +84,7 @@
 
                 <div class="card bg-light text-black mb-4">
                     <div class="card-body bg-secondary text-white">訂單編號:{{item.orderId}}</div>
-                    <div class="card-body bg-success text-white"><h5>{{item.status}}</h5></div>
+                    <div :class="changeStatusColor(item.status)"><h5><i :class="changeStatus(item.status)"></i>{{item.statusDisplay}}</h5></div>
                     <div class="row">
                         <div class="col-12">
                             <ul style="list-style:none">
@@ -119,8 +141,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <span v-html="checkOutBtn"></span>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
             </div>
         </div>
     </div>
@@ -169,7 +191,6 @@
                     });
                 },
                 setItem: function (selectedItem) {
-                    let _this = this;
                     exampleModal.item = selectedItem;
                 },
                 filterCustomerOrders: function (orderId) {
@@ -184,6 +205,11 @@
                         }
                     });
                 },
+                showCheckOut: function (status, orderId) {
+                    axios.post(`/CustomerOrders/ShowCheckOut?status=${status}&orderId=${orderId}`).then(response => {
+                        exampleModal.checkOutBtn = response.data;
+                    });
+                },
             },
         });
     </script>
@@ -192,6 +218,7 @@
             el: '#exampleModal',
             data: {
                 item: {},
+                checkOutBtn: "",
             },
             mounted: function () {
 
@@ -219,8 +246,23 @@
                     return formattedDateTime;
                 }
             },
-            method: {
-
+            methods: {
+                changeStatus: function (status) {
+                    const statusMap = {
+                        1: "fa-solid fa-triangle-exclamation",
+                        2: "fa-regular fa-circle-check",
+                        3: "fa-regular fa-circle-xmark"
+                    };
+                    return statusMap[status];
+                },
+                changeStatusColor: function (status) {
+                    const statusMap = {
+                        1: "card-body bg-warning text-white",
+                        2: "card-body bg-success text-white",
+                        3: "card-body bg-danger text-white"
+                    };
+                    return statusMap[status];
+                },
             },
         });
     </script>

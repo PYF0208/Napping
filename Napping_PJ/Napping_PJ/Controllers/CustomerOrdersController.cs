@@ -41,6 +41,7 @@ namespace Napping_PJ.Controllers
                 //Orders表
                 NameOfBooking = co.Order.NameOfBooking,
                 OrderDate = co.Order.Date,
+                Status = co.Order.Status,
 
                 //Rooms表
                 RoomType = co.Room.Type,
@@ -104,6 +105,14 @@ namespace Napping_PJ.Controllers
             }
             return Ok(customerOrders);
 
+        }
+        [HttpPost]
+        public string ShowCheckOut(int status,int orderId)
+        {
+            if (status == 1) {
+                return $"<a href=\"/CheckOut/IndexByOrder?orderId={orderId}\" class=\"btn btn-primary\">跳轉結帳頁面</a>";
+            }
+            return string.Empty;
         }
     }
 

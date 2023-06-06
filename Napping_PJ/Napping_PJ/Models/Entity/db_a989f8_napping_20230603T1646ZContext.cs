@@ -366,7 +366,7 @@ namespace Napping_PJ.Models.Entity
             {
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
-                entity.Property(e => e.NameOfBooking).HasMaxLength(20);
+                entity.Property(e => e.NameOfBooking).HasMaxLength(50);
 
                 entity.Property(e => e.PaymentType).HasMaxLength(50);
 
