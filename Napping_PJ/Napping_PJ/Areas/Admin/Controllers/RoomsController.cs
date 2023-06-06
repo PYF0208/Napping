@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Areas.Admin.Models;
+using Napping_PJ.Models;
 using Napping_PJ.Models.Entity;
 using NuGet.Packaging;
 
@@ -26,23 +27,19 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			return View();
 		}
 		// GET: Admin/Rooms
-		public async Task<IEnumerable<RoomsViewModel>> GetRooms()
+
+		[HttpGet]
+		public async Task<IEnumerable<HotelsViewModel>> GetHotelName()
 		{
-			//var db_a989f8_nappingContext = _context.Rooms.Include(r => r.Hotel);
-			//var db_a989f8_nappingContext2 = db_a989f8_nappingContext.Select(s=>s.Hotel);
-			//return View(await db_a989f8_nappingContext.ToListAsync());
-			var Rooms = await _context.Rooms.Include(p => p.Hotel).Include(p => p.Features)
-			.Select(Rooms => new RoomsViewModel
-			{
-				RoomId = Rooms.RoomId,
-				HotelId = Rooms.HotelId,
-				Type = Rooms.Type,
-				Price = Rooms.Price,
-				MaxGuests = Rooms.MaxGuests,
+			var hotelsViewModel = await _context.Hotels
+				.Select(h => new HotelsViewModel
+				{
+					HotelId = h.HotelId,
+					Name = h.Name,
+				})
+				.ToListAsync();
 
-
-			}).ToListAsync();
-			return Rooms;
+			return hotelsViewModel;
 		}
 		[HttpPost]
 		public async Task<string> CreateFeature([FromBody] FeatureViewModel feature)
@@ -128,17 +125,22 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		}
 		[HttpPost]
 
-		public async Task<IEnumerable<RoomsViewModel>> FilterRooms(RoomsViewModel rmViewMod)
+		public async Task<IEnumerable<RoomsViewModel>> GetRooms(RoomsViewModel rmViewMod)
 		{
 
-			var Rooms = await _context.Rooms.Include(p => p.Hotel).Include(x => x.Features)
+			var Rooms = await _context.Rooms.Include(p => p.Hotel).Include(x => x.Features).Include(q=>q.RoomImages)
 			.Select(Rooms => new RoomsViewModel
 			{
 				RoomId = Rooms.RoomId,
 				HotelId = Rooms.HotelId,
+				Name=Rooms.Hotel.Name,
 				Type = Rooms.Type,
 				Price = Rooms.Price,
 				MaxGuests = Rooms.MaxGuests,
+				pic=Rooms.RoomImages.Select(y=>new ImageInRoomViewModel
+				{
+					Image=y.Image,
+				}).ToList(),
 				Feature = Rooms.Features.Select(x => new FeatureInRoomViewModel
 				{
 					Id = x.FeatureId,
