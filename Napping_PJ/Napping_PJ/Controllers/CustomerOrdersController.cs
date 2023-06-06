@@ -22,12 +22,17 @@ namespace Napping_PJ.Controllers
         {
             return View();
         }
+        public IActionResult Star()
+        {
+            return View();
+        }
 
         [HttpGet]
         public IEnumerable<CustomerOrdersViewModel> GetCustomerOrders()
         {
             var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
-            var customerOrders = _context.OrderDetails.Include(x => x.Order).Include(x => x.Room).ThenInclude(x => x.Hotel).Where(x => x.Order.CustomerId == customer.CustomerId).Select(co => new CustomerOrdersViewModel
+            var customerOrders = _context.OrderDetails.Include(x => x.Order).Include(x => x.Room).ThenInclude(x => x.Hotel)
+                .Where(x => x.Order.CustomerId == customer.CustomerId).OrderByDescending(x => x.OrderId).Select(co => new CustomerOrdersViewModel
             {   //OrderDetails表
                 OrderId = co.OrderId,
                 OrderDetailId = co.OrderDetailId,
@@ -110,7 +115,11 @@ namespace Napping_PJ.Controllers
         public string ShowCheckOut(int status,int orderId)
         {
             if (status == 1) {
-                return $"<a href=\"/CheckOut/IndexByOrder?orderId={orderId}\" class=\"btn btn-primary\">跳轉結帳頁面</a>";
+                //return $"<a href=\"/CheckOut/IndexByOrder?orderId={orderId}\" class=\"btn btn-primary\">跳轉結帳頁面</a>";
+                return $"<form class=\"needs-validation\" novalidate=\"\" method=\"post\" action=\"/Bank/SpgatewayPayBill\">" +
+                    $"<input style=\"display:none;\" type=\"text\" class=\"form-control\" id=\"orderId\" name=\"orderId\" placeholder=\"王小明\" value=\"{orderId}\" required=\"\">" +
+                    "<button class=\"btn btn-primary btn-lg btn-block\" type=\"submit\">跳轉結帳頁面</button>" +
+                    "</form>";
             }
             return string.Empty;
         }

@@ -6,7 +6,7 @@
         .square-image {
             width: 100%;
             height: 0;
-            padding-bottom: 100%; /* 创建一个高度等于宽度的正方形 */
+            padding-bottom: 100%; /* 創建一個高度等於寬度的正方形 */
             position: relative;
             overflow: hidden;
         }
@@ -17,7 +17,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                object-fit: cover; /* 调整图像以适应正方形区域 */
+                object-fit: cover; /* 調整圖像以適應正方形區域 */
             }
     </style>
 }
@@ -41,9 +41,9 @@
                     <div class="card-body">訂單編號:{{item.orderId}}</div>
                     <div class="row">
                         <div class="col-4">
-                                <div class="square-image">
-                                    <img :src="item.hotelImage" style="padding: 20px;" />
-                                </div>
+                            <div class="square-image">
+                                <img :src="item.hotelImage" style="padding: 20px;" />
+                            </div>
                         </div>
                         <div class="col-4">
                             <ul style="list-style:none">
@@ -84,7 +84,15 @@
 
                 <div class="card bg-light text-black mb-4">
                     <div class="card-body bg-secondary text-white">訂單編號:{{item.orderId}}</div>
-                    <div :class="changeStatusColor(item.status)"><h5><i :class="changeStatus(item.status)"></i>{{item.statusDisplay}}</h5></div>
+                    <div :class="changeStatusColor(item.status)" id="1" v-if="item.status==1">
+                        <h5><span><i class="fa-solid fa-triangle-exclamation"></i></span>{{item.statusDisplay}}</h5>
+                    </div>
+                    <div :class="changeStatusColor(item.status)" id="2" v-if="item.status==2">
+                        <h5><span><i class="fa-regular fa-circle-check"></i></span>{{item.statusDisplay}}</h5>
+                    </div>
+                    <div :class="changeStatusColor(item.status)" id="3" v-if="item.status==3">
+                        <h5><span><i class="fa-regular fa-circle-xmark"></i></span>{{item.statusDisplay}}</h5>
+                    </div>
                     <div class="row">
                         <div class="col-12">
                             <ul style="list-style:none">
@@ -142,7 +150,7 @@
             </div>
             <div class="modal-footer">
                 <span v-html="checkOutBtn"></span>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">關閉</button>
             </div>
         </div>
     </div>
@@ -191,6 +199,7 @@
                     });
                 },
                 setItem: function (selectedItem) {
+
                     exampleModal.item = selectedItem;
                 },
                 filterCustomerOrders: function (orderId) {
@@ -217,7 +226,7 @@
         var exampleModal = new Vue({
             el: '#exampleModal',
             data: {
-                item: {},
+                item: [],
                 checkOutBtn: "",
             },
             mounted: function () {
@@ -246,20 +255,21 @@
                     return formattedDateTime;
                 }
             },
+
             methods: {
-                changeStatus: function (status) {
-                    const statusMap = {
-                        1: "fa-solid fa-triangle-exclamation",
-                        2: "fa-regular fa-circle-check",
-                        3: "fa-regular fa-circle-xmark"
-                    };
-                    return statusMap[status];
-                },
                 changeStatusColor: function (status) {
                     const statusMap = {
                         1: "card-body bg-warning text-white",
                         2: "card-body bg-success text-white",
                         3: "card-body bg-danger text-white"
+                    };
+                    return statusMap[status];
+                },
+                changeStatus: function (status) {
+                    const statusMap = {
+                        1: "fa-solid fa-triangle-exclamation",
+                        2: "fa-regular fa-circle-check",
+                        3: "fa-regular fa-circle-xmark"
                     };
                     return statusMap[status];
                 },

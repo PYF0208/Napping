@@ -55,7 +55,7 @@ namespace Napping_PJ.Controllers
 
         [HttpPost]
         //[Route("Bank/SpgatewayPayBillAsync/")]
-        public async Task SpgatewayPayBillAsync(string firstName, string phone, int orderId = -1)
+        public async Task SpgatewayPayBillAsync(string firstName = null, string phone = null, int orderId = -1)
 
         {
             Order thisOrder = new Order();
@@ -163,7 +163,7 @@ namespace Napping_PJ.Controllers
                     return;
                 }
                 thisOrder = getOrder;
-                subTotle =  (int)_Context.OrderDetails.Where(x => x.OrderId == getOrder.OrderId)
+                subTotle = (int)_Context.OrderDetails.Where(x => x.OrderId == getOrder.OrderId)
                     .Sum(y => y.RoomTotalPrice + y.EspriceTotal - y.DiscountTotalPrice);
             }
 
