@@ -18,9 +18,9 @@ namespace Napping_PJ.Models.Entity
         public int NumberOfGuests { get; set; }
         public string TravelType { get; set; } = null!;
         public string? Note { get; set; }
-        public double? RoomTotalPrice { get; set; }
-        public double? DiscountTotalPrice { get; set; }
-        public double? EspriceTotal { get; set; }
+        public double RoomTotalPrice { get; set; }
+        public double DiscountTotalPrice { get; set; }
+        public double EspriceTotal { get; set; }
 
         public virtual Order Order { get; set; } = null!;
         public virtual Room Room { get; set; } = null!;

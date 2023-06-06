@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Napping_PJ.Models.Entity
 {
-    public partial class db_a989f8_nappingContext : DbContext
+    public partial class db_a989f8_napping_20230603T1646ZContext : DbContext
     {
-        public db_a989f8_nappingContext()
+        public db_a989f8_napping_20230603T1646ZContext()
         {
         }
 
-        public db_a989f8_nappingContext(DbContextOptions<db_a989f8_nappingContext> options)
+        public db_a989f8_napping_20230603T1646ZContext(DbContextOptions<db_a989f8_napping_20230603T1646ZContext> options)
             : base(options)
         {
         }
@@ -55,7 +55,7 @@ namespace Napping_PJ.Models.Entity
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=tcp:napping-jp.database.windows.net,1433;Initial Catalog=db_a989f8_napping;Persist Security Info=False;User ID=NappingSa;Password=zaq!xsw2;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                optionsBuilder.UseSqlServer("Server=tcp:napping-jp.database.windows.net,1433;Initial Catalog=db_a989f8_napping_2023-06-03T16-46Z;Persist Security Info=False;User ID=NappingSa;Password=zaq!xsw2;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -366,7 +366,7 @@ namespace Napping_PJ.Models.Entity
             {
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
-                entity.Property(e => e.NameOfBooking).HasMaxLength(50);
+                entity.Property(e => e.NameOfBooking).HasMaxLength(20);
 
                 entity.Property(e => e.PaymentType).HasMaxLength(50);
 

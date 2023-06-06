@@ -800,7 +800,8 @@ figure {
 ***/
 
 .header-style-one.alternate {
-    position: fixed;
+    /*position: fixed;*/
+    height: 150px
 }
 
     .header-style-one.alternate .header-span {
@@ -3270,6 +3271,7 @@ img.lazy-image {
     position: relative;
     background: #181b1f;
     color: #9a9fa6;
+    margin-top: 100px
 }
 
     .main-footer .widgets-section {
@@ -8615,7 +8617,7 @@ img.lazy-image {
 
 .sidebar-page-container {
     position: relative;
-    padding: 5.3em 0px 0px 0px;
+    /*padding: 110px 0px 0px 0px;*/
 }
 
     .sidebar-page-container.blog-single {

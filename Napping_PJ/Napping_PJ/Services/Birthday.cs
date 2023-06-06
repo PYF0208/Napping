@@ -1,143 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Napping_PJ.Models.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 using Napping_PJ.Areas.Admin.Models;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
+using Napping_PJ.Models.Entity;
+using Napping_PJ.Models;
 
-namespace Napping_PJ.Areas.Admin.Controllers
+namespace Napping_PJ.Services
 {
-	[Area("Admin")]
-	public class PromotionsController : Controller
+	public class Birthday:IBirthday
 	{
 		private readonly db_a989f8_nappingContext _context;
 
-		public PromotionsController(db_a989f8_nappingContext context)
+		public Birthday(db_a989f8_nappingContext context)
 		{
 			_context = context;
 		}
-		public IActionResult Index()
+
+
+		public bool SendBirthDayMail()
 		{
-			return View();
-		}
-		[HttpGet]
-		// GET: Admin/Promotions
-		public async Task<IEnumerable<PromotionViewModel>> GetPromotionService()
-		{
-			var PromotionService = _context.Promotions.Select(PromotionService => new PromotionViewModel
+			var Member = _context.Customers;
+
+
+			foreach (Customer m in Member)
 			{
-				PromotionId = PromotionService.PromotionId,
-				LevelId = PromotionService.LevelId,
-				Name = PromotionService.Name,
-				StartDate = PromotionService.StartDate,
-				EndDate = PromotionService.EndDate,
-				Discount = PromotionService.Discount
-			});
-			return PromotionService;
-		}
-		[HttpGet]
-		// GET: Admin/Promotions
-		public async Task<IEnumerable<LevelViewModel>> GetLevel()
-		{
-			var Level = await _context.Levels
-				.Select(Level => new LevelViewModel
+
+
+				//if m is birth
+				if (m.Birthday != DateTime.Today) { continue; };
+				//send
+				try
 				{
-					LevelId = Level.LevelId,
-					Name = Level.Name
 
-				})
-				.ToListAsync();
-
-			return Level;
-		}
-		[HttpPost]
-		public async Task<IEnumerable<PromotionViewModel>> FilterPromotions(
-			[FromBody] PromotionViewModel prViewModel)
-		{
-			return _context.Promotions.Where(pro => pro.Name.Contains(prViewModel.Name) || pro.Discount == prViewModel.Discount || pro.Level.Name.Contains(prViewModel.LevelName))
-				.Select(pro => new PromotionViewModel
-				{
-					PromotionId = pro.PromotionId,
-					LevelId = pro.LevelId,
-					Name = pro.Name,
-					StartDate = pro.StartDate,
-					EndDate = pro.EndDate,
-					Discount = pro.Discount,
-					LevelName = pro.Level.Name
-				});
-		}
-
-
-
-		[HttpPut]
-		public async Task<string> PutPromotions(int id, [FromBody] PromotionViewModel promotion)
-		{
-			if (id != promotion.PromotionId)
-			{
-				return "修改促銷記錄失敗!";
-			}
-			int result = DateTime.Compare(promotion.StartDate, promotion.EndDate);
-			if (result >= 0)
-			{
-				return "結束日期必須大於起始日期!";
-			}
-			Promotion pro = await _context.Promotions.FindAsync(id);
-			pro.PromotionId = promotion.PromotionId;
-			pro.LevelId = promotion.LevelId;
-			pro.Name = promotion.Name;
-			pro.StartDate = promotion.StartDate;
-			pro.EndDate = promotion.EndDate;
-			pro.Discount = promotion.Discount;
-			_context.Entry(pro).State = EntityState.Modified;
-
-			try
-			{
-				await _context.SaveChangesAsync();
-			}
-			catch (DbUpdateConcurrencyException)
-			{
-				if (!PromotionExists(id))
-				{
-					return "修改促銷記錄失敗!";
-				}
-				else
-				{
-					throw;
-				}
-			}
-
-			return "修改促銷記錄成功!";
-		}
-		[HttpPost]
-		public string SendMailByPromotionId([FromBody] SendemailViewModel sendmailviewmodel)
-		{
-			var x = _context.Promotions
-				.Include(x => x.Level)
-				.ThenInclude(x => x.Customers)
-				.FirstOrDefault(s => s.PromotionId == sendmailviewmodel.PromotionId);
-
-
-			if (x != null)
-			{
-				var y = x.Level.Customers.Select(x => x.Email).ToList();
-				foreach (var email in y)
-				{
-					try
+					var mail = new MailMessage()
 					{
+						From = new MailAddress("tibameth101team3@gmail.com"),
+						Subject = "Napping會員促銷",
 
-						var mail = new MailMessage()
-						{
-							From = new MailAddress("tibameth101team3@gmail.com"),
-							Subject = "Napping會員促銷",
-
-							Body = $@"<!DOCTYPE html>
+						Body = $@"<!DOCTYPE html>
 
 <html lang=""en"" xmlns:o=""urn:schemas-microsoft-com:office:office"" xmlns:v=""urn:schemas-microsoft-com:vml"">
 <head>
@@ -242,7 +143,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 <table border=""0"" cellpadding=""0"" cellspacing=""0"" class=""image_block block-1"" role=""presentation"" style=""mso-table-lspace: 0pt; mso-table-rspace: 0pt;"" width=""100%"">
 <tr>
 <td class=""pad"" style=""padding-left:20px;padding-right:20px;width:100%;"">
-<div align=""center"" class=""alignment"" style=""line-height:10px""><img alt="" Image"" src=""https://cdn.pixabay.com/photo/2015/03/22/17/55/sale-685007_1280.jpg"" style=""display: block; height: auto; border: 0; width: 294px; max-width: 100%;"" title=""Father's Day Image"" width=""294""/></div>
+<div align=""center"" class=""alignment"" style=""line-height:10px""><img alt="" Image"" src=""https://cdn4.iconfinder.com/data/icons/BRILLIANT/shopping/png/400/free_gift.png"" style=""display: block; height: auto; border: 0; width: 294px; max-width: 100%;"" title=""Father's Day Image"" width=""294""/></div>
 </td>
 </tr>
 </table>
@@ -259,7 +160,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 <tr>
 <td class=""pad"" style=""padding-bottom:10px;padding-left:20px;padding-right:30px;padding-top:10px;"">
 <div style=""color:#e2d7c1;direction:ltr;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;font-weight:400;letter-spacing:0px;line-height:150%;text-align:left;mso-line-height-alt:27px;"">
-<p style=""margin: 0;"">尊貴的{sendmailviewmodel.LevelName}會員您好:<br>獻上{sendmailviewmodel.PromotionName}促銷<br>促銷折扣為:{sendmailviewmodel.Discount}<br>優惠起始時間為:{sendmailviewmodel.StartDate}<br>優惠結束時間為:{sendmailviewmodel.EndDate}
+<p style=""margin: 0;"">尊貴的{m.Name}會員您好:<br>在此祝賀您生日快樂<br><br>Napping全體員工祝賀您有美好的一天<br>
 </p>
 </div>
 </td>
@@ -326,94 +227,28 @@ namespace Napping_PJ.Areas.Admin.Controllers
 </table><!-- End -->
 </body>
 </html>",
-							//$"尊貴的{sendmailviewmodel.LevelName}會員您好:<br>獻上{sendmailviewmodel.PromotionName}促銷<br>促銷折扣為:{sendmailviewmodel.Discount}<br>優惠起始時間為:{sendmailviewmodel.StartDate}<br>優惠結束時間為:{sendmailviewmodel.EndDate}",
-							IsBodyHtml = true,
-							BodyEncoding = Encoding.UTF8,
-						};
-						mail.To.Add(new MailAddress(email));
-						using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
-						{
-							sm.EnableSsl = true;
-							sm.Credentials = new NetworkCredential("tibameth101team3@gmail.com", "glyirsixoioagwmh");
-							sm.Send(mail);
-						}
-
-					}
-					catch (Exception)
+						
+						IsBodyHtml = true,
+						BodyEncoding = Encoding.UTF8,
+					};
+					mail.To.Add(new MailAddress(m.Email));
+					using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
 					{
-
-						throw;
-
+						sm.EnableSsl = true;
+						sm.Credentials = new NetworkCredential("tibameth101team3@gmail.com", "glyirsixoioagwmh");
+						sm.Send(mail);
 					}
+
 				}
-				return "寄送成功";
+				catch (Exception)
+				{
+
+					throw;
+
+				}
 			}
-			return "寄送失敗";
+			return true;
 		}
-
-		// POST: Admin/Promotions/Edit/5
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		public async Task<string> PostPromotion([FromBody] PromotionViewModel promotion)
-		{
-			if (promotion == null)
-			{
-				return "欄位不可為空值!";
-			}
-
-			Promotion pro = new Promotion
-			{
-
-				PromotionId = promotion.PromotionId,
-				LevelId = promotion.LevelId,
-				Name = promotion.Name,
-				StartDate = promotion.StartDate,
-				EndDate = promotion.EndDate,
-				Discount = promotion.Discount,
-
-
-			};
-			int result = DateTime.Compare(pro.StartDate, pro.EndDate);
-			if (result >= 0)
-			{
-				return "結束日期必須大於起始日期!";
-			}
-			_context.Promotions.Add(pro);
-			await _context.SaveChangesAsync();
-
-			return $"促銷編號:{pro.PromotionId}";
-		}
-
-
-
-		// Delete: Admin/Promotions/Delete/5
-		[HttpDelete]
-		public async Task<string> DeletePromotions(int id)
-		{
-			var promotion = await _context.Promotions.FindAsync(id);
-			if (promotion == null)
-			{
-				return "刪除促銷記錄成功!";
-			}
-
-			_context.Promotions.Remove(promotion);
-			try
-			{
-				await _context.SaveChangesAsync();
-			}
-			catch (DbUpdateException ex)
-			{
-				return "刪除促銷關聯記錄失敗!";
-			}
-
-			return "刪除促銷記錄成功!";
-		}
-
-		private bool PromotionExists(int id)
-		{
-			return (_context.Promotions?.Any(e => e.PromotionId == id)).GetValueOrDefault();
-		}
-
 	}
-}
+	}
+

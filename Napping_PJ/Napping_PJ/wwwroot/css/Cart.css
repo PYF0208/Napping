@@ -73,7 +73,7 @@
 
 #cartVue .summary {
     background-color: #ddd;
-    border-top-right-radius: 1rem;
+    /*border-top-right-radius: 1rem;*/
     border-bottom-right-radius: 1rem;
     padding: 4vh;
     color: rgb(65, 65, 65);
@@ -169,14 +169,7 @@
     }
 
 #cartVue .btn {
-    background-color: #000;
-    border-color: #000;
-    color: white;
     width: 100%;
-    font-size: 0.7rem;
-    margin-top: 4vh;
-    padding: 1vh;
-    border-radius: 0;
 }
 
 #cartVue .btn:focus {

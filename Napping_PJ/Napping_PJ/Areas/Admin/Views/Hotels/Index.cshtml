@@ -40,7 +40,7 @@
 					<td>name</td>
 					<td>Star</td>
 					<td>Image</td>
-					<td>Contactname</td>
+					<td>ContactName</td>
 					<td>Phone</td>
 					<td>Email</td>
 					<td>City</td>
@@ -61,7 +61,7 @@
 						<td><input v-model="item.name" /> </td>
 						<td><input v-model="item.star" /> </td>
 						<td><input v-model="item.image" /> </td>
-						<td><input v-model="item.contactname" /> </td>
+						<td><input v-model="item.contactName" /> </td>
 						<td><input v-model="item.phone" /> </td>
 						<td><input v-model="item.email" /> </td>
 						<td><input v-model="item.city" /> </td>
@@ -81,7 +81,7 @@
 						<td>{{item.name}}</td>
 						<td>{{item.star}}</td>
 						<td>{{item.image}}</td>
-						<td>{{item.contactname}}</td>
+						<td>{{item.contactName}}</td>
 						<td>{{item.phone}}</td>
 						<td>{{item.email}}</td>
 						<td>{{item.city}}</td>
@@ -107,7 +107,7 @@
 
 						<div class="form-group">
 							<label class="form-label">飯店名稱:</label>
-							<input class="form-control" v-model="name" />@* v-model="price"*@
+							<input class="form-control" v-model="Name" />@* v-model="price"*@
 						</div>
 						<div class="form-group">
 							<label class="form-label">星級:</label>
@@ -119,7 +119,7 @@
 						</div>
 						<div class="form-group">
 							<label class="form-label">聯絡人:</label>
-							<input class="form-control" v-model="contactname" />@* v-model="price"*@
+							<input class="form-control" v-model="contactName" />@* v-model="price"*@
 						</div>
 						<div class="form-group">
 							<label class="form-label">手機:</label>
@@ -164,7 +164,7 @@
 
 				HotelsViewModel: [],
 				hotelId: "",
-				name: "",
+				Name: "",
 				star: "",
 				image: "",
 				contactName: "",
@@ -200,7 +200,7 @@
 					let _this = this;
 					var request = {
 						HotelId: 0,
-						Name: _this.name,
+						Name: _this.Name,
 						Star: _this.star,
 						Image: _this.image,
 						ContactName: _this.contactName,

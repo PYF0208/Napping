@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Napping_PJ.Enums;
 using Napping_PJ.Models.Entity;
 using Napping_PJ.Models;
 using Newtonsoft.Json;
@@ -85,8 +86,8 @@ namespace Napping_PJ.Controllers
         {
             List<long[]> bookedDate = new List<long[]>();
             //取得已booking的紀錄
-            await _context.OrderDetails
-                .Where(x => x.RoomId == roomId && (x.CheckIn >= DateTime.Today && x.CheckOut >= DateTime.Today))
+            await _context.OrderDetails.Include(x=>x.Order)
+                .Where(x => x.RoomId == roomId && (x.CheckIn >= DateTime.Today && x.CheckOut >= DateTime.Today) && x.Order.Status < (int)PaymentStatusEnum.Cancel)
                 .ForEachAsync(
                     x =>
                     {
@@ -112,9 +113,9 @@ namespace Napping_PJ.Controllers
                 roomDetailViewModels = JsonConvert.DeserializeObject<List<RoomDetailViewModel>>(cartJson);
             }
 
-            roomDetailViewModels.Where(x =>
+            var filterList = roomDetailViewModels.Where(x =>
                 x.roomId == roomId && (x.checkIn.ToLocalTime() >= DateTime.Today && x.checkOut.ToLocalTime() >= DateTime.Today));
-            foreach (var item in roomDetailViewModels)
+            foreach (var item in filterList)
             {
                 bookedDate.Add(new long[2]
                 {
