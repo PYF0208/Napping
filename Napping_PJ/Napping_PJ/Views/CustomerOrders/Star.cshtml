@@ -1,0 +1,82 @@
+﻿@{
+    Layout = "_COLayout";
+}
+@section Styles{
+    <style>
+        .rating {
+            margin-bottom: 20px;
+        }
+
+        .stars {
+            color: #ccc;
+            font-size: 30px;
+        }
+
+        .star {
+            cursor: pointer;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+    </style>
+}
+<div class="rating">
+    <h3>CP</h3>
+    <div class="stars" id="cpStars">
+        <span class="star" onclick="rate('cp', 1)">&#9733;</span>
+        <span class="star" onclick="rate('cp', 2)">&#9733;</span>
+        <span class="star" onclick="rate('cp', 3)">&#9733;</span>
+        <span class="star" onclick="rate('cp', 4)">&#9733;</span>
+        <span class="star" onclick="rate('cp', 5)">&#9733;</span>
+    </div>
+</div>
+
+<div class="rating">
+    <h3>Comfortable</h3>
+    <div class="stars" id="comfortStars">
+        <span class="star" onclick="rate('comfort', 1)">&#9733;</span>
+        <span class="star" onclick="rate('comfort', 2)">&#9733;</span>
+        <span class="star" onclick="rate('comfort', 3)">&#9733;</span>
+        <span class="star" onclick="rate('comfort', 4)">&#9733;</span>
+        <span class="star" onclick="rate('comfort', 5)">&#9733;</span>
+    </div>
+</div>
+
+<!-- 類似的方式添加其他評價欄位 -->
+
+<button onclick="submitRating()">提交評價</button>
+
+@section Scripts{
+    <script>
+        var ratings = {};
+
+        // 評價函式
+        function rate(category, value) {
+            ratings[category] = value;
+            var stars = document.getElementById(category + 'Stars').children;
+            for (var i = 0; i < value; i++) {
+                stars[i].style.color = '#ffc107'; // 被選中的星星顏色為黃色
+            }
+            for (var j = value; j < 5; j++) {
+                stars[j].style.color = '#ccc'; // 未被選中的星星顏色為灰色
+            }
+        }
+
+        // 提交評價函式
+        function submitRating() {
+            // 在這裡可以使用ratings物件進行評價的後續處理，例如傳送到伺服器或顯示結果
+            console.log(ratings);
+        }
+    </script>
+}

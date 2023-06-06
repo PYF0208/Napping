@@ -37,9 +37,9 @@ namespace Napping_PJ.Controllers
 
         private BankInfoModel _bankInfoModel = new BankInfoModel
         {
-            MerchantID = "MS149051454",
-            HashKey = "ibbQy58FRSf0D5ffF18SbQFDibc8Gn1r",
-            HashIV = "CXqLErYe6D2QvqMP",
+            MerchantID = "MS149050874",
+            HashKey = "yntmG4lRSvANsjKiwuP7r99pi13NKzsB",
+            HashIV = "Cg6vxOtPYjevmcOP",
             ReturnURL = $"https://localhost:7265/CheckOut/CheckOutReturn",
             NotifyURL = "http://yourWebsitUrl/Bank/SpgatewayNotify",
             CustomerURL = "http://yourWebsitUrl/Bank/SpgatewayCustomer",
@@ -55,7 +55,7 @@ namespace Napping_PJ.Controllers
 
         [HttpPost]
         //[Route("Bank/SpgatewayPayBillAsync/")]
-        public async Task SpgatewayPayBillAsync(string firstName, string phone, int orderId = -1)
+        public async Task SpgatewayPayBillAsync(string firstName = null, string phone = null, int orderId = -1)
 
         {
             Order thisOrder = new Order();
@@ -163,7 +163,7 @@ namespace Napping_PJ.Controllers
                     return;
                 }
                 thisOrder = getOrder;
-                subTotle =  (int)_Context.OrderDetails.Where(x => x.OrderId == getOrder.OrderId)
+                subTotle = (int)_Context.OrderDetails.Where(x => x.OrderId == getOrder.OrderId)
                     .Sum(y => y.RoomTotalPrice + y.EspriceTotal - y.DiscountTotalPrice);
             }
 
@@ -188,7 +188,7 @@ namespace Napping_PJ.Controllers
                 // * 訂單金額
                 Amt = subTotle,
                 // * 商品資訊
-                ItemDesc = "商品資訊(自行修改)",
+                ItemDesc = "預訂房間",
                 // 繳費有效期限(適用於非即時交易)
                 ExpireDate = null,
                 // 支付完成 返回商店網址
@@ -204,7 +204,7 @@ namespace Napping_PJ.Controllers
                 // 付款人電子信箱 是否開放修改(1=可修改 0=不可修改)
                 EmailModify = 0,
                 // 商店備註
-                OrderComment = "xxxxx",
+                OrderComment = "Napping訂房網",
                 // 信用卡 一次付清啟用(1=啟用、0或者未有此參數=不啟用)
                 CREDIT = 1,
                 // WEBATM啟用(1=啟用、0或者未有此參數，即代表不開啟)
