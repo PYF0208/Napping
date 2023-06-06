@@ -169,12 +169,12 @@ namespace Napping_PJ.Controllers
                     Console.WriteLine(e);
                 }
             }
-            receive.Length = 0;
-            foreach (String key in decryptTradeCollection.AllKeys)
-            {
-                receive.AppendLine(key + "=" + decryptTradeCollection[key] + "<br>");
-            }
-            ViewData["TradeInfo"] = receive.ToString();
+            //receive.Length = 0;
+            //foreach (String key in decryptTradeCollection.AllKeys)
+            //{
+            //    receive.AppendLine(key + "=" + decryptTradeCollection[key] + "<br>");
+            //}
+            //ViewData["TradeInfo"] = receive.ToString();
 
             return View("Error");
             //return View();
