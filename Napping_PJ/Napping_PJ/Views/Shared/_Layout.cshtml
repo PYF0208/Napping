@@ -39,7 +39,7 @@
 							<div class="d-flex" style="align-items: center; column-gap: 12px;" id="homeIndexOnlyContainer">
 								<template id="homeIndexOnly">
 									@*首頁header中間的元素都在這*@
-									<div class="form-group" id="vueApp">
+									<div class="form-group" id="datePicker">
 										<template>
 											<div class="demo-date-picker">
 												<div class="block">
@@ -48,6 +48,7 @@
 																	range-separator="至"
 																	start-placeholder="入住時間"
 																	end-placeholder="退房時間"
+																	:disabled-date="disabledDate"
 																	:size="size" />
 												</div>
 											</div>

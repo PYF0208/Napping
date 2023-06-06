@@ -29,7 +29,6 @@ namespace Napping_PJ.Controllers
             }
             return _context.Hotels.AsNoTracking().Join(_context.Rooms, h => h.HotelId, r => r.HotelId, (h, r) => new ResultViewModel
             {
-
                 HotelId = h.HotelId,
                 Name = h.Name,
                 Image = h.Image,
@@ -43,5 +42,22 @@ namespace Napping_PJ.Controllers
                 IsLike = (allHotel != null && allHotel.Contains(h.HotelId)) ? true : false,
             });
         }
-    }
+
+		//[HttpGet]
+		//public IEnumerable<ResultViewModel> GetCanBookRoom( rvm)
+		//{
+  //          var BookedRooms = _context.OrderDetails.Where(r => r.RoomId == rvm.RoomId)
+  //              .Select(r => new ResultViewModel
+		//		{
+		//		RoomId = r.RoomId,
+		//		CheckIn = r.CheckIn,
+		//		CheckOut = r.CheckOut
+		//	}); ;
+
+
+
+		//}
+
+
+	}
 }
