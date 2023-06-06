@@ -141,10 +141,12 @@ namespace Napping_PJ.Controllers
 
             string TradeInfoDecrypt = CryptoUtil.DecryptAESHex(Request.Form["TradeInfo"], HashKey, HashIV);
             NameValueCollection decryptTradeCollection = HttpUtility.ParseQueryString(TradeInfoDecrypt);
+            //取得OrderId
+            string getOrderId = ((string)decryptTradeCollection["MerchantOrderNo"]).Split('_')[0];
             //將Order付款狀態碼改成2
             ViewBag.OrderInfo = new
             {
-                orderId = decryptTradeCollection["MerchantOrderNo"],
+                orderId = getOrderId,
                 totalPrice = decryptTradeCollection["Amt"]
             };
             if (decryptTradeCollection["Status"] == "SUCCESS")
@@ -152,13 +154,13 @@ namespace Napping_PJ.Controllers
                 Payment newPayment = new Payment()
                 {
                     Date = DateTime.Now,
-                    OrderId = Int32.Parse(decryptTradeCollection["MerchantOrderNo"]),
+                    OrderId = Int32.Parse(getOrderId),
                     Status = (int)PaymentStatusEnum.Paid,
                     Type = decryptTradeCollection["PaymentType"]
                 };
                 try
                 {
-                    Order getOrder = await _Context.Orders.FirstOrDefaultAsync(x => x.OrderId == Int32.Parse(decryptTradeCollection["MerchantOrderNo"]));
+                    Order getOrder = await _Context.Orders.FirstOrDefaultAsync(x => x.OrderId == Int32.Parse(getOrderId));
                     getOrder.Status = (int)PaymentStatusEnum.Paid;
                     _Context.Payments.Add(newPayment);
                     await _Context.SaveChangesAsync();

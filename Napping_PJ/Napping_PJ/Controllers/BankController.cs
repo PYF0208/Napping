@@ -184,7 +184,7 @@ namespace Napping_PJ.Controllers
                 Version = version,
                 // * 商店訂單編號
                 //MerchantOrderNo = $"T{DateTime.Now.ToString("yyyyMMddHHmm")}",
-                MerchantOrderNo = thisOrder.OrderId.ToString(),
+                MerchantOrderNo = $"{thisOrder.OrderId}_{DateTime.Now.ToString("yyyyMMdd_hhmm")}",
                 // * 訂單金額
                 Amt = subTotle,
                 // * 商品資訊
