@@ -220,23 +220,23 @@ namespace Napping_PJ.Controllers
         public IActionResult GetComment([FromBody]CommentViewModel cv)
         {
             var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
-            var findComment = _context.Comments.AsNoTracking().FirstOrDefault(x => x.CustomerId == customer.CustomerId && x.HotelId == cv.HotelId && x.OrderId == cv.OrderId);
-            if (findComment == null)
+            var comment = _context.Comments.AsNoTracking().FirstOrDefault(x => x.CustomerId == customer.CustomerId && x.HotelId == cv.HotelId && x.OrderId == cv.OrderId);
+            if (comment != null)
             {
-                return Content("尚未完成評價");
+                var cm = new CommentViewModel
+                {
+
+                    Cp = comment.Cp,
+                    Comfortable = comment.Comfortable,
+                    Staff = comment.Staff,
+                    Facility = comment.Facility,
+                    Clean = comment.Clean,
+                    Note = comment.Note,
+                    Date = comment.Date,
+                };
+                return Ok(comment);
             }
-            var comment = _context.Comments.Where(x => x.CustomerId == customer.CustomerId && x.HotelId == cv.HotelId && x.OrderId == cv.OrderId)
-                .Select(cm => new CommentViewModel
-            {
-                Cp = cm.Cp,
-                Comfortable = cm.Comfortable,
-                Staff = cm.Staff,
-                Facility = cm.Facility,
-                Clean = cm.Clean,
-                Note = cm.Note,
-                Date = cm.Date,
-            });
-            return Ok(comment);
+        return Content("");
         }
     }
 
