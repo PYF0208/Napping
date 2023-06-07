@@ -141,16 +141,17 @@ namespace Napping_PJ.Controllers
 
             string TradeInfoDecrypt = CryptoUtil.DecryptAESHex(Request.Form["TradeInfo"], HashKey, HashIV);
             NameValueCollection decryptTradeCollection = HttpUtility.ParseQueryString(TradeInfoDecrypt);
-            //取得OrderId
-            string getOrderId = ((string)decryptTradeCollection["MerchantOrderNo"]).Split('_')[0];
-            //將Order付款狀態碼改成2
-            ViewBag.OrderInfo = new
-            {
-                orderId = getOrderId,
-                totalPrice = decryptTradeCollection["Amt"]
-            };
+
             if (decryptTradeCollection["Status"] == "SUCCESS")
             {
+                //取得OrderId
+                string getOrderId = ((string)decryptTradeCollection["MerchantOrderNo"]).Split('_')[0];
+                ViewBag.OrderInfo = new
+                {
+                    orderId = getOrderId,
+                    totalPrice = decryptTradeCollection["Amt"]
+                };
+                //將Order付款狀態碼改成2
                 Payment newPayment = new Payment()
                 {
                     Date = DateTime.Now,
