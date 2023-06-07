@@ -801,7 +801,7 @@ figure {
 
 .header-style-one.alternate {
     /*position: fixed;*/
-    height: 150px
+    height: 5em;
 }
 
     .header-style-one.alternate .header-span {
@@ -3271,7 +3271,6 @@ img.lazy-image {
     position: relative;
     background: #181b1f;
     color: #9a9fa6;
-    margin-top: 100px
 }
 
     .main-footer .widgets-section {
@@ -8680,7 +8679,6 @@ img.lazy-image {
         position: relative;
         margin-bottom: 30px;
         z-index: 1;
-        height: 800px;
     }
 
 .services-page .sidebar-side {

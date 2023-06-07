@@ -37,20 +37,15 @@ namespace Napping_PJ.Controllers
 
         private BankInfoModel _bankInfoModel = new BankInfoModel
         {
-            MerchantID = "MS149051454",
-            HashKey = "ibbQy58FRSf0D5ffF18SbQFDibc8Gn1r",
-            HashIV = "CXqLErYe6D2QvqMP",
+            MerchantID = "MS149050874",
+            HashKey = "yntmG4lRSvANsjKiwuP7r99pi13NKzsB",
+            HashIV = "Cg6vxOtPYjevmcOP",
             ReturnURL = $"https://localhost:7265/CheckOut/CheckOutReturn",
             NotifyURL = "http://yourWebsitUrl/Bank/SpgatewayNotify",
             CustomerURL = "http://yourWebsitUrl/Bank/SpgatewayCustomer",
             AuthUrl = "https://ccore.newebpay.com/MPG/mpg_gateway",
             CloseUrl = "https://core.newebpay.com/API/CreditCard/Close"
         };
-
-        public IActionResult Index2()
-        {
-            return PartialView();
-        }
 
 
         [HttpPost]
@@ -183,12 +178,12 @@ namespace Napping_PJ.Controllers
                 // * 串接程式版本
                 Version = version,
                 // * 商店訂單編號
-                //MerchantOrderNo = $"T{DateTime.Now.ToString("yyyyMMddHHmm")}",
-                MerchantOrderNo = thisOrder.OrderId.ToString(),
+                //MerchantOrderNo = thisOrder.OrderId.ToString(),
+                MerchantOrderNo = $"{thisOrder.OrderId}_{DateTime.Now.ToString("yyyyMMddhhmmss")}",
                 // * 訂單金額
                 Amt = subTotle,
                 // * 商品資訊
-                ItemDesc = "商品資訊(自行修改)",
+                ItemDesc = "預訂房間",
                 // 繳費有效期限(適用於非即時交易)
                 ExpireDate = null,
                 // 支付完成 返回商店網址
@@ -204,7 +199,7 @@ namespace Napping_PJ.Controllers
                 // 付款人電子信箱 是否開放修改(1=可修改 0=不可修改)
                 EmailModify = 0,
                 // 商店備註
-                OrderComment = "xxxxx",
+                OrderComment = "Napping訂房網",
                 // 信用卡 一次付清啟用(1=啟用、0或者未有此參數=不啟用)
                 CREDIT = 1,
                 // WEBATM啟用(1=啟用、0或者未有此參數，即代表不開啟)

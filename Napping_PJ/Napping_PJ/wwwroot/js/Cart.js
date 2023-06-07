@@ -116,7 +116,7 @@
             var self = this;
             var cartTotal = 0;
             for (var i = 0; i < self.rooms.length; i++) {
-                cartTotal += self.rooms[i].tRoomPrice + self.rooms[i].tServicePrice + self.rooms[i].tPromotionPrice;
+                cartTotal += self.rooms[i].tRoomPrice + self.rooms[i].tServicePrice - self.rooms[i].tPromotionPrice;
             }
             return cartTotal;
         },

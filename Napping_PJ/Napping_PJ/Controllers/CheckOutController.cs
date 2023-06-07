@@ -141,24 +141,27 @@ namespace Napping_PJ.Controllers
 
             string TradeInfoDecrypt = CryptoUtil.DecryptAESHex(Request.Form["TradeInfo"], HashKey, HashIV);
             NameValueCollection decryptTradeCollection = HttpUtility.ParseQueryString(TradeInfoDecrypt);
-            //將Order付款狀態碼改成2
-            ViewBag.OrderInfo = new
-            {
-                orderId = decryptTradeCollection["MerchantOrderNo"],
-                totalPrice = decryptTradeCollection["Amt"]
-            };
+
             if (decryptTradeCollection["Status"] == "SUCCESS")
             {
+                //取得OrderId
+                string getOrderId = ((string)decryptTradeCollection["MerchantOrderNo"]).Split('_')[0];
+                ViewBag.OrderInfo = new
+                {
+                    orderId = getOrderId,
+                    totalPrice = decryptTradeCollection["Amt"]
+                };
+                //將Order付款狀態碼改成2
                 Payment newPayment = new Payment()
                 {
                     Date = DateTime.Now,
-                    OrderId = Int32.Parse(decryptTradeCollection["MerchantOrderNo"]),
+                    OrderId = Int32.Parse(getOrderId),
                     Status = (int)PaymentStatusEnum.Paid,
                     Type = decryptTradeCollection["PaymentType"]
                 };
                 try
                 {
-                    Order getOrder = await _Context.Orders.FirstOrDefaultAsync(x => x.OrderId == Int32.Parse(decryptTradeCollection["MerchantOrderNo"]));
+                    Order getOrder = await _Context.Orders.FirstOrDefaultAsync(x => x.OrderId == Int32.Parse(getOrderId));
                     getOrder.Status = (int)PaymentStatusEnum.Paid;
                     _Context.Payments.Add(newPayment);
                     await _Context.SaveChangesAsync();
@@ -169,12 +172,12 @@ namespace Napping_PJ.Controllers
                     Console.WriteLine(e);
                 }
             }
-            receive.Length = 0;
-            foreach (String key in decryptTradeCollection.AllKeys)
-            {
-                receive.AppendLine(key + "=" + decryptTradeCollection[key] + "<br>");
-            }
-            ViewData["TradeInfo"] = receive.ToString();
+            //receive.Length = 0;
+            //foreach (String key in decryptTradeCollection.AllKeys)
+            //{
+            //    receive.AppendLine(key + "=" + decryptTradeCollection[key] + "<br>");
+            //}
+            //ViewData["TradeInfo"] = receive.ToString();
 
             return View("Error");
             //return View();
