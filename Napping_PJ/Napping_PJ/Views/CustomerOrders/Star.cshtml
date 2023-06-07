@@ -3,6 +3,33 @@
 }
 @section Styles{
     <style>
+        .rating {
+            margin-bottom: 20px;
+        }
+
+        .stars {
+            color: #ccc;
+            font-size: 30px;
+        }
+
+        .star {
+            cursor: pointer;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
         .square-image {
             width: 100%;
             height: 0;
@@ -22,27 +49,27 @@
     </style>
 }
 <div id="app">
-    <h3 class="mt-4">管理您的訂單</h3>
+    <h3 class="mt-4">管理您的住宿評鑑</h3>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">
             查詢訂單:<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
                     <input class="form-control" type="text" placeholder="訂單編號"
                            v-model="orderId" aria-label="訂單編號" aria-describedby="btnNavbarSearch" />
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="button" @@click="filterCustomerOrders(orderId)"><i class="fas fa-search"></i></button>
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button" @@click="filterFinishOrders(orderId)"><i class="fas fa-search"></i></button>
                 </div>
             </form>
         </li>
         <li>
             <div class="input-group">
-                <button class="btn btn-primary" type="button" @@click="getCustomerOrders"><i class="fa-solid fa-arrow-rotate-right"></i>重新整理訂單</button>
+                <button class="btn btn-primary" type="button" @@click="getFinishOrders"><i class="fa-solid fa-arrow-rotate-right"></i>重新整理訂單</button>
             </div>
         </li>
     </ol>
-    <template v-for="item in CustomerOrders">
+    <template v-for="item in FinishOrders">
         <div class="row">
             <div class="col-12">
-                <div class="card bg-dark text-white mb-4">
+                <div class="card bg-secondary text-white mb-4">
                     <div class="card-body">訂單編號:{{item.orderId}}</div>
                     <div class="row">
                         <div class="col-4">
@@ -55,6 +82,8 @@
                                 <li><h2>{{item.hotelName}}</h2></li>
                                 <li><h4>{{item.city}} {{item.region}}</h4></li>
                                 <li><h4><i :class="exampleModal.changeStatus(item.status)"></i>{{item.statusDisplay}}</h4></li>
+                                <li><h4><i class="fa-regular fa-circle-check"></i>已退房</h4></li>
+                                <li><h4><i class="fa-solid fa-triangle-exclamation"></i>尚未評價</h4></li>
                             </ul>
                         </div>
                         <div class="col-4">
@@ -77,12 +106,12 @@
         </div>
     </template>
 </div>
-<!-- OrderDetailModal -->
+<!-- CommentModal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">訂單明細</h5>
+                <h5 class="modal-title" id="exampleModalLabel">住宿評鑑</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -104,7 +133,6 @@
                                 <li>{{item.hotelName}}</li>
                                 <li>住宿電話:{{item.hotelPhone}}</li>
                                 <li>客房資訊:{{item.roomType}}</li>
-                                <li>特殊需求:{{item.note}}</li>
                             </ul>
                         </div>
                     </div>
@@ -124,34 +152,59 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="row">
-                        <div class="col-6">
-                            <ul style="list-style:none">
-                                <li>住客資訊</li>
-                                <li><h5>{{item.nameOfBooking}}</h5></li>
-                                <li>預訂總人數</li>
-                                <li><h5>{{item.numberOfGuests}}</h5></li>
-                            </ul>
+                    <div class="rating">
+                        <h4>性價比</h4>
+                        <div class="stars" id="cpStars">
+                            <span class="star" onclick="rate('cp', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('cp', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('cp', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('cp', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('cp', 5)">&#9733;</span>
                         </div>
-                        <div class="col-6">
-                            <ul style="list-style:none">
-                                <li>付款方式</li>
-                                <li><h5>{{item.paymentType}}</h5></li>
-                                <li>總金額</li>
-                                <li><h5>{{item.totalPrice}}</h5></li>
-                            </ul>
+                        <span class="rating-text">有點貴</span>
+                    </div>
+                    <div class="rating">
+                        <h4>舒適度</h4>
+                        <div class="stars" id="comfortableStars">
+                            <span class="star" onclick="rate('comfortable', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('comfortable', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('comfortable', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('comfortable', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('comfortable', 5)">&#9733;</span>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-black stretched-link" href="#">聯絡Napping客服中心</a>
-                                <div class="small text-black"><i class="fas fa-angle-right"></i></div>
-                            </div>
+                    <div class="rating">
+                        <h4>員工服務</h4>
+                        <div class="stars" id="staffStars">
+                            <span class="star" onclick="rate('staff', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('staff', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('staff', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('staff', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('staff', 5)">&#9733;</span>
                         </div>
                     </div>
+                    <div class="rating">
+                        <h4>設施</h4>
+                        <div class="stars" id="facilityStars">
+                            <span class="star" onclick="rate('facility', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('facility', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('facility', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('facility', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('facility', 5)">&#9733;</span>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <h4>清潔</h4>
+                        <div class="stars" id="cleanStars">
+                            <span class="star" onclick="rate('clean', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('clean', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('clean', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('clean', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('clean', 5)">&#9733;</span>
+                        </div>
+                    </div>
+                    <button onclick="submitRating()">提交評價</button>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <span v-html="checkOutBtn"></span>
@@ -163,15 +216,35 @@
 
 @section Scripts{
     <script>
+        var ratings = {};
+
+        // 評價函式
+        function rate(category, value) {
+            ratings[category] = value;
+            var stars = document.getElementById(category + 'Stars').children;
+            for (var i = 0; i < value; i++) {
+                stars[i].style.color = '#ffc107'; // 被選中的星星顏色為黃色
+            }
+            for (var j = value; j < 5; j++) {
+                stars[j].style.color = '#ccc'; // 未被選中的星星顏色為灰色
+            }
+        }
+
+        // 提交評價函式
+        function submitRating() {
+            // 在這裡可以使用ratings物件進行評價的後續處理，例如傳送到伺服器或顯示結果
+            console.log(ratings);
+        }
+
         var app = new Vue({
             el: '#app',
             data: {
-                CustomerOrders: [],
+                FinishOrders: [],
                 orderId: "",
             },
             mounted: function () {
                 let _this = this;
-                _this.getCustomerOrders();
+                _this.getFinishOrders();
             },
             filters: {
                 formatDateTime(value) {
@@ -197,28 +270,28 @@
                 }
             },
             methods: {
-                getCustomerOrders: function () {
+                getFinishOrders: function () {
                     let _this = this;
-                    axios.get('/CustomerOrders/GetCustomerOrders').then(response => {
-                        _this.CustomerOrders = response.data;
+                    axios.get('/CustomerOrders/GetFinishOrders').then(response => {
+                        _this.FinishOrders = response.data;
                     });
                 },
                 setItem: function (selectedItem) {
 
                     exampleModal.item = selectedItem;
                 },
-                filterCustomerOrders: function (orderId) {
+                filterFinishOrders: function (orderId) {
                     let _this = this;
                     var okOrderId = isNaN(Number(_this.orderId)) ? 0 : Number(_this.orderId);
-                    axios.get(`/CustomerOrders/FilterCustomerOrders?orderId=${okOrderId}`).then(response => {
+                    axios.get(`/CustomerOrders/FilterFinishOrders?orderId=${okOrderId}`).then(response => {
                         if (typeof response.data === 'string') {
                             alert(response.data);
                         }
                         else {
-                            _this.CustomerOrders = response.data;
+                            _this.FinishOrders = response.data;
                         }
                     });
-                    _this.orderId="";
+                    _this.orderId = "";
                 },
                 showCheckOut: function (status, orderId) {
                     axios.post(`/CustomerOrders/ShowCheckOut?status=${status}&orderId=${orderId}`).then(response => {
@@ -261,7 +334,6 @@
                     return formattedDateTime;
                 }
             },
-
             methods: {
                 changeStatusColor: function (status) {
                     const statusMap = {

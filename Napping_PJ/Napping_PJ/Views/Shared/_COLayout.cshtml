@@ -20,21 +20,11 @@
 		<a class="navbar-brand ps-3" asp-area="" asp-controller="Home" asp-action="Index">Napping</a>
 		<!-- Sidebar Toggle-->
 		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-		<div class="nav ms-auto" style="color: azure;">
-			管理員
+		<div class="nav ms-auto" style="color: azure;margin-right: 20px;">
+			<ul class="navbar-nav">
+				<partial name="_LoginPartial" />
+			</ul>
 		</div>
-		<!-- Navbar-->
-		<ul class="navbar-nav ms-0 me-3 me-lg-4">
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-					<li><a class="dropdown-item" href="#!">Settings</a></li>
-					<li><a class="dropdown-item" href="#!">Activity Log</a></li>
-					<li><hr class="dropdown-divider" /></li>
-					<li><a class="dropdown-item" href="#!">Logout</a></li>
-				</ul>
-			</li>
-		</ul>
 	</nav>
 	<div id="layoutSidenav">
 		<div id="layoutSidenav_nav">
@@ -42,11 +32,11 @@
 				<div class="sb-sidenav-menu">
 					<div class="nav">
 						<div class="sb-sidenav-menu-heading">會員功能</div>
-						<a class="nav-link" asp-area="Admin" asp-controller="Roles" asp-action="Index">
+						<a class="nav-link" asp-area="" asp-controller="CustomerOrders" asp-action="Index">
 							<div class="sb-nav-link-icon"><i class="fa-solid fa-hotel"></i></div>
 							管理訂單
 						</a>
-						<a class="nav-link" asp-area="Admin" asp-controller="Profits" asp-action="Index">
+						<a class="nav-link" asp-area="" asp-controller="CustomerOrders" asp-action="Star">
 							<div class="sb-nav-link-icon"><i class="fa-regular fa-star"></i></div>
 							住宿評鑑
 						</a>
