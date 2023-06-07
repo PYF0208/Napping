@@ -91,7 +91,7 @@
         <span class="tri-pattern tri-pattern-8"></span>
 
 		<div class="result-container">
-			<div class="row clearfix" style="height: 100vh;">
+			<div class="row clearfix" style="height: 90vh;">
 				<!--Content Side-->
 				<div class="content-side col-lg-8 col-md-12 col-sm-12">
 					<div class="blog-content">
@@ -343,33 +343,27 @@
 			data: {
 				size: 'default',
 				timeValue: null,
-				disabledDate: null,
+				pickerOptions:{
+					disabledDate: null,
+				},
+				
+                
 			},
 			mounted: function () {
 				let _this = this;
-				_this.disabledDate = _this.disabledStartDate;
+				_this.pickerOptions.disabledDate = _this.disabledStartDate;
 			},
 			methods: {
 				disabledStartDate(date) {
 					let _this = this;
-					//找今天
-					var dateNow = new Date();
 					//禁用今天以前的日期
+					var dateNow = new Date();
 					var yesterday = dateNow.setDate(dateNow.getDate() - 1);
 					if (date.getTime() <= yesterday) {
 						return true;
 					}
 					return false;
 				},
-				getCanBookRoom(date){
-					let _this = this;
-					//console.log("開始日期:", this.timeValue[0]);
-					//console.log("结束日期:", this.timeValue[1]);
-
-
-
-				}
-
 			},
 		});
 
@@ -385,6 +379,16 @@
 			},
 			methods: {
 				searchRoom: function () {
+					if (app.timeValue != null){
+						var startDate = app.timeValue[0];
+						var endDate = app.timeValue[1];
+
+						var test = vm.resultVM.filter(x => x.roomOrders.checkIn <= endDate && x.roomOrders.checkOut >= startDate);
+						
+						console.log(test);
+					
+					}
+
 
 					vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
 					vm.filterResultVM();
