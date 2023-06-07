@@ -33,6 +33,11 @@
                 </div>
             </form>
         </li>
+        <li>
+            <div class="input-group">
+                <button class="btn btn-primary" type="button" @@click="getCustomerOrders"><i class="fa-solid fa-arrow-rotate-right"></i>重新整理訂單</button>
+            </div>
+        </li>
     </ol>
     <template v-for="item in CustomerOrders">
         <div class="row">
@@ -213,6 +218,7 @@
                             _this.CustomerOrders = response.data;
                         }
                     });
+                    _this.orderId="";
                 },
                 showCheckOut: function (status, orderId) {
                     axios.post(`/CustomerOrders/ShowCheckOut?status=${status}&orderId=${orderId}`).then(response => {
