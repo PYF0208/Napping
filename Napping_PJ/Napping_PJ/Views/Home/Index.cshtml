@@ -91,7 +91,7 @@
         <span class="tri-pattern tri-pattern-8"></span>
 
 		<div class="result-container">
-			<div class="row clearfix" style="height: 100vh;">
+			<div class="row clearfix" style="height: 90vh;">
 				<!--Content Side-->
 				<div class="content-side col-lg-8 col-md-12 col-sm-12">
 					<div class="blog-content">
@@ -196,6 +196,37 @@
     <script src="~/lib/vue/vue.min.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/lib/element-ui/index.min.js"></script>
+	<script>
+		var app = new Vue({
+			el: '#datePicker',
+			data: {
+				size: 'default',
+				timeValue: null,
+				pickerOptions: {
+					disabledDate: null,
+				},
+
+
+			},
+			mounted: function () {
+				let _this = this;
+				_this.pickerOptions.disabledDate = _this.disabledStartDate;
+			},
+			methods: {
+				disabledStartDate(date) {
+					let _this = this;
+					//禁用今天以前的日期
+					var dateNow = new Date();
+					var yesterday = dateNow.setDate(dateNow.getDate() - 1);
+					if (date.getTime() <= yesterday) {
+						return true;
+					}
+					return false;
+				},
+			},
+		});
+
+	</script>
     <script>
         const vm = new Vue({
             el: "#app",
@@ -240,20 +271,45 @@
                   <a class="info-window__link" href="#">Read More</a>
                 </div>`;
                 },
-
 				filterResultVM: function () {
 					let _this = this;
 					axios.get(`/api/Result/Get`).then(response => {
-						_this.resultVM = response.data.filter(x => {
-							if (_this.numOfGuests >= 5) {
-								return x.maxGuests == 6;
-							} else if (_this.numOfGuests >= 3) {
-								return x.maxGuests == 4;
-							}
-							return x.maxGuests == 2;
-						});
-						_this.initMap();
+						//如果有輸入時間
+						if (app.timeValue != null) {
+
+							var startDate = app.timeValue[0];
+							var endDate = app.timeValue[1];
+							_this.resultVM = response.data.filter(x => {
+								if (x.roomOrders.length == 0) {
+									return true;
+								} else if (x.roomOrders.length != 0) {
+									return x.roomOrders.find(c => c.checkIn <= endDate && c.checkOut >= startDate)
+								}
+								return false;
+							}).filter(x => {
+								if (_this.numOfGuests >= 5) {
+									return x.maxGuests == 6;
+								} else if (_this.numOfGuests >= 3) {
+									return x.maxGuests == 4;
+								}
+								return x.maxGuests == 2;
+							})
+
+						} else if (app.timeValue == null) {
+						//如果沒輸入時間
+							_this.resultVM = response.data.filter(x => {
+
+								if (_this.numOfGuests >= 5) {
+									return x.maxGuests == 6;
+								} else if (_this.numOfGuests >= 3) {
+									return x.maxGuests == 4;
+								}
+								return x.maxGuests == 2;
+							})
+						
+						}
 					});
+					_this.initMap();
 				},
 				initMap: function () {
 					let _this = this;
@@ -337,43 +393,7 @@
 		});
 
 	</script>
-	<script>
-		var app = new Vue({
-			el: '#datePicker',
-			data: {
-				size: 'default',
-				timeValue: null,
-				disabledDate: null,
-			},
-			mounted: function () {
-				let _this = this;
-				_this.disabledDate = _this.disabledStartDate;
-			},
-			methods: {
-				disabledStartDate(date) {
-					let _this = this;
-					//找今天
-					var dateNow = new Date();
-					//禁用今天以前的日期
-					var yesterday = dateNow.setDate(dateNow.getDate() - 1);
-					if (date.getTime() <= yesterday) {
-						return true;
-					}
-					return false;
-				},
-				getCanBookRoom(date){
-					let _this = this;
-					//console.log("開始日期:", this.timeValue[0]);
-					//console.log("结束日期:", this.timeValue[1]);
-
-
-
-				}
-
-			},
-		});
-
-	</script>
+	
 	<script>
 		var searchApp = new Vue({
 			el: '#search',
@@ -381,11 +401,10 @@
 
 			},
 			mounted: function () {
-
+				let _this = this;
 			},
 			methods: {
-				searchRoom: function () {
-
+				searchRoom: function () {	
 					vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
 					vm.filterResultVM();
 				},
