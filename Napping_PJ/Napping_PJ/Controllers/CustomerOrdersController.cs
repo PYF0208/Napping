@@ -234,9 +234,9 @@ namespace Napping_PJ.Controllers
                     Note = comment.Note,
                     Date = comment.Date,
                 };
-                return Ok(comment);
+                return Ok(cm);
             }
-        return Content("");
+        return Content("住宿評價尚未完成!");
         }
     }
 
