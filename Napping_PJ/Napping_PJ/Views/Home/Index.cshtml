@@ -147,12 +147,12 @@
 		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3 class="modal-title" id="staticBackdropLabel" style="color: red;">喜愛清單</h3>
+					<h3 class="modal-title" id="staticBackdropLabel" style="color: red;text-align:center;">喜愛清單</h3>
 					@*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
 				</div>
 				<div class="modal-body">
 					<template v-if="likeVM.length === 0">
-						<p>您還沒有收藏任何旅店唷!</p>
+						<h4>您還沒有收藏任何旅店唷!</h4>
 					</template>
 					<template v-else>
 						<div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="500ms" v-for="item in likeVM">
@@ -165,7 +165,7 @@
 								</div>
 								<div class="text-box">
 									<a :href="'Home/HotelPage/'+item.hotelId">
-										<h3>{{item.hotelname}}</h3>
+										<h3>{{item.hotelName}}</h3>
 										<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
 										<div>
 											<h4>起價&ensp;<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span></h4>

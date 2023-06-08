@@ -151,7 +151,7 @@ namespace Napping_PJ.Controllers
 
                     //Rooms表
                     RoomType = co.Room.Type,
-                    HotelId=co.Room.HotelId,
+                    HotelId = co.Room.HotelId,
 
                     //Hotels表
                     HotelName = co.Room.Hotel.Name,
@@ -162,9 +162,12 @@ namespace Napping_PJ.Controllers
                     HotelPhone = co.Room.Hotel.Phone,
 
                     //Payments表
-                    PaymentType = co.Order.Payments.OrderBy(x => x.PaymentId).Last().Type
-                });
+                    PaymentType = co.Order.Payments.OrderBy(x => x.PaymentId).Last().Type,
 
+                    //Comments表
+                    CommentId = _context.Comments.FirstOrDefault(
+                        x => x.HotelId == co.Room.HotelId && x.OrderId == co.OrderId && x.CustomerId == customer.CustomerId).CommentId,
+                });
             return customerOrders;
         }
 
@@ -195,7 +198,7 @@ namespace Napping_PJ.Controllers
 
                     //Rooms表
                     RoomType = co.Room.Type,
-                    HotelId=co.Room.HotelId,
+                    HotelId = co.Room.HotelId,
 
                     //Hotels表
                     HotelName = co.Room.Hotel.Name,
@@ -206,7 +209,11 @@ namespace Napping_PJ.Controllers
                     HotelPhone = co.Room.Hotel.Phone,
 
                     //Payments表
-                    PaymentType = co.Order.Payments.OrderBy(x => x.PaymentId).Last().Type
+                    PaymentType = co.Order.Payments.OrderBy(x => x.PaymentId).Last().Type,
+
+                    //Comments表
+                    CommentId = _context.Comments.FirstOrDefault(
+                        x => x.HotelId == co.Room.HotelId && x.OrderId == co.OrderId && x.CustomerId == customer.CustomerId).CommentId,
                 });
             if (!customerOrders.Any())
             {
@@ -217,7 +224,7 @@ namespace Napping_PJ.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetComment([FromBody]CommentViewModel cv)
+        public IActionResult GetComment([FromBody] CommentViewModel cv)
         {
             var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
             var comment = _context.Comments.AsNoTracking().FirstOrDefault(x => x.CustomerId == customer.CustomerId && x.HotelId == cv.HotelId && x.OrderId == cv.OrderId);
@@ -225,7 +232,7 @@ namespace Napping_PJ.Controllers
             {
                 var cm = new CommentViewModel
                 {
-
+                    CommentId = comment.CommentId,
                     Cp = comment.Cp,
                     Comfortable = comment.Comfortable,
                     Staff = comment.Staff,
@@ -236,7 +243,7 @@ namespace Napping_PJ.Controllers
                 };
                 return Ok(cm);
             }
-        return Content("住宿評價尚未完成!");
+            return Content("住宿評價尚未完成!");
         }
     }
 

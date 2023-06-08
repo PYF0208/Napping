@@ -83,7 +83,8 @@
                                 <li><h4>{{item.city}} {{item.region}}</h4></li>
                                 <li><h4><i :class="exampleModal.changeStatus(item.status)"></i>{{item.statusDisplay}}</h4></li>
                                 <li><h4><i class="fa-regular fa-circle-check"></i>已退房</h4></li>
-                                <li><h4><i class="fa-solid fa-triangle-exclamation"></i>尚未評價</h4></li>
+                                <template v-if="item.commentId"><li><h4><span><i class="fa-regular fa-circle-check"></i></span>已完成評鑑</h4></li></template>
+                                <template v-else><li><h4><span><i class="fa-solid fa-triangle-exclamation"></i></span>尚未完成評鑑</h4></li></template>
                             </ul>
                         </div>
                         <div class="col-4">
@@ -109,7 +110,7 @@
 <!-- CommentModal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content" @*v-for="comment in ratings"*@>
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">您的評鑑</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -118,11 +119,11 @@
 
                 <div class="card bg-light text-black mb-4">
                     <div class="card-body bg-secondary text-white">訂單編號:{{item.orderId}}</div>
-                    <div :class="changeStatusColor(item.status)" id="1" v-if="item.status==1">
-                        <h5><span><i class="fa-solid fa-triangle-exclamation"></i></span>{{item.statusDisplay}}</h5>
+                    <div class="card-body bg-success text-white" id="1" v-if="ratings.commentId">
+                        <h5><span><i class="fa-regular fa-circle-check"></i></span>已完成評鑑</h5>
                     </div>
-                    <div :class="changeStatusColor(item.status)" id="2" v-if="item.status==2">
-                        <h5><span><i class="fa-regular fa-circle-check"></i></span>{{item.statusDisplay}}</h5>
+                    <div class="card-body bg-warning text-white" id="2" v-else>
+                        <h5><span><i class="fa-solid fa-triangle-exclamation"></i></span>尚未完成評鑑</h5>
                     </div>
                     <div class="row">
                         <div class="col-12">
@@ -212,7 +213,6 @@
             <div class="modal-footer">
                 <span>最後修改時間:{{}}</span>
                 <button @@click="submitRating()">提交評價</button>
-                <span v-html="checkOutBtn"></span>
                 <button type="button" class="btn-secondary" data-bs-dismiss="modal">關閉</button>
             </div>
         </div>
@@ -307,11 +307,6 @@
                         exampleModal.ratings = response.data;
                     })
                 },
-                showCheckOut: function (status, orderId) {
-                    axios.post(`/CustomerOrders/ShowCheckOut?status=${status}&orderId=${orderId}`).then(response => {
-                        exampleModal.checkOutBtn = response.data;
-                    });
-                },
             },
         });
     </script>
@@ -320,11 +315,11 @@
             el: '#exampleModal',
             data: {
                 item: [],
-                ratings:[],
+                ratings: {},
                 checkOutBtn: "",
             },
             mounted: function () {
-    
+
             },
             filters: {
                 formatDateTime(value) {
@@ -350,14 +345,6 @@
                 }
             },
             methods: {
-                changeStatusColor: function (status) {
-                    const statusMap = {
-                        1: "card-body bg-warning text-white",
-                        2: "card-body bg-success text-white",
-                        3: "card-body bg-danger text-white"
-                    };
-                    return statusMap[status];
-                },
                 changeStatus: function (status) {
                     const statusMap = {
                         1: "fa-solid fa-triangle-exclamation",
@@ -367,7 +354,7 @@
                     return statusMap[status];
                 },
                 rate: function (category, value) {
-                    let _this=this;
+                    let _this = this;
                     _this.ratings[category] = value;
                     var stars = document.getElementById(category + 'Stars').children;
                     for (var i = 0; i < value; i++) {
@@ -378,7 +365,7 @@
                     }
                 },
                 submitRating: function () {
-                    let _this=this;
+                    let _this = this;
                     console.log(_this.ratings);
                 },
             },
