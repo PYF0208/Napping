@@ -43,11 +43,11 @@
                 console.log(error.response.data);
             }
         },
-        setSession: async function (value) {
+        setSession: async function (room) {
             var self = this;
             try {
                 //console.log(value);
-                var response = await axios.post(`${document.location.origin}/cart/AddSession`, value);
+                var response = await axios.post(`${document.location.origin}/cart/SetSession`, room);
                 //console.log(response.data);
                 self.getSession();
 
@@ -59,7 +59,7 @@
             var self = this;
             try {
                 var response = await axios.get(`${document.location.origin}/cart/GetSession`);
-                //console.log(response.data);
+                console.log(response.data);
                 self.rooms = response.data;
             } catch (error) {
                 console.log(error.response.data);
@@ -78,17 +78,19 @@
                     );
             });
         },
-        serviceQuanSub: async function (service) {
+        serviceQuanSub: async function (room, service) {
             var self = this;
             if (service.serviceQuantity > 0) {
                 service.serviceQuantity--;
-                await self.setSession(self.rooms);
+                await self.setSession(room);
+                await self.getSession();
             }
         },
-        serviceQuanAdd: async function (service) {
+        serviceQuanAdd: async function (room, service) {
             var self = this;
             service.serviceQuantity++;
-            await self.setSession(self.rooms);
+            await self.setSession(room);
+            await self.getSession();
         },
         checkOut: function () {
             var self = this;
@@ -98,7 +100,7 @@
             location.href = location.origin + "/CheckOut/Index";
 
         },
-        formateDate :function(dateStr) {
+        formateDate: function (dateStr) {
             var date = new Date(dateStr);
             var formattedDate = `${date.getFullYear()}/${(date.getMonth() + 1)
                 .toString()
