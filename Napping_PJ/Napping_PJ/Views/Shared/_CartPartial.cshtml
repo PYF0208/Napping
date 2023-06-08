@@ -23,7 +23,7 @@
                         </div>
                         <div class="row">
                             <span class="optionDiv bg-light" v-for="service in room.selectedExtraServices">
-                                <label>{{service.name}}</label><a @@click="serviceQuanSub(service)">-</a><a href="#" class="border">{{service.serviceQuantity}}</a><a @@click="serviceQuanAdd(service)">+</a>
+                                <label>{{service.name}}</label><a @@click="serviceQuanSub(room,service)">-</a><a href="#" class="border">{{service.serviceQuantity}}</a><a @@click="serviceQuanAdd(room,service)">+</a>
                             </span>
                         </div>
                         <div>
