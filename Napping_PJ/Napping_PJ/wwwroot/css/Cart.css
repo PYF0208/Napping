@@ -6,8 +6,8 @@
 
 #cartVue .cart-float {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 0.5em;
+    right: 0.5em;
     width: 20px;
     height: 20px;
     background-color: red;
@@ -17,12 +17,15 @@
 
 #cartVue .cartBtn {
     position: fixed;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     bottom: 30px;
     right: 30px;
     z-index: 9999;
-    border-radius: 50px;
+    border-radius: 20px ;
+    color: #ffff;
+    background-color: rgba(0,0,0,0.8);
+    border: 3px solid #ffff;
 }
 
 #cartVue .cartItem {

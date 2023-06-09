@@ -47,11 +47,6 @@ namespace Napping_PJ.Controllers
             CloseUrl = "https://core.newebpay.com/API/CreditCard/Close"
         };
 
-        public IActionResult Index2()
-        {
-            return PartialView();
-        }
-
 
         [HttpPost]
         //[Route("Bank/SpgatewayPayBillAsync/")]
@@ -183,8 +178,8 @@ namespace Napping_PJ.Controllers
                 // * 串接程式版本
                 Version = version,
                 // * 商店訂單編號
-                //MerchantOrderNo = $"T{DateTime.Now.ToString("yyyyMMddHHmm")}",
-                MerchantOrderNo = thisOrder.OrderId.ToString(),
+                //MerchantOrderNo = thisOrder.OrderId.ToString(),
+                MerchantOrderNo = $"{thisOrder.OrderId}_{DateTime.Now.ToString("yyyyMMddhhmmss")}",
                 // * 訂單金額
                 Amt = subTotle,
                 // * 商品資訊

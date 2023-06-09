@@ -29,33 +29,190 @@
             button:hover {
                 background-color: #45a049;
             }
+
+        .square-image {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%; /* 創建一個高度等於寬度的正方形 */
+            position: relative;
+            overflow: hidden;
+        }
+
+            .square-image img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* 調整圖像以適應正方形區域 */
+            }
     </style>
 }
-<div class="rating">
-    <h3>CP</h3>
-    <div class="stars" id="cpStars">
-        <span class="star" onclick="rate('cp', 1)">&#9733;</span>
-        <span class="star" onclick="rate('cp', 2)">&#9733;</span>
-        <span class="star" onclick="rate('cp', 3)">&#9733;</span>
-        <span class="star" onclick="rate('cp', 4)">&#9733;</span>
-        <span class="star" onclick="rate('cp', 5)">&#9733;</span>
+<div id="app">
+    <h3 class="mt-4">管理您的住宿評鑑</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">
+            查詢訂單:<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="訂單編號"
+                           v-model="orderId" aria-label="訂單編號" aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button" @@click="filterFinishOrders(orderId)"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+        </li>
+        <li>
+            <div class="input-group">
+                <button class="btn btn-primary" type="button" @@click="getFinishOrders"><i class="fa-solid fa-arrow-rotate-right"></i>重新整理訂單</button>
+            </div>
+        </li>
+    </ol>
+    <template v-for="item in FinishOrders">
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-secondary text-white mb-4">
+                    <div class="card-body">訂單編號:{{item.orderId}}</div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="square-image">
+                                <img :src="item.hotelImage" style="padding: 20px;" />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <ul style="list-style:none">
+                                <li><h2>{{item.hotelName}}</h2></li>
+                                <li><h4>{{item.city}} {{item.region}}</h4></li>
+                                <li><h4><i :class="exampleModal.changeStatus(item.status)"></i>{{item.statusDisplay}}</h4></li>
+                                <li><h4><i class="fa-regular fa-circle-check"></i>已退房</h4></li>
+                                <li><h4><i class="fa-solid fa-triangle-exclamation"></i>尚未評價</h4></li>
+                            </ul>
+                        </div>
+                        <div class="col-4">
+                            <ul style="list-style:none">
+                                <li><h4>預訂日期</h4></li>
+                                <li><h4>{{item.orderDate| formatDateTime}}</h4></li>
+                                <li><h4>入住日期</h4></li>
+                                <li><h4>{{item.checkIn| formatDateTime}}</h4></li>
+                                <li><h4>退房日期</h4></li>
+                                <li><h4>{{item.checkOut| formatDateTime}}</h4></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="setItem(item);showCheckOut(item.status,item.orderId)">點擊查看訂單明細</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>
+<!-- CommentModal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">住宿評鑑</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="card bg-light text-black mb-4">
+                    <div class="card-body bg-secondary text-white">訂單編號:{{item.orderId}}</div>
+                    <div :class="changeStatusColor(item.status)" id="1" v-if="item.status==1">
+                        <h5><span><i class="fa-solid fa-triangle-exclamation"></i></span>{{item.statusDisplay}}</h5>
+                    </div>
+                    <div :class="changeStatusColor(item.status)" id="2" v-if="item.status==2">
+                        <h5><span><i class="fa-regular fa-circle-check"></i></span>{{item.statusDisplay}}</h5>
+                    </div>
+                    <div :class="changeStatusColor(item.status)" id="3" v-if="item.status==3">
+                        <h5><span><i class="fa-regular fa-circle-xmark"></i></span>{{item.statusDisplay}}</h5>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <ul style="list-style:none">
+                                <li>{{item.hotelName}}</li>
+                                <li>住宿電話:{{item.hotelPhone}}</li>
+                                <li>客房資訊:{{item.roomType}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <ul style="list-style:none">
+                                <li>入住日期</li>
+                                <li>{{item.checkIn| formatDateTime}}</li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul style="list-style:none">
+                                <li>退房日期</li>
+                                <li>{{item.checkOut| formatDateTime}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="rating">
+                        <h4>性價比</h4>
+                        <div class="stars" id="cpStars">
+                            <span class="star" onclick="rate('cp', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('cp', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('cp', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('cp', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('cp', 5)">&#9733;</span>
+                        </div>
+                        <span class="rating-text">有點貴</span>
+                    </div>
+                    <div class="rating">
+                        <h4>舒適度</h4>
+                        <div class="stars" id="comfortableStars">
+                            <span class="star" onclick="rate('comfortable', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('comfortable', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('comfortable', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('comfortable', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('comfortable', 5)">&#9733;</span>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <h4>員工服務</h4>
+                        <div class="stars" id="staffStars">
+                            <span class="star" onclick="rate('staff', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('staff', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('staff', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('staff', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('staff', 5)">&#9733;</span>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <h4>設施</h4>
+                        <div class="stars" id="facilityStars">
+                            <span class="star" onclick="rate('facility', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('facility', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('facility', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('facility', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('facility', 5)">&#9733;</span>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <h4>清潔</h4>
+                        <div class="stars" id="cleanStars">
+                            <span class="star" onclick="rate('clean', 1)">&#9733;</span>
+                            <span class="star" onclick="rate('clean', 2)">&#9733;</span>
+                            <span class="star" onclick="rate('clean', 3)">&#9733;</span>
+                            <span class="star" onclick="rate('clean', 4)">&#9733;</span>
+                            <span class="star" onclick="rate('clean', 5)">&#9733;</span>
+                        </div>
+                    </div>
+                    <button onclick="submitRating()">提交評價</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span v-html="checkOutBtn"></span>
+                <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
     </div>
 </div>
-
-<div class="rating">
-    <h3>Comfortable</h3>
-    <div class="stars" id="comfortStars">
-        <span class="star" onclick="rate('comfort', 1)">&#9733;</span>
-        <span class="star" onclick="rate('comfort', 2)">&#9733;</span>
-        <span class="star" onclick="rate('comfort', 3)">&#9733;</span>
-        <span class="star" onclick="rate('comfort', 4)">&#9733;</span>
-        <span class="star" onclick="rate('comfort', 5)">&#9733;</span>
-    </div>
-</div>
-
-<!-- 類似的方式添加其他評價欄位 -->
-
-<button onclick="submitRating()">提交評價</button>
 
 @section Scripts{
     <script>
@@ -78,5 +235,123 @@
             // 在這裡可以使用ratings物件進行評價的後續處理，例如傳送到伺服器或顯示結果
             console.log(ratings);
         }
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                FinishOrders: [],
+                orderId: "",
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getFinishOrders();
+            },
+            filters: {
+                formatDateTime(value) {
+                    const date = new Date(value);
+
+                    // 定義星期幾的名稱
+                    const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+                    // 獲取日期的年、月、日、小時和分鐘
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                    // 獲取星期幾的索引，並根據索引獲取對應的名稱
+                    const weekday = weekdays[date.getDay()];
+
+                    // 格式化為指定的字符串形式
+                    const formattedDateTime = `${year}-${month}-${day} ${weekday} ${hours}:${minutes}`;
+
+                    return formattedDateTime;
+                }
+            },
+            methods: {
+                getFinishOrders: function () {
+                    let _this = this;
+                    axios.get('/CustomerOrders/GetFinishOrders').then(response => {
+                        _this.FinishOrders = response.data;
+                    });
+                },
+                setItem: function (selectedItem) {
+
+                    exampleModal.item = selectedItem;
+                },
+                filterFinishOrders: function (orderId) {
+                    let _this = this;
+                    var okOrderId = isNaN(Number(_this.orderId)) ? 0 : Number(_this.orderId);
+                    axios.get(`/CustomerOrders/FilterFinishOrders?orderId=${okOrderId}`).then(response => {
+                        if (typeof response.data === 'string') {
+                            alert(response.data);
+                        }
+                        else {
+                            _this.FinishOrders = response.data;
+                        }
+                    });
+                    _this.orderId = "";
+                },
+                showCheckOut: function (status, orderId) {
+                    axios.post(`/CustomerOrders/ShowCheckOut?status=${status}&orderId=${orderId}`).then(response => {
+                        exampleModal.checkOutBtn = response.data;
+                    });
+                },
+            },
+        });
+    </script>
+    <script>
+        var exampleModal = new Vue({
+            el: '#exampleModal',
+            data: {
+                item: [],
+                checkOutBtn: "",
+            },
+            mounted: function () {
+
+            },
+            filters: {
+                formatDateTime(value) {
+                    const date = new Date(value);
+
+                    // 定義星期幾的名稱
+                    const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+                    // 獲取日期的年、月、日、小時和分鐘
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                    // 獲取星期幾的索引，並根據索引獲取對應的名稱
+                    const weekday = weekdays[date.getDay()];
+
+                    // 格式化為指定的字符串形式
+                    const formattedDateTime = `${year}-${month}-${day} ${weekday} ${hours}:${minutes}`;
+
+                    return formattedDateTime;
+                }
+            },
+            methods: {
+                changeStatusColor: function (status) {
+                    const statusMap = {
+                        1: "card-body bg-warning text-white",
+                        2: "card-body bg-success text-white",
+                        3: "card-body bg-danger text-white"
+                    };
+                    return statusMap[status];
+                },
+                changeStatus: function (status) {
+                    const statusMap = {
+                        1: "fa-solid fa-triangle-exclamation",
+                        2: "fa-regular fa-circle-check",
+                        3: "fa-regular fa-circle-xmark"
+                    };
+                    return statusMap[status];
+                },
+            },
+        });
     </script>
 }

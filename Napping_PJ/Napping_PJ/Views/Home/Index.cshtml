@@ -30,54 +30,48 @@
 				font-size: 14px;
 				margin-bottom: 20px;
 			}
-	</style>
-	<style>
 		#map {
 			height: 54.5em;
 			width: auto;
 		}
-	</style>
-	<style>
 		.fa-solid.fa-heart {
 			mix-blend-mode: difference;
-            color: rgba(192,192,192,0.5);
-            transition: color 0.3s ease-in-out;
-        }
+			color: rgba(192,192,192,0.5);
+			transition: color 0.3s ease-in-out;
+		}
 
-            .fa-heart:hover,
-            .fa-solid.fa-heart.is-Liked {
-                mix-blend-mode: normal;
-                color: red;
-            }
+			.fa-heart:hover,
+			.fa-solid.fa-heart.is-Liked {
+				mix-blend-mode: normal;
+				color: red;
+			}
 
-    </style>
-    <style>
-        .info-window {
-            max-width: 300px;
-        }
+		.info-window {
+			max-width: 300px;
+		}
 
-        .info-window__image {
-            width: 100%;
-            height: auto;
-        }
+		.info-window__image {
+			width: 100%;
+			height: auto;
+		}
 
-        .info-window__title {
-            font-size: 16px;
-            font-weight: bold;
-            margin: 8px 0;
-        }
+		.info-window__title {
+			font-size: 16px;
+			font-weight: bold;
+			margin: 8px 0;
+		}
 
-        .info-window__description {
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
+		.info-window__description {
+			font-size: 14px;
+			margin-bottom: 8px;
+		}
 
-        .info-window__link {
-            font-size: 14px;
-            color: #007bff;
-            text-decoration: underline;
-            cursor: pointer;
-        }
+		.info-window__link {
+			font-size: 14px;
+			color: #007bff;
+			text-decoration: underline;
+			cursor: pointer;
+		}
 
     </style>
 }
@@ -97,19 +91,19 @@
         <span class="tri-pattern tri-pattern-8"></span>
 
 		<div class="result-container">
-			<div class="row clearfix" style="height: 100vh;">
+			<div class="row clearfix" style="height: 90vh;">
 				<!--Content Side-->
 				<div class="content-side col-lg-8 col-md-12 col-sm-12">
 					<div class="blog-content">
 						<div class="row">
 							<!--Feature Box-->
-                            <template v-if="containsHotel.length == 0">
-                                    <div class="result-box notfound">
-                                        <h1>沒有搜尋到符合的房型QQ</h1>
-                                    </div>
-                                </template>
-								<template v-else v-for="item in containsHotel">
-								<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-delay="3000ms" data-wow-duration="2000ms">
+							<template v-if="containsHotel.length == 0">
+								<div class="result-box notfound bounceIn">
+									<h1>沒有搜尋到符合的房型QQ</h1>
+								</div>
+							</template>
+							<template v-else v-for="item in containsHotel">
+								<div class="result-box col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12 fadeInUp">
 									<div class="inner-box">
 										<div class="icon-box">
 											<div class="heart-box">
@@ -133,53 +127,52 @@
 					</div>
 				</div>
 
-                <!--Sidebar Side-->
-                <div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
-                    <aside class="sidebar blog-sidebar">
-                        <!--Sidebar Widget-->
-                        <div class="sidebar-widget search-box wow fadeInUp" data-wow-delay="0ms"
-                             data-wow-duration="1500ms">
-                            <div class="widget-inner" id="map">
-                                <div class="sidebar-title">
-                                </div>
-                            </div>
-                        </div>
-                    </aside>
-                </div>
-            </div>
+				<!--Sidebar Side-->
+				<div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
+					<aside class="sidebar blog-sidebar">
+						<!--Sidebar Widget-->
+						<div class="sidebar-widget search-box fadeInUp">
+							<div class="widget-inner" id="map">
+								<div class="sidebar-title">
+								</div>
+							</div>
+						</div>
+					</aside>
+				</div>
+			</div>
 
-        </div>
-    </div>
-    <div class="modal fade" id="likeList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="staticBackdropLabel" style="color: red;">喜愛清單</h3>
-                    @*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
-                </div>
-                <div class="modal-body">
-                    <template v-if="likeVM.length === 0">
-                        <p>您還沒有收藏任何旅店唷!</p>
-                    </template>
-                    <template v-else>
-                        <div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="500ms" v-for="item in likeVM">
-                            <div class="inner-box">
-                                <div class="icon-box">
-                                    <div class="heart-box">
-                                        <button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
-                                    </div>
-                                    <img :src="item.hotelImage" />
-                                </div>
-                                <div class="text-box">
-                                    <a :href="'Home/HotelPage/'+item.hotelId">
-                                        <h3>{{item.hotelname}}</h3>
-                                        <h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
-                                        <div>
-                                            <h4>起價&ensp;<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span></h4>
-                                            <h4>建立時間:{{item.createDate | formatDateTime }}</h4>
-                                        </div>
-                                    </a>
-                                </div>
+		</div>
+	</div>
+	<div class="modal fade" id="likeList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="staticBackdropLabel" style="color: red;">喜愛清單</h3>
+					@*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
+				</div>
+				<div class="modal-body">
+					<template v-if="likeVM.length === 0">
+						<p>您還沒有收藏任何旅店唷!</p>
+					</template>
+					<template v-else>
+						<div class="result-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="500ms" v-for="item in likeVM">
+							<div class="inner-box">
+								<div class="icon-box">
+									<div class="heart-box">
+										<button @@click="clickLike(item.hotelId)"><i :class="item.isLike ? 'fa-solid fa-heart is-Liked' : 'fa-solid fa-heart'"></i></button>
+									</div>
+									<img :src="item.hotelImage" />
+								</div>
+								<div class="text-box">
+									<a :href="'Home/HotelPage/'+item.hotelId">
+										<h3>{{item.hotelname}}</h3>
+										<h6><span>{{item.city}}</span> <span>{{item.region}}</span></h6>
+										<div>
+											<h4>起價&ensp;<span>NT </span><span>{{item.lowestPrice}}</span><span>/每晚</span></h4>
+											<h4>建立時間:{{item.createDate | formatDateTime }}</h4>
+										</div>
+									</a>
+								</div>
 
                             </div>
                         </div>
@@ -203,6 +196,37 @@
     <script src="~/lib/vue/vue.min.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/lib/element-ui/index.min.js"></script>
+	<script>
+		var app = new Vue({
+			el: '#datePicker',
+			data: {
+				size: 'default',
+				timeValue: null,
+				pickerOptions: {
+					disabledDate: null,
+				},
+
+
+			},
+			mounted: function () {
+				let _this = this;
+				_this.pickerOptions.disabledDate = _this.disabledStartDate;
+			},
+			methods: {
+				disabledStartDate(date) {
+					let _this = this;
+					//禁用今天以前的日期
+					var dateNow = new Date();
+					var yesterday = dateNow.setDate(dateNow.getDate() - 1);
+					if (date.getTime() <= yesterday) {
+						return true;
+					}
+					return false;
+				},
+			},
+		});
+
+	</script>
     <script>
         const vm = new Vue({
             el: "#app",
@@ -247,141 +271,146 @@
                   <a class="info-window__link" href="#">Read More</a>
                 </div>`;
                 },
+				filterResultVM: function () {
+					let _this = this;
+					axios.get(`/api/Result/Get`).then(response => {
+						//如果有輸入時間
+						if (app.timeValue != null) {
 
-                filterResultVM: function () {
-                    let _this = this;
-                    axios.get(`/api/Result/Get`).then(response => {
-                        _this.resultVM = response.data.filter(x => {
-                            if (_this.numOfGuests >= 5) {
-                                return x.maxGuests == 6;
-                            } else if (_this.numOfGuests >= 3) {
-                                return x.maxGuests == 4;
-                            }
-                            return x.maxGuests == 2;
-                        });
-                        _this.initMap();
-                    });
-                },
-                initMap: function () {
-                    let _this = this;
-                    _this.map = new google.maps.Map(document.getElementById("map"), {
-                        zoom: 8,
-                        center: { lat: parseFloat(_this.resultVM[46].positionLat), lng: parseFloat(_this.resultVM[46].positionLon) },
-                    });
-                    //const mapPrice = document.createElement("div");
-                    //mapPrice.classname="price-tag";
-                    //mapPrice.textContent=""
+							var startDate = app.timeValue[0];
+							var endDate = app.timeValue[1];
+							_this.resultVM = response.data.filter(x => {
+								if (x.roomOrders.length == 0) {
+									return true;
+								} else if (x.roomOrders.length != 0) {
+									return x.roomOrders.find(c => c.checkIn <= endDate && c.checkOut >= startDate)
+								}
+								return false;
+							}).filter(x => {
+								if (_this.numOfGuests >= 5) {
+									return x.maxGuests == 6;
+								} else if (_this.numOfGuests >= 3) {
+									return x.maxGuests == 4;
+								}
+								return x.maxGuests == 2;
+							})
+
+						} else if (app.timeValue == null) {
+						//如果沒輸入時間
+							_this.resultVM = response.data.filter(x => {
+
+								if (_this.numOfGuests >= 5) {
+									return x.maxGuests == 6;
+								} else if (_this.numOfGuests >= 3) {
+									return x.maxGuests == 4;
+								}
+								return x.maxGuests == 2;
+							})
+						
+						}
+						_this.initMap();
+					});
+					
+				},
+				initMap: function () {
+					let _this = this;
+					_this.map = new google.maps.Map(document.getElementById("map"), {
+						zoom: 14,
+						center: { lat: parseFloat(_this.resultVM[46].positionLat), lng: parseFloat(_this.resultVM[46].positionLon) },
+					});
+					//const mapPrice = document.createElement("div");
+					//mapPrice.classname="price-tag";
+					//mapPrice.textContent=""
 
 
-                    _this.map.addListener("bounds_changed", function () {
-                        let x = _this.map.getBounds();
-                        _this.containsHotel = [];
-                        for (let i = 0; i < _this.resultVM.length; i++) {
-                            if (x.contains({ lat: parseFloat(_this.resultVM[i].positionLat), lng: parseFloat(_this.resultVM[i].positionLon) })) {
-                                _this.containsHotel.push(_this.resultVM[i])
-                            }
-                        }
-                    })
-                    _this.resultVM.forEach(location => {
-                        const marker = new google.maps.Marker({
-                            position: { lat: parseFloat(location.positionLat), lng: parseFloat(location.positionLon) },
-                            map: _this.map,
-                            //icon: '/images/mapPin.png',
-                            title: location.name,
-                            label: {
-                                color: "white",
-                                text: location.name,
-                                className: "btn btn-primary",
-                            },
-                        });
-                        const infoWindow = new google.maps.InfoWindow({
-                            content: _this.getInfoWindowContent(location.image, location.name, location.price),
-                            maxWidth: 200,
-                        });
+					_this.map.addListener("bounds_changed", function () {
+						let x = _this.map.getBounds();
+						_this.containsHotel = [];
+						for (let i = 0; i < _this.resultVM.length; i++) {
+							if (x.contains({ lat: parseFloat(_this.resultVM[i].positionLat), lng: parseFloat(_this.resultVM[i].positionLon) })) {
+								_this.containsHotel.push(_this.resultVM[i])
+							}
+						}
+					})
+					_this.resultVM.forEach(location => {
+						const marker = new google.maps.Marker({
+							position: { lat: parseFloat(location.positionLat), lng: parseFloat(location.positionLon) },
+							map: _this.map,
+							//icon: '/images/mapPin.png',
+							title: location.name,
+							label: {
+								color: "white",
+								text: location.name,
+								className: "btn btn-primary",
+							},
+						});
+						const infoWindow = new google.maps.InfoWindow({
+							content: _this.getInfoWindowContent(location.image, location.name, location.price),
+							maxWidth: 200,
+						});
 
-                        _this.markers.push(marker);
-                        marker.addListener('click', function () {
-                            infoWindow.open(map, marker)
-                        });
-                    });
-                },
-                getLikes: function () {
-                    let _this = this;
-                    axios.get(`/Like/GetLikes`).then(response => {
-                        //alert(JSON.stringify(response.data));
-                        _this.likeVM = response.data;
-                    }).catch(error => {
-                        //console.log(error.response.data);
-                        location.href = _this.baseURL + error.response.data;
-                    });
-                },
-                clickLike: function (id) {
-                    let _this = this;
-                    var request = { params: { hotelId: id } };
-                    axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
-                        _this.filterResultVM();
-                        _this.getLikes();
-                    }).catch(error => {
-                        //console.log(error.response.data);
-                        location.href = _this.baseURL + error.response.data;
-                    });
-                },
-            }
-        });
-    </script>
-    <script>
-        var likeapp = new Vue({
-            el: '#likeButton',
-            data: {
+						_this.markers.push(marker);
+						marker.addListener('click', function () {
+							infoWindow.open(map, marker)
+						});
+					});
+				},
+				getLikes: function () {
+					let _this = this;
+					axios.get(`/Like/GetLikes`).then(response => {
+						//alert(JSON.stringify(response.data));
+						_this.likeVM = response.data;
+					}).catch(error => {
+						//console.log(error.response.data);
+						location.href = _this.baseURL + error.response.data;
+					});
+				},
+				clickLike: function (id) {
+					let _this = this;
+					var request = { params: { hotelId: id } };
+					axios.get(`/Like/ClickLike`, { params: { hotelId: id } }).then(() => {
+						_this.filterResultVM();
+						_this.getLikes();
+					}).catch(error => {
+						//console.log(error.response.data);
+						location.href = _this.baseURL + error.response.data;
+					});
+				},
+			}
+		});
+	</script>
+	<script>
+		var likeapp = new Vue({
+			el: '#likeButton',
+			data: {
 
-            },
-            mounted: function () {
+			},
+			mounted: function () {
 
-            },
-            methods: {
+			},
+			methods: {
 
-            },
-        });
+			},
+		});
 
-    </script>
-    <script>
-        var app = new Vue({
-            el: '#vueApp',
-            data: {
-                size: 'default',
-                timeValue: null,
-            },
-            mounted: function () {
+	</script>
+	
+	<script>
+		var searchApp = new Vue({
+			el: '#search',
+			data: {
 
-            },
-            methods: {
-                submitForm() {
-                    // 提交後想做什麼邏輯
-                    console.log("開始日期:", this.timeValue[0]);
-                    console.log("结束日期:", this.timeValue[1]);
-                },
+			},
+			mounted: function () {
+				let _this = this;
+			},
+			methods: {
+				searchRoom: function () {	
+					vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
+					vm.filterResultVM();
+				},
+			},
+		});
 
-            },
-        });
-
-    </script>
-    <script>
-        var searchApp = new Vue({
-            el: '#search',
-            data: {
-
-            },
-            mounted: function () {
-
-            },
-            methods: {
-                searchRoom: function () {
-
-                    vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
-                    vm.filterResultVM();
-                },
-            },
-        });
-
-    </script>
+	</script>
 				}
