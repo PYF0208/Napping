@@ -1,323 +1,376 @@
 ﻿@model IEnumerable<Napping_PJ.Areas.Admin.Models.HotelsViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 @section Styles
-    {
-    <style>
-        thead {
-            background-color: maroon;
-            color: aliceblue;
-        }
-    </style>
+	{
+	<link href="~/css/table.css" rel="stylesheet" />
 }
+
 <div id="app" class="container">
 
-    <div class="form-group">
-        @*篩選欄位*@
-        <div class="row" style="width:50%;margin-left:auto;margin-right:0px">
-            <label class="col-md-4">關鍵字:</label>
-            <input class="col-md-8 form-control" placeholder="請輸入篩選關鍵字"
-                   v-model="filter" @@keyup="filterHotels">
-        </div>
-    </div>
-    <div class="form-group">
-        @*新增按鍵*@
-        <button type="button" @@click="showInsertPage" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">
-            新增旅店選項
-        </button>
+	<div class="table-responsive">
+		<div class="table-wrapper">
+			@*藍藍綠綠那一塊*@
+			<div class="table-title">
+				<div class="row">
+					@*如果想來點查詢功能<input type="text" class="form-control" placeholder="請輸入篩選關鍵字" v-model="Filter" @@keyup="filterEmployeeDTOes" />*@
+					<div>
+						<button class="btn btn-info" data-toggle="modal" @@click="showInsertPage"><span><i class="fa-solid fa-circle-plus"></i> 新增</span></button>
+					</div>
+				</div>
+			</div>
+			@*藍藍綠綠那一塊*@
+			@*表格標題*@
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<td>HotelId</td>
+						<td>name</td>
+						<td>Star</td>
+						<td>Image</td>
+						<td>ContactName</td>
+						<td>Phone</td>
+						<td>Email</td>
+						<td>City</td>
+						<td>Region</td>
+						<td>Address</td>
+						
+						<td>編輯</td>
+						
+					</tr>
+				</thead>
+				@*表格標題*@
+				@*表格內容*@
+				<tbody>
+					<tr v-for="item in HotelsViewModel">
+						@*v-for="item in FeatureVMs"*@
+						<td>{{item.hotelId}}</td>
+						<td>{{item.name}}</td>
+						<td>{{item.star}}</td>
+						<td>{{item.image}}</td>
+						<td>{{item.contactName}}</td>
+						<td>{{item.phone}}</td>
+						<td>{{item.email}}</td>
+						<td>{{item.city}}</td>
+						<td>{{item.region}}</td>
+						<td>{{item.address}}</td>
+						
+						<td>
+							<a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
+							<a class="btn delete" @@click="deleteHotelsService(item.hotelId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
+						</td>
+					</tr>
+				</tbody>
+				@*表格內容*@
+			</table>
 
-    </div>
-    <div class="form-group">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <td>編輯</td>
-                    <td>HotelId</td>
-                    <td>name</td>
-                    <td>Star</td>
-                    <td>Image</td>
-                    <td>ContactName</td>
-                    <td>Phone</td>
-                    <td>Email</td>
-                    <td>City</td>
-                    <td>Region</td>
-                    <td>Address</td>
-                    <td>AvgComment</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in HotelsViewModel">
-                    <template v-if="item.Edit==true">
-                        <td>
-                            <button class="btn btn-success" @@click="update(item)">修改</button>
-                            <button class="btn btn-warning" @@click="cancel">取消</button>
-                        </td>
-                        <td>{{item.hotelId}}</td>
-                        <td><input v-model="item.name" /> </td>
-                        <td><input v-model="item.star" /> </td>
-                        <td><input v-model="item.image" /> </td>
-                        <td><input v-model="item.contactName" /> </td>
-                        <td><input v-model="item.phone" /> </td>
-                        <td><input v-model="item.email" /> </td>
-                        <td><input v-model="item.city" /> </td>
-                        <td><input v-model="item.region" /></td>
-                        <td><input v-model="item.address" /></td>
-                        <td><input v-model="item.avgComment" /> </td>
-                    </template>
-                    <template v-else>
-                        <td>
-                            <button class="btn btn-primary" @@click="edit(item.hotelId)">編輯</button>
-                            <button class="btn btn-danger" @@click="deleteHotelsService(item.hotelId)">刪除</button>
-                        </td>
-                        <td>{{item.hotelId}}</td>
-                        <td>{{item.name}}</td>
-                        <td>{{item.star}}</td>
-                        <td>{{item.image}}</td>
-                        <td>{{item.contactName}}</td>
-                        <td>{{item.phone}}</td>
-                        <td>{{item.email}}</td>
-                        <td>{{item.city}}</td>
-                        <td>{{item.region}}</td>
-                        <td>{{item.address}}</td>
-                        <td>{{item.avgComment}}</td>
-                    </template>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="form-group">
-        @*新增旅店選項畫面*@
-        <div class="modal fade" id="insertPage" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitleId">新增旅店選項</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
+		</div>
+		@*編輯用的互動視窗*@
+		<div class="form-group">
+			<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId">編輯</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label class="form-label">HotelId:</label>
+								<input class="form-control" readonly v-model="hotelId" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">飯店名稱:</label>
+								<input class="form-control" v-model="o_Name" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">星級:</label>
+								<input class="form-control"  v-model="o_star" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">圖片:</label>
+								<input class="form-control" v-model="o_image" />
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">聯絡人:</label>
+								<input class="form-control" v-model="o_contactName" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">手機:</label>
+								<input class="form-control" v-model="o_phone" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">電子信箱:</label>
+								<input class="form-control" v-model="o_email" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">城市:</label>
+								<input class="form-control" v-model="o_city" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">地區:</label>
+								<input class="form-control" v-model="o_region" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">地址:</label>
+								<input class="form-control" v-model="o_address" />
+							</div>
+
+						
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" class="btn btn-primary" @@click="update()">儲存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		@*新增用的互動視窗*@
+		<div class="form-group">
+			@*新增旅店選項畫面*@
+			<div class="modal fade" id="insertPage" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId">新增旅店選項</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
 
 
-                        <div class="form-group">
-                            <label class="form-label">旅店名稱:</label>
-                            <input class="form-control" v-model="Name" />@* v-model="price"*@
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">星級:</label>
-                            <input class="form-control" v-model="star" />@* v-model="price"*@
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">圖片:</label>
-                            <input class="form-control" v-model="image" />@* v-model="price"*@
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">聯絡人:</label>
-                            <input class="form-control" v-model="contactName" />@* v-model="price"*@
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">手機:</label>
-                            <input class="form-control" v-model="phone" />@* v-model="price"*@
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">電子信箱:</label>
-                            <input class="form-control" v-model="email" />@* v-model="price"*@
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">城市:</label>
-                            <input class="form-control" v-model="city" />@* v-model="price"*@
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">地區:</label>
-                            <input class="form-control" v-model="region" />@* v-model="price"*@
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">地址:</label>
-                            <input class="form-control" v-model="address" />@* v-model="price"*@
-                        </div>
+							<div class="form-group">
+								<label class="form-label">旅店名稱:</label>
+								<input class="form-control" v-model="Name" />@* v-model="price"*@
+							</div>
+							<div class="form-group">
+								<label class="form-label">星級:</label>
+								<input class="form-control" v-model="star" />@* v-model="price"*@
+							</div>
+							<div class="form-group">
+								<label class="form-label">圖片:</label>
+								<input class="form-control" v-model="image" />@* v-model="price"*@
+							</div>
+							<div class="form-group">
+								<label class="form-label">聯絡人:</label>
+								<input class="form-control" v-model="contactName" />@* v-model="price"*@
+							</div>
+							<div class="form-group">
+								<label class="form-label">手機:</label>
+								<input class="form-control" v-model="phone" />@* v-model="price"*@
+							</div>
+							<div class="form-group">
+								<label class="form-label">電子信箱:</label>
+								<input class="form-control" v-model="email" />@* v-model="price"*@
+							</div>
+							<div class="form-group">
+								<label class="form-label">城市:</label>
+								<input class="form-control" v-model="city" />@* v-model="price"*@
+							</div>
+							<div class="form-group">
+								<label class="form-label">地區:</label>
+								<input class="form-control" v-model="region" />@* v-model="price"*@
+							</div>
+							<div class="form-group">
+								<label class="form-label">地址:</label>
+								<input class="form-control" v-model="address" />@* v-model="price"*@
+							</div>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                        <button type="button" class="btn btn-primary" @@click="createHotel">新增</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" class="btn btn-primary" @@click="createHotel">新增</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
+
+
 @section Scripts{
-    <script src="~/lib/vue/vue.min.js"></script>
-    <script src="~/lib/axios/axios.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script>
-        var data = new Vue({
-            el: "#app",
-            data: {
+	<script src="~/lib/vue/vue.min.js"></script>
+	<script src="~/lib/axios/axios.min.js"></script>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script>
+		var data = new Vue({
+			el: "#app",
+			data: {
 
-                HotelsViewModel: [],
-                hotelId: "",
-                Name: "",
-                star: "",
-                image: "",
-                contactName: "",
-                phone: "",
-                email: "",
-                city: "",
-                region: "",
-                address: "",
-                filter: "",
+				HotelsViewModel: [],
+				hotelId: "",
+				Name: "",
+				star: "",
+				image: "",
+				contactName: "",
+				phone: "",
+				email: "",
+				city: "",
+				region: "",
+				address: "",
+				filter: "",
 
-            },
-            mounted: function () {
-                let _this = this;
-                _this.getHotel();
-            },
-            methods: {
-                getHotel: function () {
-                    let _this = this;
-                    axios.get("Hotels/GetHotelsService")
-                        .then(function (response) {
-                            //alert(JSON.stringify(response.data))
-                            _this.HotelsViewModel = response.data;
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                },
-                showInsertPage: function () {
-                    $('#insertPage').modal('show');
-                },
-                createHotel: function () {
+				o_hotelId: "",
+				o_Name: "",
+				o_star: "",
+				o_image: "",
+				o_contactName: "",
+				o_phone: "",
+				o_email: "",
+				o_city: "",
+				o_region: "",
+				o_address: "",
+				o_filter: "",
 
-                    let _this = this;
-                    var request = {
-                        HotelId: 0,
-                        Name: _this.Name,
-                        Star: _this.star,
-                        Image: _this.image,
-                        ContactName: _this.contactName,
-                        Phone: _this.phone,
-                        Email: _this.email,
-                        City: _this.city,
-                        Region: _this.region,
-                        Address: _this.address,
+			},
+			mounted: function () {
+				let _this = this;
+				_this.getHotel();
+			},
+			methods: {
+				getHotel: function () {
+					let _this = this;
+					axios.get("Hotels/GetHotelsService")
+						.then(function (response) {
+							//alert(JSON.stringify(response.data))
+							_this.HotelsViewModel = response.data;
+						})
+						.catch(function (error) {
+							console.log(error);
+						});
+				},
+				showInsertPage: function () {
+					$('#insertPage').modal('show');
+				},
+				createHotel: function () {
 
-                    };
-                    axios.post("Hotels/NewCreate", request)
-                        .then(res => {
-                            alert(res.data);
-                            $("#insertPage").modal('hide');
-                            _this.getHotel()
-                        })
-                },
-                update: function (item) {
-                    //alert("update");
-                    let _this = this;
-                    var request = {
-                        hotelId: item.hotelId,
-                        name: item.name,
-                        star: item.star,
-                        image: item.image,
-                        contactName: item.contactName,
-                        phone: item.phone,
-                        email: item.email,
-                        city: item.city,
-                        region: item.region,
-                        address: item.address,
+					let _this = this;
+					var request = {
+						HotelId: 0,
+						Name: _this.Name,
+						star: _this.star,
+						image: _this.image,
+						contactName: _this.contactName,
+						phone: _this.phone,
+						email: _this.email,
+						city: _this.city,
+						region: _this.region,
+						address: _this.address,
 
-                    };
-                    axios.put(`Hotels/Edit?ID=${item.hotelId}`, request)
-                        .then(response => {
-                            alert(response.data);
-                            _this.getHotel();
-                            //_this.cancel();
-                        });
-                },
-                cancel: function () {
-                    //alert("cancel");
-                    let _this = this;
-                    var request = [];
-                    for (var i = 0; i < _this.HotelsViewModel.length; i++) {
-                        var item = _this.HotelsViewModel[i];
-                        if (item.Edit == true) {
-                            item.Edit = false;
+					};
+					axios.post("Hotels/NewCreate", request)
+						.then(res => {
+							alert(res.data);
+							$("#insertPage").modal('hide');
+							_this.getHotel()
+						})
+				},
+				update: function () {
+					//alert("update");
+					let _this = this;
+					var request = {
+						hotelId: _this.hotelId,
+						Name: _this.o_Name,
+						star: _this.o_star,
+						image: _this.o_image,
+						contactName: _this.o_contactName,
+						phone: _this.o_phone,
+						email: _this.o_email,
+						city: _this.o_city,
+						region: _this.o_region,
+						address: _this.o_address,
+
+					};
+					axios.put(`Hotels/Edit?ID=${_this.hotelId}`, request)
+						.then(response => {
+							alert(response.data);
+							_this.getHotel();
+							//_this.cancel();
+							$('#editModal').modal('hide');
+						});
+				},
+				cancel: function () {
+					//alert("cancel");
+					let _this = this;
+					var request = [];
+					for (var i = 0; i < _this.HotelsViewModel.length; i++) {
+						var item = _this.HotelsViewModel[i];
+						if (item.Edit == true) {
+							item.Edit = false;
 
 
-                            item.name = _this.Name;
-                            item.star = _this.Star;
-                            item.image = _this.Image;
-                            item.contactName = _this.ContactName;
-                            item.phone = _this.Phone;
-                            item.email = _this.Email;
-                            item.city = _this.City;
-                            item.region = _this.Region;
-                            item.address = _this.Address;
+							item.name = _this.Name;
+							item.star = _this.Star;
+							item.image = _this.Image;
+							item.contactName = _this.ContactName;
+							item.phone = _this.Phone;
+							item.email = _this.Email;
+							item.city = _this.City;
+							item.region = _this.Region;
+							item.address = _this.Address;
 
-                        }
-                        request.push(item);
-                    }
-                    _this.HotelsViewModel = request;
-                },
-                filterHotels: function () {
-                    let _this = this;
-                    var request = {};
-                    request.HotelId = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
-                    request.Star = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
-                    request.Name = request.Image = request.ContactName = request.Phone = request.Email
-                        = request.City = request.Region = request.Address = _this.filter;
-                    axios.post(`Hotels/FilterHotels`, request)
-                        .then(function (response) {
-                            alert(JSON.stringify(response.data));
-                            //_this.HotelsViewModel = response.data;
-                            //var HotelsList = [];
-                            //for (var i = 0; i < _this.HotelsViewModel.length; i++) {
-                            //    var item = _this.HotelsViewModel[i];
-                            //    item.Edit = false;
-                            //    HotelsList.push(item);
-                            //}
-                            //_this.HotelsViewModel = HotelsList;
-                        });
-                },
-                edit: function (hotelId) {
-                    //alert("edit");
-                    let _this = this;
-                    var HotelsServiceList = [];
-                    for (var i = 0; i < _this.HotelsViewModel.length; i++) {
-                        var item = _this.HotelsViewModel[i];
-                        if (hotelId == item.hotelId) {
-                            item.Edit = true;
-                            _this.Name = item.name;
-                            _this.Star = item.star;
-                            _this.Image = item.image;
-                            _this.ContactName = item.contactName;
-                            _this.Phone = item.phone;
-                            _this.Email = item.email;
-                            _this.City = item.city;
-                            _this.Region = item.region;
-                            _this.Address = item.address;
-                        }
-                        HotelsServiceList.push(item);
-                    }
-                    _this.HotelsViewModel = HotelsServiceList;
-                },
-                deleteHotelsService: function (hotelId) {
-                    //alert("delete");
-                    let _this = this;
-                    var x = _this.HotelsViewModel.find(h => h.hotelId == hotelId)
+						}
+						request.push(item);
+					}
+					_this.HotelsViewModel = request;
+				},
+				filterHotels: function () {
+					let _this = this;
+					var request = {};
+					request.HotelId = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
+					request.Star = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
+					request.Name = request.Image = request.ContactName = request.Phone = request.Email
+						= request.City = request.Region = request.Address = _this.filter;
+					axios.post(`Hotels/FilterHotels`, request)
+						.then(function (response) {
+							alert(JSON.stringify(response.data));
+							//_this.HotelsViewModel = response.data;
+							//var HotelsList = [];
+							//for (var i = 0; i < _this.HotelsViewModel.length; i++) {
+							//    var item = _this.HotelsViewModel[i];
+							//    item.Edit = false;
+							//    HotelsList.push(item);
+							//}
+							//_this.HotelsViewModel = HotelsList;
+						});
+				},
+				edit: function (item) {
+					//alert("edit");
+					$('#editModal').modal('show');
+					let _this = this;
+					_this.hotelId=item.hotelId;
+							_this.o_Name = item.name;
+							_this.o_star = item.star;
+							_this.o_image = item.image;
+							_this.o_contactName = item.contactName;
+							_this.o_phone = item.phone;
+							_this.o_email = item.email;
+							_this.o_city = item.city;
+							_this.o_region = item.region;
+							_this.o_address = item.address;
+					
+				},
+				deleteHotelsService: function (hotelId) {
+					//alert("delete");
+					let _this = this;
+					var x = _this.HotelsViewModel.find(h => h.hotelId == hotelId)
 
-                    var ret = confirm(`您確定要將ID:${x.hotelId}-${x.name}刪除嗎?`);
-                    if (ret == true) {
-                        axios.delete(`Hotels/DeleteConfirmed?ID=${hotelId}`)
-                            .then(response => {
-                                var y = _this.HotelsViewModel.findIndex(h => h.hotelId == hotelId)
-                                _this.HotelsViewModel.splice(y, 1)
-                            });
-                    }
-                },
-            }
-        });
-    </script>
+					var ret = confirm(`您確定要將ID:${x.hotelId}-${x.name}刪除嗎?`);
+					if (ret == true) {
+						axios.delete(`Hotels/DeleteConfirmed?ID=${hotelId}`)
+							.then(response => {
+								var y = _this.HotelsViewModel.findIndex(h => h.hotelId == hotelId)
+								_this.HotelsViewModel.splice(y, 1)
+							});
+					}
+				},
+			}
+		});
+	</script>
 }
 

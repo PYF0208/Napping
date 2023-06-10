@@ -104,8 +104,8 @@ namespace Napping_PJ
 			{
 				var Services = Scope.ServiceProvider;
 				var EmailSender = Services.GetRequiredService<IBirthday>();
-				BackgroundJob.Enqueue(() => EmailSender.SendBirthDayMail());
-
+				
+				RecurringJob.AddOrUpdate(() => EmailSender.SendBirthDayMail(), Cron.Daily);
 			}  //這邊執行背景發送生日信
 			app.Run();
         }

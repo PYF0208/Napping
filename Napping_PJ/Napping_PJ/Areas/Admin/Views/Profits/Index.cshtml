@@ -66,11 +66,11 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">日期</label>
-								<input class="form-control" v-model="date"  type="date" />
+								<input class="form-control" v-model="f_date"  type="date" />
 							</div>
 							<div class="form-group">
 								<label class="form-label">數字</label>
-								<input class="form-control" v-model="number" />
+								<input class="form-control" v-model="f_number" />
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -122,6 +122,10 @@
 				profitId:"",
 				date:"",
 				number:"",
+
+				
+				f_date: "",
+				f_number: "",
 
 			},
 			mounted: function () {
@@ -211,8 +215,8 @@
 					let _this = this;
 					var request = {
 						profitId: _this.profitId,
-						date: _this.date,
-						number: _this.number,
+						date: _this.f_date,
+						number: _this.f_number,
 					};
 					axios.put(`Profits/Edit?ID=${_this.profitId}`, request)
 						.then(response => {
@@ -226,8 +230,8 @@
 					$("#editModal").modal("show");				
 					let _this = this;
 					_this.profitId = item.profitId;
-					_this.date = item.date;
-					_this.number = item.number;
+					_this.f_date = item.date;
+					_this.f_number = item.number;
 				},
 				deleteProfitService: function (profitId) {
 					//alert("delete");

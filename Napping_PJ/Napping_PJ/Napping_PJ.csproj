@@ -50,17 +50,9 @@
     <None Include="Areas\Admin\Views\Feature\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Feature\Index.cshtml" />
     <None Include="Areas\Admin\Views\Home\Index.cshtml" />
-    <None Include="Areas\Admin\Views\Hotels\Create.cshtml" />
-    <None Include="Areas\Admin\Views\Hotels\Delete.cshtml" />
-    <None Include="Areas\Admin\Views\Hotels\Details.cshtml" />
-    <None Include="Areas\Admin\Views\Hotels\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Hotels\Index.cshtml" />
     <None Include="Areas\Admin\Views\Levels\Index.cshtml" />
     <None Include="Areas\Admin\Views\Orders\Index.cshtml" />
-    <None Include="Areas\Admin\Views\Profits\Create.cshtml" />
-    <None Include="Areas\Admin\Views\Profits\Delete.cshtml" />
-    <None Include="Areas\Admin\Views\Profits\Details.cshtml" />
-    <None Include="Areas\Admin\Views\Profits\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Profits\Index.cshtml" />
     <None Include="Areas\Admin\Views\Promotions\Create.cshtml" />
     <None Include="Areas\Admin\Views\Promotions\Delete.cshtml" />
