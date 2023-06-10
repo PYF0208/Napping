@@ -104,6 +104,12 @@ namespace Napping_PJ.Models.Entity
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Comment_Hotel");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Comments_Orders");
             });
 
             modelBuilder.Entity<Counter>(entity =>

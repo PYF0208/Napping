@@ -22,7 +22,7 @@ namespace Napping_PJ.Controllers
         public async Task<IActionResult> Index()
         {
             
-            Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == User.FindFirstValue(ClaimTypes.Email));
+            Customer customer = await _context.Customers.Include(x=>x.Level).FirstOrDefaultAsync(c => c.Email == User.FindFirstValue(ClaimTypes.Email));
             MemberViewModel memberViewModel = new MemberViewModel()
             {
                 Email = customer.Email,
@@ -33,7 +33,7 @@ namespace Napping_PJ.Controllers
                 City = customer.City,
                 Region = customer.Region,
                 Country = customer.Country,
-                LevelId = customer.LevelId,
+                LevelName = customer.Level.Name,
             };
             return View(memberViewModel);
 
