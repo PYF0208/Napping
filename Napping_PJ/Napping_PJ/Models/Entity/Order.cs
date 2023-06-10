@@ -7,6 +7,7 @@ namespace Napping_PJ.Models.Entity
     {
         public Order()
         {
+            Comments = new HashSet<Comment>();
             OrderDetails = new HashSet<OrderDetail>();
             Payments = new HashSet<Payment>();
         }
@@ -20,6 +21,7 @@ namespace Napping_PJ.Models.Entity
         public string PaymentType { get; set; } = null!;
 
         public virtual Customer Customer { get; set; } = null!;
+        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
     }

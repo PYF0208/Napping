@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Napping_PJ.Models.Entity
+﻿namespace Napping_PJ.Models
 {
-    public partial class Comment
+    public class CommentViewModel
     {
         public int CommentId { get; set; }
         public int HotelId { get; set; }
-        public int CustomerId { get; set; }
         public int Cp { get; set; }
         public int Comfortable { get; set; }
         public int Staff { get; set; }
@@ -16,9 +12,5 @@ namespace Napping_PJ.Models.Entity
         public string? Note { get; set; }
         public DateTime Date { get; set; }
         public int OrderId { get; set; }
-
-        public virtual Customer Customer { get; set; } = null!;
-        public virtual Hotel Hotel { get; set; } = null!;
-        public virtual Order Order { get; set; } = null!;
     }
 }
