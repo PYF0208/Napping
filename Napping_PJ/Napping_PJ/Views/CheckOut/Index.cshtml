@@ -66,7 +66,9 @@
                                 <div class="invalid-feedback"> 請輸入您的聯絡電話. </div>
                             </div>
                         </div>
-                        <span v-if="submitting">加載中...</span>
+                        <button v-if="submitting" class="btn btn-secondary btn-lg btn-block" disabled="true"><div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>跳轉金流...</button>
                         <button v-else id="submitBtn" class="btn btn-primary btn-lg btn-block" type="submit">去付款</button>
                     </form>
                 </template>
