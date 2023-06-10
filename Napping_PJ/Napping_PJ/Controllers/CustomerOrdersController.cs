@@ -233,6 +233,8 @@ namespace Napping_PJ.Controllers
                 var cm = new CommentViewModel
                 {
                     CommentId = comment.CommentId,
+                    HotelId = comment.HotelId,
+                    OrderId = comment.OrderId,
                     Cp = comment.Cp,
                     Comfortable = comment.Comfortable,
                     Staff = comment.Staff,
@@ -243,16 +245,63 @@ namespace Napping_PJ.Controllers
                 };
                 return Ok(cm);
             }
-            var nocm = new CommentViewModel
+            var noCm = new CommentViewModel
             {
+                HotelId = cv.HotelId,
+                OrderId = cv.OrderId,
+                CustomerId= customer.CustomerId,
                 Cp = 0,
                 Comfortable = 0,
                 Staff = 0,
                 Facility = 0,
                 Clean = 0,
+                Note="",
             };
-            return Ok(nocm);
+            return Ok(noCm);
         }
+
+        [HttpPost]
+        public async Task<string> PostComment([FromBody] CommentViewModel cm)
+        {
+            if (cm.Cp == 0 || cm.Comfortable == 0 || cm.Staff == 0 || cm.Facility == 0 || cm.Clean == 0)
+            {
+                return "評分範圍為1顆星至5顆星!";
+            }
+            if (cm.CommentId != 0)
+            {
+                Comment existComment = await _context.Comments.FindAsync(cm.CommentId);
+                existComment.Cp = cm.Cp;
+                existComment.Comfortable = cm.Comfortable;
+                existComment.Staff = cm.Staff;
+                existComment.Facility = cm.Facility;
+                existComment.Clean = cm.Clean;
+                existComment.Note = cm.Note;
+                existComment.Date = DateTime.Now;
+
+                _context.Entry(existComment).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return "已修改住宿評鑑!";
+            }
+            Comment comment = new Comment
+            {   
+                HotelId = cm.HotelId,
+                OrderId = cm.OrderId,
+                CustomerId = cm.CustomerId,
+                Cp = cm.Cp,
+                Comfortable = cm.Comfortable,
+                Staff = cm.Staff,
+                Facility = cm.Facility,
+                Clean = cm.Clean,
+                Note = cm.Note,
+                Date = DateTime.Now,
+            };
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            return "已完成住宿評鑑!";
+        }
+
     }
 
 }
