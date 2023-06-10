@@ -262,13 +262,13 @@
                 _this.baseURL = window.location.origin;
             },
             methods: {
-                getInfoWindowContent: function (img, title, desc) {
+                getInfoWindowContent: function (img, title, desc,id) {
 
                     return `<div class="info-window">
                   <img class="info-window__image" src="${img}" alt="Image">
                   <h3 class="info-window__title">${title}</h3>
                   <p class="info-window__description">${desc}</p>
-                  <a class="info-window__link" href="#">Read More</a>
+								  <a class="info-window__link" href="/RoomDetail/${id}">Read More</a>
                 </div>`;
                 },
 				filterResultVM: function () {
@@ -345,7 +345,7 @@
 							},
 						});
 						const infoWindow = new google.maps.InfoWindow({
-							content: _this.getInfoWindowContent(location.image, location.name, location.price),
+							content: _this.getInfoWindowContent(location.image, location.name, location.price,location.roomId),
 							maxWidth: 200,
 						});
 
