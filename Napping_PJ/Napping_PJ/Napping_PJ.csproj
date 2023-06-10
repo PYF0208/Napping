@@ -55,7 +55,7 @@
     <None Include="Areas\Admin\Views\Hotels\Details.cshtml" />
     <None Include="Areas\Admin\Views\Hotels\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Hotels\Index.cshtml" />
-    <None Include="Areas\Admin\Views\Levels\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Levels\Index2.cshtml" />
     <None Include="Areas\Admin\Views\Orders\Index.cshtml" />
     <None Include="Areas\Admin\Views\Profits\Create.cshtml" />
     <None Include="Areas\Admin\Views\Profits\Delete.cshtml" />

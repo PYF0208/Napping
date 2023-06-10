@@ -24,8 +24,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			return View();
 		}
 
-
-
 		[HttpGet]
 		public async Task<IEnumerable<LevelViewModel>> GetLevel()
 		{
@@ -42,8 +40,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IEnumerable<LevelViewModel>> FilterLevel(
-			[FromBody] LevelViewModel leViewModel)
+		public IEnumerable<LevelViewModel> FilterLevel([FromBody] LevelViewModel leViewModel)
 		{
 			return _context.Levels.Where(le =>
 			le.LevelId == leViewModel.LevelId ||
@@ -52,9 +49,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				LevelId = le.LevelId,
 				Name = le.Name
-				
 			});
-
 		}
 
 		[HttpPut]
