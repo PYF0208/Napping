@@ -11,7 +11,7 @@ namespace Napping_PJ.Areas.Admin.Models
 		public int MaxGuests { get; set; }
 		public string Name { get; set; }
 
-		public List<ImageInRoomViewModel> pic { get; set; }
+		public List<ImageInRoomViewModel> Pic { get; set; }
 		public List<FeatureInRoomViewModel> Feature { get; set; }
 		
 	}
