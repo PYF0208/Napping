@@ -151,7 +151,7 @@ namespace Napping_PJ.Controllers
 
                     //Rooms表
                     RoomType = co.Room.Type,
-                    HotelId=co.Room.HotelId,
+                    HotelId = co.Room.HotelId,
 
                     //Hotels表
                     HotelName = co.Room.Hotel.Name,
@@ -162,9 +162,12 @@ namespace Napping_PJ.Controllers
                     HotelPhone = co.Room.Hotel.Phone,
 
                     //Payments表
-                    PaymentType = co.Order.Payments.OrderBy(x => x.PaymentId).Last().Type
-                });
+                    PaymentType = co.Order.Payments.OrderBy(x => x.PaymentId).Last().Type,
 
+                    //Comments表
+                    CommentId = _context.Comments.FirstOrDefault(
+                        x => x.HotelId == co.Room.HotelId && x.OrderId == co.OrderId && x.CustomerId == customer.CustomerId).CommentId,
+                });
             return customerOrders;
         }
 
@@ -195,7 +198,7 @@ namespace Napping_PJ.Controllers
 
                     //Rooms表
                     RoomType = co.Room.Type,
-                    HotelId=co.Room.HotelId,
+                    HotelId = co.Room.HotelId,
 
                     //Hotels表
                     HotelName = co.Room.Hotel.Name,
@@ -206,7 +209,11 @@ namespace Napping_PJ.Controllers
                     HotelPhone = co.Room.Hotel.Phone,
 
                     //Payments表
-                    PaymentType = co.Order.Payments.OrderBy(x => x.PaymentId).Last().Type
+                    PaymentType = co.Order.Payments.OrderBy(x => x.PaymentId).Last().Type,
+
+                    //Comments表
+                    CommentId = _context.Comments.FirstOrDefault(
+                        x => x.HotelId == co.Room.HotelId && x.OrderId == co.OrderId && x.CustomerId == customer.CustomerId).CommentId,
                 });
             if (!customerOrders.Any())
             {
@@ -217,7 +224,7 @@ namespace Napping_PJ.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetComment([FromBody]CommentViewModel cv)
+        public IActionResult GetComment([FromBody] CommentViewModel cv)
         {
             var customer = _context.Customers.AsNoTracking().FirstOrDefault(x => x.Email == User.FindFirst(ClaimTypes.Email).Value);
             var comment = _context.Comments.AsNoTracking().FirstOrDefault(x => x.CustomerId == customer.CustomerId && x.HotelId == cv.HotelId && x.OrderId == cv.OrderId);
@@ -225,7 +232,9 @@ namespace Napping_PJ.Controllers
             {
                 var cm = new CommentViewModel
                 {
-
+                    CommentId = comment.CommentId,
+                    HotelId = comment.HotelId,
+                    OrderId = comment.OrderId,
                     Cp = comment.Cp,
                     Comfortable = comment.Comfortable,
                     Staff = comment.Staff,
@@ -236,8 +245,63 @@ namespace Napping_PJ.Controllers
                 };
                 return Ok(cm);
             }
-        return Content("住宿評價尚未完成!");
+            var noCm = new CommentViewModel
+            {
+                HotelId = cv.HotelId,
+                OrderId = cv.OrderId,
+                CustomerId= customer.CustomerId,
+                Cp = 0,
+                Comfortable = 0,
+                Staff = 0,
+                Facility = 0,
+                Clean = 0,
+                Note="",
+            };
+            return Ok(noCm);
         }
+
+        [HttpPost]
+        public async Task<string> PostComment([FromBody] CommentViewModel cm)
+        {
+            if (cm.Cp == 0 || cm.Comfortable == 0 || cm.Staff == 0 || cm.Facility == 0 || cm.Clean == 0)
+            {
+                return "評分範圍為1顆星至5顆星!";
+            }
+            if (cm.CommentId != 0)
+            {
+                Comment existComment = await _context.Comments.FindAsync(cm.CommentId);
+                existComment.Cp = cm.Cp;
+                existComment.Comfortable = cm.Comfortable;
+                existComment.Staff = cm.Staff;
+                existComment.Facility = cm.Facility;
+                existComment.Clean = cm.Clean;
+                existComment.Note = cm.Note;
+                existComment.Date = DateTime.Now;
+
+                _context.Entry(existComment).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
+                return "已修改住宿評鑑!";
+            }
+            Comment comment = new Comment
+            {   
+                HotelId = cm.HotelId,
+                OrderId = cm.OrderId,
+                CustomerId = cm.CustomerId,
+                Cp = cm.Cp,
+                Comfortable = cm.Comfortable,
+                Staff = cm.Staff,
+                Facility = cm.Facility,
+                Clean = cm.Clean,
+                Note = cm.Note,
+                Date = DateTime.Now,
+            };
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            return "已完成住宿評鑑!";
+        }
+
     }
 
 }
