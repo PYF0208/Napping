@@ -97,7 +97,7 @@
 								<label class="form-label">筆記:{{item.note}}</label>
 							</div>
 							<div class="form-group">
-								<label class="form-label">日期:{{item.date}}</label>								
+								<label class="form-label">日期:{{item.date|formatDateTime}}</label>
 							</div>
 
 
@@ -137,7 +137,7 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">日期</label>
-								<input class="form-control" type="datetime-local" v-model="date" disabled/>
+								<input class="form-control" type="datetime" v-model="date" disabled/>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -220,6 +220,29 @@
 				_this.getPayment();
 				_this.getOrderDetails();
 			},
+			filters: {
+				formatDateTime(value) {
+					const date = new Date(value);
+
+					// 定義星期幾的名稱
+					const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+					// 獲取日期的年、月、日、小時和分鐘
+					const year = date.getFullYear();
+					const month = String(date.getMonth() + 1).padStart(2, '0');
+					const day = String(date.getDate()).padStart(2, '0');
+					const hours = String(date.getHours()).padStart(2, '0');
+					const minutes = String(date.getMinutes()).padStart(2, '0');
+
+					// 獲取星期幾的索引，並根據索引獲取對應的名稱
+					const weekday = weekdays[date.getDay()];
+
+					// 格式化為指定的字符串形式
+					const formattedDateTime = `${year}-${month}-${day} ${weekday} ${hours}:${minutes}`;
+
+					return formattedDateTime;
+				}
+			},
 			methods: {
 				getOrderDetails:  function (item) {
 					let _this = this;
@@ -232,6 +255,12 @@
 
 							//alert(JSON.stringify(response.data))
 							_this.OrderDetailsViewModel = response.data;
+							for (i = 0; i < _this.OrderDetailsViewModel.length;i++){
+								var ord = _this.OrderDetailsViewModel[i];
+								ord.checkIn = new Date(ord.checkIn).toISOString().slice(0,10);
+								ord.checkOut = new Date(ord.checkOut).toISOString().slice(0, 10);
+								//ord.date.splice(10, 1);
+							}
 						})
 						.catch(function (error) {
 							console.log(error);
@@ -268,6 +297,11 @@
 
 							//alert(JSON.stringify(response.data))
 							_this.OrdersViewModel = response.data;
+
+							for (i = 0; i < _this.OrdersViewModel.length;i++){
+								var or = _this.OrdersViewModel[i];
+								//or.date=new Date(or.date).toISOString().slice(0,16)
+							}
 						})
 						.catch(function (error) {
 							console.log(error);
