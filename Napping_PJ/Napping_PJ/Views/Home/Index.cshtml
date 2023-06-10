@@ -1,9 +1,9 @@
 @section Styles{
-    <link href="~/lib/element-ui/theme-chalk/index.min.css" rel="stylesheet" />
-    <style>
-        .el-date-editor .el-range-separator {
-            width: auto;
-        }
+	<link href="~/lib/element-ui/theme-chalk/index.min.css" rel="stylesheet" />
+	<style>
+		.el-date-editor .el-range-separator {
+			width: auto;
+		}
 
 		.demo-date-picker {
 			display: flex;
@@ -13,16 +13,16 @@
 			z-index: 9999;
 		}
 
-            .demo-date-picker .block {
-                padding: 30px 0;
-                text-align: center;
-                border-right: solid 1px var(--el-border-color);
-                flex: 1;
-            }
+			.demo-date-picker .block {
+				padding: 30px 0;
+				text-align: center;
+				border-right: solid 1px var(--el-border-color);
+				flex: 1;
+			}
 
-                .demo-date-picker .block:last-child {
-                    border-right: none;
-                }
+				.demo-date-picker .block:last-child {
+					border-right: none;
+				}
 
 			.demo-date-picker .demonstration {
 				display: block;
@@ -30,10 +30,12 @@
 				font-size: 14px;
 				margin-bottom: 20px;
 			}
+
 		#map {
 			height: 54.5em;
 			width: auto;
 		}
+
 		.fa-solid.fa-heart {
 			mix-blend-mode: difference;
 			color: rgba(192,192,192,0.5);
@@ -73,22 +75,22 @@
 			cursor: pointer;
 		}
 
-    </style>
+	</style>
 }
 
 ﻿@{
-    ViewBag.Title = "Simple Map";
+	ViewBag.Title = "Simple Map";
 }
 
 <div id="app">
 
-    <div class="sidebar-page-container">
-        <div class="circles-two">
-            <div class="c-1"></div>
-            <div class="c-2"></div>
-        </div>
-        <span class="dotted-pattern dotted-pattern-5"></span>
-        <span class="tri-pattern tri-pattern-8"></span>
+	<div class="sidebar-page-container">
+		<div class="circles-two">
+			<div class="c-1"></div>
+			<div class="c-2"></div>
+		</div>
+		<span class="dotted-pattern dotted-pattern-5"></span>
+		<span class="tri-pattern tri-pattern-8"></span>
 
 		<div class="result-container">
 			<div class="row clearfix" style="height: 90vh;">
@@ -174,28 +176,28 @@
 									</a>
 								</div>
 
-                            </div>
-                        </div>
-                    </template>
+							</div>
+						</div>
+					</template>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </div>
 
 
 @section Scripts {
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw"></script>
-    <a href="~/lib/jquery/dist/jquery.min.map"></a>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/vue/vue.min.js"></script>
-    <script src="~/lib/axios/axios.min.js"></script>
-    <script src="~/lib/element-ui/index.min.js"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBS-dimgmmzjnxx6Vax1lDAKB3FBShOgKw"></script>
+	<a href="~/lib/jquery/dist/jquery.min.map"></a>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/vue/vue.min.js"></script>
+	<script src="~/lib/axios/axios.min.js"></script>
+	<script src="~/lib/element-ui/index.min.js"></script>
 	<script>
 		var app = new Vue({
 			el: '#datePicker',
@@ -227,50 +229,50 @@
 		});
 
 	</script>
-    <script>
-        const vm = new Vue({
-            el: "#app",
-            data: {
-                resultVM: [],
-                markers: [],
-                selectLocation: null,
-                map: null,
-                infoWindowAll: {},
-                infoWindow: "",
-                likeVM: [],
-                baseURL: "",
-                numOfGuests: 2,
-                containsHotel: [],
-            },
-            computed: {
+	<script>
+		const vm = new Vue({
+			el: "#app",
+			data: {
+				resultVM: [],
+				markers: [],
+				selectLocation: null,
+				map: null,
+				infoWindowAll: {},
+				infoWindow: "",
+				likeVM: [],
+				baseURL: "",
+				numOfGuests: 2,
+				containsHotel: [],
+			},
+			computed: {
 
-            },
-            filters: {
-                formatDateTime(value) {
-                    const date = new Date(value);
-                    const year = date.getFullYear();
-                    const month = ("0" + (date.getMonth() + 1)).slice(-2);
-                    const day = ("0" + date.getDate()).slice(-2);
-                    const hours = ("0" + date.getHours()).slice(-2);
-                    const minutes = ("0" + date.getMinutes()).slice(-2);
-                    return `${year}-${month}-${day} ${hours}:${minutes}`;
-                }
-            },
-            mounted: function () {
-                let _this = this;
-                _this.filterResultVM();
-                _this.baseURL = window.location.origin;
-            },
-            methods: {
-                getInfoWindowContent: function (img, title, desc) {
+			},
+			filters: {
+				formatDateTime(value) {
+					const date = new Date(value);
+					const year = date.getFullYear();
+					const month = ("0" + (date.getMonth() + 1)).slice(-2);
+					const day = ("0" + date.getDate()).slice(-2);
+					const hours = ("0" + date.getHours()).slice(-2);
+					const minutes = ("0" + date.getMinutes()).slice(-2);
+					return `${year}-${month}-${day} ${hours}:${minutes}`;
+				}
+			},
+			mounted: function () {
+				let _this = this;
+				_this.filterResultVM();
+				_this.baseURL = window.location.origin;
+			},
+			methods: {
+				getInfoWindowContent: function (img, title, desc, id) {
 
-                    return `<div class="info-window">
-                  <img class="info-window__image" src="${img}" alt="Image">
-                  <h3 class="info-window__title">${title}</h3>
-                  <p class="info-window__description">${desc}</p>
-                  <a class="info-window__link" href="#">Read More</a>
-                </div>`;
-                },
+					return `<div class="info-window">
+						  <img class="info-window__image" src="${img}" alt="Image">
+						  <h3 class="info-window__title">${title}</h3>
+						  <p class="info-window__description">NT${desc}/每晚</p>
+						<a class="info-window__link" href="/RoomDetail/${id}">Read More</a>
+						</div>`;
+				},
 				filterResultVM: function () {
 					let _this = this;
 					axios.get(`/api/Result/Get`).then(response => {
@@ -296,7 +298,7 @@
 							})
 
 						} else if (app.timeValue == null) {
-						//如果沒輸入時間
+							//如果沒輸入時間
 							_this.resultVM = response.data.filter(x => {
 
 								if (_this.numOfGuests >= 5) {
@@ -306,11 +308,11 @@
 								}
 								return x.maxGuests == 2;
 							})
-						
+
 						}
 						_this.initMap();
 					});
-					
+
 				},
 				initMap: function () {
 					let _this = this;
@@ -318,11 +320,6 @@
 						zoom: 8,
 						center: { lat: parseFloat(_this.resultVM[46].positionLat), lng: parseFloat(_this.resultVM[46].positionLon) },
 					});
-					//const mapPrice = document.createElement("div");
-					//mapPrice.classname="price-tag";
-					//mapPrice.textContent=""
-
-
 					_this.map.addListener("bounds_changed", function () {
 						let x = _this.map.getBounds();
 						_this.containsHotel = [];
@@ -336,7 +333,6 @@
 						const marker = new google.maps.Marker({
 							position: { lat: parseFloat(location.positionLat), lng: parseFloat(location.positionLon) },
 							map: _this.map,
-							//icon: '/images/mapPin.png',
 							title: location.name,
 							label: {
 								color: "white",
@@ -345,7 +341,7 @@
 							},
 						});
 						const infoWindow = new google.maps.InfoWindow({
-							content: _this.getInfoWindowContent(location.image, location.name, location.price),
+							content: _this.getInfoWindowContent(location.image, location.name, location.price, location.roomId),
 							maxWidth: 200,
 						});
 
@@ -358,10 +354,8 @@
 				getLikes: function () {
 					let _this = this;
 					axios.get(`/Like/GetLikes`).then(response => {
-						//alert(JSON.stringify(response.data));
 						_this.likeVM = response.data;
 					}).catch(error => {
-						//console.log(error.response.data);
 						location.href = _this.baseURL + error.response.data;
 					});
 				},
@@ -372,7 +366,6 @@
 						_this.filterResultVM();
 						_this.getLikes();
 					}).catch(error => {
-						//console.log(error.response.data);
 						location.href = _this.baseURL + error.response.data;
 					});
 				},
@@ -394,7 +387,7 @@
 		});
 
 	</script>
-	
+
 	<script>
 		var searchApp = new Vue({
 			el: '#search',
@@ -405,7 +398,7 @@
 				let _this = this;
 			},
 			methods: {
-				searchRoom: function () {	
+				searchRoom: function () {
 					vm.numOfGuests = parseInt($('input[name=adult-group]:checked').val()) + parseInt($('input[name=child-group]:checked').val());
 					vm.filterResultVM();
 				},

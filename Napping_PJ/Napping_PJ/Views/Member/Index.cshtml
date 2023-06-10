@@ -6,7 +6,7 @@
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>Snippet - BBBootstrap</title>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    @*<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />*@
     <style>
         ::-webkit-scrollbar {
             width: 8px;
@@ -22,10 +22,10 @@
             background: #888;
         }
 
-            /* Handle on hover */
-            ::-webkit-scrollbar-thumb:hover {
-                background: #555;
-            }
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
 
         body {
             background: rgb(99, 39, 120)
@@ -42,19 +42,19 @@
             border: none
         }
 
-            .profile-button:hover {
-                background: #682773
-            }
+        .profile-button:hover {
+            background: #682773
+        }
 
-            .profile-button:focus {
-                background: #682773;
-                box-shadow: none
-            }
+        .profile-button:focus {
+            background: #682773;
+            box-shadow: none
+        }
 
-            .profile-button:active {
-                background: #682773;
-                box-shadow: none
-            }
+        .profile-button:active {
+            background: #682773;
+            box-shadow: none
+        }
 
         .back:hover {
             color: #682773;
@@ -81,10 +81,10 @@
                 <div class="col-md-4 border-right">
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                         <img class="rounded-circle mt-5"
-                             width="150px"
-                             src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-                        <span class="font-weight-bold">{{MemberViewModel.levelId}}</span>
-                        <span class="text-black-50">{{MemberViewModel.Email}}</span><span> </span>
+                             width="200px"
+                             src="https://ws.csptc.gov.tw/Download.ashx?u=LzAwMS9VcGxvYWQvNy9ja2ZpbGUvYzlmOGU1NTYtZjhiNC00OWY4LWJlNzgtNWJiOTFhMGFkODUyLnBuZw%3D%3D&n=QnJvbnplLVRFQ0gtQXdhcmQtMjAxOS0wMS5wbmc%3D&icon=.png">
+                        <span class="badge bg-warning fs-6">{{MemberViewModel.LevelName}}</span>
+                        <span class="text-black-50">{{MemberViewModel.Email}}</span>
                     </div>
                 </div>
                 <div class="col-md-8 border-right">
@@ -95,7 +95,7 @@
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <label class="labels">姓名</label>
-                                <input v-model="MemberViewModel.name" type="text" class="form-control" placeholder="輸入姓名" value="">
+                                <input v-model="MemberViewModel.Name" type="text" class="form-control" placeholder="輸入姓名" value="">
                             </div>
                             <div class="col-md-6">
                                 <label class="labels">連絡電話</label>
@@ -150,7 +150,7 @@
 </body>
 </html>
 @section Scripts{
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/lib/vue/vue.min.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script>
@@ -169,6 +169,7 @@
                     Region: null,
                     Country: null,
                     LevelId: null,
+                    LevelName:null,
                 }
 
             },
@@ -204,6 +205,7 @@
                     _this.MemberViewModel.Region = model.region;
                     _this.MemberViewModel.Country = model.country;
                     _this.MemberViewModel.LevelId = model.levelId;
+                    _this.MemberViewModel.LevelName = model.levelName;
                 },
                 getCityList: function () {
                     var _this = this;
