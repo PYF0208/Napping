@@ -48,5 +48,8 @@
 
         public string PaymentType { get; set; } = null!;
         //Payments表
+
+        public int? CommentId { get; set; }
+        //Comments表
     }
 }

@@ -91,7 +91,7 @@ namespace Napping_PJ.Models.Entity
             {
                 entity.Property(e => e.Cp).HasColumnName("CP");
 
-                entity.Property(e => e.Date).HasColumnType("date");
+                entity.Property(e => e.Date).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Comments)
@@ -479,10 +479,10 @@ namespace Napping_PJ.Models.Entity
                     .UsingEntity<Dictionary<string, object>>(
                         "RoomFeature",
                         l => l.HasOne<Feature>().WithMany().HasForeignKey("FeatureId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Feature"),
-                        r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Room_Feature_Room"),
+                        r => r.HasOne<Room>().WithMany().HasForeignKey("RoomId").HasConstraintName("FK_Room_Feature_Room"),
                         j =>
                         {
-                            j.HasKey("RoomId", "FeatureId").HasName("PK_RoomFeatures_1");
+                            j.HasKey("RoomId", "FeatureId");
 
                             j.ToTable("RoomFeatures");
                         });

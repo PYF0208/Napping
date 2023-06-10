@@ -83,7 +83,8 @@
                                 <li><h4>{{item.city}} {{item.region}}</h4></li>
                                 <li><h4><i :class="exampleModal.changeStatus(item.status)"></i>{{item.statusDisplay}}</h4></li>
                                 <li><h4><i class="fa-regular fa-circle-check"></i>已退房</h4></li>
-                                <li><h4><i class="fa-solid fa-triangle-exclamation"></i>尚未評價</h4></li>
+                                <template v-if="item.commentId"><li><h4><span><i class="fa-regular fa-circle-check"></i></span>已完成評鑑</h4></li></template>
+                                <template v-else><li><h4><span><i class="fa-solid fa-triangle-exclamation"></i></span>尚未完成評鑑</h4></li></template>
                             </ul>
                         </div>
                         <div class="col-4">
@@ -109,7 +110,7 @@
 <!-- CommentModal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content" @*v-for="comment in ratings"*@>
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">您的評鑑</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -118,11 +119,11 @@
 
                 <div class="card bg-light text-black mb-4">
                     <div class="card-body bg-secondary text-white">訂單編號:{{item.orderId}}</div>
-                    <div :class="changeStatusColor(item.status)" id="1" v-if="item.status==1">
-                        <h5><span><i class="fa-solid fa-triangle-exclamation"></i></span>{{item.statusDisplay}}</h5>
+                    <div class="card-body bg-success text-white" id="1" v-if="ratings.commentId">
+                        <h5><span><i class="fa-regular fa-circle-check"></i></span>已完成評鑑</h5>
                     </div>
-                    <div :class="changeStatusColor(item.status)" id="2" v-if="item.status==2">
-                        <h5><span><i class="fa-regular fa-circle-check"></i></span>{{item.statusDisplay}}</h5>
+                    <div class="card-body bg-warning text-white" id="2" v-else>
+                        <h5><span><i class="fa-solid fa-triangle-exclamation"></i></span>尚未完成評鑑</h5>
                     </div>
                     <div class="row">
                         <div class="col-12">
@@ -206,13 +207,12 @@
                         </div>
                     </div>
                     <div style="text-align:center" class="card-body bg-secondary text-white"><h5>旅店評論</h5></div>
-                    <textarea name="feedback" id="feedback" rows="8" placeholder="您的回覆是我們進步的動力!" style="border:2px #2f3944 solid;"></textarea>
+                    <textarea name="feedback" id="feedback" rows="8" placeholder="您的回覆是我們進步的動力!" style="border:2px #2f3944 solid;" v-model="ratings.note"></textarea>
                 </div>
+                <span v-if="ratings.date!='0001-01-01T00:00:00'">最後修改時間:{{ratings.date| formatDateTime}}</span>
             </div>
             <div class="modal-footer">
-                <span>最後修改時間:{{}}</span>
                 <button @@click="submitRating()">提交評價</button>
-                <span v-html="checkOutBtn"></span>
                 <button type="button" class="btn-secondary" data-bs-dismiss="modal">關閉</button>
             </div>
         </div>
@@ -221,26 +221,6 @@
 
 @section Scripts{
     <script>
-        //var ratings = {};
-
-        // //評價函式
-        //function rate(category, value) {
-        //    ratings[category] = value;
-        //    var stars = document.getElementById(category + 'Stars').children;
-        //    for (var i = 0; i < value; i++) {
-        //        stars[i].style.color = '#ffc107'; // 被選中的星星顏色為黃色
-        //    }
-        //    for (var j = value; j < 5; j++) {
-        //        stars[j].style.color = '#ccc'; // 未被選中的星星顏色為灰色
-        //    }
-        //}
-
-        //// 提交評價函式
-        //function submitRating() {
-        //    // 在這裡可以使用ratings物件進行評價的後續處理，例如傳送到伺服器或顯示結果
-        //    console.log(ratings);
-        //}
-
         var app = new Vue({
             el: '#app',
             data: {
@@ -305,12 +285,8 @@
                     request.OrderId = item.orderId;
                     axios.post(`/CustomerOrders/GetComment`, request).then(response => {
                         exampleModal.ratings = response.data;
+                        exampleModal.rateAll();
                     })
-                },
-                showCheckOut: function (status, orderId) {
-                    axios.post(`/CustomerOrders/ShowCheckOut?status=${status}&orderId=${orderId}`).then(response => {
-                        exampleModal.checkOutBtn = response.data;
-                    });
                 },
             },
         });
@@ -320,11 +296,10 @@
             el: '#exampleModal',
             data: {
                 item: [],
-                ratings:[],
-                checkOutBtn: "",
+                ratings: {cp:0,comfortable:0,staff:0,facility:0,clean:0},
             },
             mounted: function () {
-    
+              
             },
             filters: {
                 formatDateTime(value) {
@@ -350,14 +325,6 @@
                 }
             },
             methods: {
-                changeStatusColor: function (status) {
-                    const statusMap = {
-                        1: "card-body bg-warning text-white",
-                        2: "card-body bg-success text-white",
-                        3: "card-body bg-danger text-white"
-                    };
-                    return statusMap[status];
-                },
                 changeStatus: function (status) {
                     const statusMap = {
                         1: "fa-solid fa-triangle-exclamation",
@@ -367,7 +334,7 @@
                     return statusMap[status];
                 },
                 rate: function (category, value) {
-                    let _this=this;
+                    let _this = this;
                     _this.ratings[category] = value;
                     var stars = document.getElementById(category + 'Stars').children;
                     for (var i = 0; i < value; i++) {
@@ -378,8 +345,37 @@
                     }
                 },
                 submitRating: function () {
-                    let _this=this;
-                    console.log(_this.ratings);
+                    let _this = this;
+                    var cm = {
+                        CommentId: _this.ratings.commentId,
+                        HotelId: _this.ratings.hotelId,
+                        OrderId: _this.ratings.orderId,
+                        CustomerId:_this.ratings.customerId,
+                        Cp: _this.ratings.cp,
+                        Comfortable: _this.ratings.comfortable,
+                        Staff: _this.ratings.staff,
+                        Facility: _this.ratings.facility,
+                        Clean: _this.ratings.clean,
+                        Note: _this.ratings.note,
+                    };
+                    axios.post('/CustomerOrders/PostComment', cm).then(response => {
+                        alert(response.data);
+                        //$('#insertPage').modal('hide');
+                        app.getFinishOrders();
+                    });
+                },
+                rateAll: function () {
+                    let _this = this;
+                    var targetProperties = ['cp', 'comfortable', 'staff', 'facility', 'clean'];
+
+                    for (var i = 0; i < targetProperties.length; i++) {
+                        var category = targetProperties[i];
+
+                        if (_this.ratings.hasOwnProperty(category)) {
+                            var value = _this.ratings[category];
+                            _this.rate(category, value);
+                        }
+                    }
                 },
             },
         });
