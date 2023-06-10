@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -21,13 +22,11 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		{
 			_context = context;
 		}
-
 		public IActionResult Index()
 		{
 			return View();
 		}
 		// GET: Admin/Rooms
-
 		[HttpGet]
 		public async Task<IEnumerable<HotelsViewModel>> GetHotelName()
 		{
@@ -63,12 +62,10 @@ namespace Napping_PJ.Areas.Admin.Controllers
 					FeatureId = Feature.FeatureId,
 					Name = Feature.Name,
 					Image = Feature.Image
-
 				})
 				.ToListAsync();
 			return Feature;
 		}
-
 		[HttpPut]
 		public async Task<string> Feature(int id, [FromBody] FeatureViewModel feature)
 		{
@@ -76,13 +73,11 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return "修改失敗！";
 			}
-
 			Feature ft = await _context.Features.FindAsync(feature.FeatureId);
 			ft.FeatureId = feature.FeatureId;
 			ft.Name = feature.Name;
 			ft.Image = feature.Image;
 			_context.Entry(ft).State = EntityState.Modified;
-
 			try
 			{
 				_context.Update(ft);
@@ -99,7 +94,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
 					throw;
 				}
 			}
-
 			return "修改成功！";
 		}
 		[HttpDelete]
@@ -110,7 +104,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return "刪除特徵成功!";
 			}
-
 			_context.Features.Remove(feature);
 			try
 			{
@@ -120,26 +113,23 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return "刪除特徵記錄失敗!";
 			}
-
 			return "刪除特徵記錄成功!";
 		}
 		[HttpPost]
-
 		public async Task<IEnumerable<RoomsViewModel>> GetRooms(RoomsViewModel rmViewMod)
 		{
-
-			var Rooms = await _context.Rooms.Include(p => p.Hotel).Include(x => x.Features).Include(q=>q.RoomImages)
+			var Rooms = await _context.Rooms.Include(p => p.Hotel).Include(x => x.Features).Include(q => q.RoomImages)
 			.Select(Rooms => new RoomsViewModel
 			{
 				RoomId = Rooms.RoomId,
 				HotelId = Rooms.HotelId,
-				Name=Rooms.Hotel.Name,
+				Name = Rooms.Hotel.Name,
 				Type = Rooms.Type,
 				Price = Rooms.Price,
 				MaxGuests = Rooms.MaxGuests,
-				pic=Rooms.RoomImages.Select(y=>new ImageInRoomViewModel
+				Pic = Rooms.RoomImages.Select(y => new ImageInRoomViewModel
 				{
-					Image=y.Image,
+					Image = y.Image,
 				}).ToList(),
 				Feature = Rooms.Features.Select(x => new FeatureInRoomViewModel
 				{
@@ -147,11 +137,9 @@ namespace Napping_PJ.Areas.Admin.Controllers
 					Name = x.Name,
 					Image = x.Image
 				}).ToList(),
-
 			}).ToListAsync();
 			return Rooms;
 		}
-
 		// GET: Admin/Rooms/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
@@ -159,7 +147,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return NotFound();
 			}
-
 			var room = await _context.Rooms
 				.Include(r => r.Hotel)
 				.FirstOrDefaultAsync(m => m.RoomId == id);
@@ -170,36 +157,34 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
 			return View(room);
 		}
-
 		// GET: Admin/Rooms/Create
 		public IActionResult Create()
 		{
 			ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "name");
 			return View();
 		}
-
 		// POST: Admin/Rooms/Create
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
-		public async Task<string> CreateRooms([FromBody] RoomsViewModel room)
+		public async Task<string> CreateRooms([FromBody] CreateViewModel room)
 		{
-
 			Room NewRoom = new Room
 			{
-				RoomId = room.RoomId,
 				HotelId = room.HotelId,
 				Type = room.Type,
 				Price = room.Price,
 				MaxGuests = room.MaxGuests,
 			};
-			
+			var images = room.Pic.Select(x => new RoomImage
+			{
+				Image = x
+			});
+			NewRoom.RoomImages.AddRange(images);
 			_context.Rooms.Add(NewRoom);
 			await _context.SaveChangesAsync();
 			return "新增成功";
-
 		}
-
 		// GET: Admin/Rooms/Edit/5
 		public async Task<IActionResult> Edit(int? id)
 		{
@@ -207,7 +192,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return NotFound();
 			}
-
 			var room = await _context.Rooms.FindAsync(id);
 			if (room == null)
 			{
@@ -216,20 +200,17 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			ViewData["HotelId"] = new SelectList(_context.Hotels, "HotelId", "name", room.HotelId);
 			return View(room);
 		}
-
 		// POST: Admin/Rooms/Edit/5
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
-
-		public  string Edit(int id, [FromBody] RoomsEditViewModel room)
+		public string Edit(int id, [FromBody] RoomsEditViewModel room)
 		{
 			if (id == null || room.RoomId == null || id != room.RoomId)
 			{
 				return "修改失敗1";
 			}
-			
-			var SearchHotel =  _context.Rooms.Include(x=>x.Features).SingleOrDefault(x=>x.RoomId==id);
+			var SearchHotel = _context.Rooms.Include(x => x.Features).SingleOrDefault(x => x.RoomId == id);
 			if (SearchHotel == null)
 			{
 				return "修改失敗2";
@@ -240,13 +221,12 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			SearchHotel.Price = room.Price;
 			SearchHotel.MaxGuests = room.MaxGuests;
 			SearchHotel.Features.Clear();
-			var x=_context.Features.Where(x => room.Features.Contains(x.FeatureId)).ToList();
+			var x = _context.Features.Where(x => room.Features.Contains(x.FeatureId)).ToList();
 			SearchHotel.Features.AddRange(x);
-
 			try
 			{
 				_context.Update(SearchHotel);
-				 _context.SaveChanges();
+				_context.SaveChanges();
 			}
 			catch (DbUpdateConcurrencyException)
 			{
@@ -262,7 +242,6 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			return "修改成功";
 
 		}
-
 		// GET: Admin/Rooms/Delete/5
 		public async Task<IActionResult> Delete(int? id)
 		{
@@ -281,10 +260,8 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
 			return View(room);
 		}
-
 		// POST: Admin/Rooms/Delete/5
 		[HttpDelete]
-
 		public async Task<string> DeleteConfirmed(int id)
 		{
 			var delete = await _context.Rooms.FindAsync(id);
@@ -292,8 +269,9 @@ namespace Napping_PJ.Areas.Admin.Controllers
 			{
 				return "刪除失敗1";
 			}
-			
+			var pics = _context.RoomImages.Where(r => r.RoomId == id);
 			_context.Rooms.Remove(delete);
+			_context.RoomImages.RemoveRange(pics);
 			try
 			{
 				await _context.SaveChangesAsync();
@@ -303,9 +281,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 				return "刪除失敗2";
 			}
 			return "刪除成功";
-
 		}
-
 		private bool RoomExists(int id)
 		{
 			return (_context.Rooms?.Any(e => e.RoomId == id)).GetValueOrDefault();
