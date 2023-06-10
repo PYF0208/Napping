@@ -11,17 +11,18 @@ namespace Napping_PJ.Controllers
     public class MemberController : Controller
     {
         private readonly db_a989f8_nappingContext _context;
-	
+		private readonly IBackgroundJobClient background;
+		private readonly IBirthday birthday;
 
-		public MemberController(db_a989f8_nappingContext context)
+		public MemberController(db_a989f8_nappingContext context,IBackgroundJobClient background,IBirthday birthday)
         {
             _context = context;
-			
+			this.background = background;
+			this.birthday = birthday;
 		}
 
         public async Task<IActionResult> Index()
         {
-            
             Customer customer = await _context.Customers.Include(x=>x.Level).FirstOrDefaultAsync(c => c.Email == User.FindFirstValue(ClaimTypes.Email));
             MemberViewModel memberViewModel = new MemberViewModel()
             {
@@ -65,6 +66,12 @@ namespace Napping_PJ.Controllers
 
             return View(memberViewModel);
         }
-		
+        [HttpPost]
+		public IActionResult SendMail()
+        {				
+				var send=BackgroundJob.Enqueue(() => birthday.SendBirthDayMail());
+            return Ok("寄信成功");
+			  //這邊執行背景發送生日信
+		}
 	}
 }
