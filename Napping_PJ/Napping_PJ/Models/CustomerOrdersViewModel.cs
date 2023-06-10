@@ -35,6 +35,7 @@
         //OrderDetails表
 
         public string RoomType { get; set; } = null!;
+        public int HotelId { get; set; }
         //Rooms表
 
         public string HotelName { get; set; } = null!;
@@ -47,5 +48,8 @@
 
         public string PaymentType { get; set; } = null!;
         //Payments表
+
+        public int? CommentId { get; set; }
+        //Comments表
     }
 }

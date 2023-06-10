@@ -83,7 +83,8 @@
                                 <li><h4>{{item.city}} {{item.region}}</h4></li>
                                 <li><h4><i :class="exampleModal.changeStatus(item.status)"></i>{{item.statusDisplay}}</h4></li>
                                 <li><h4><i class="fa-regular fa-circle-check"></i>已退房</h4></li>
-                                <li><h4><i class="fa-solid fa-triangle-exclamation"></i>尚未評價</h4></li>
+                                <template v-if="item.commentId"><li><h4><span><i class="fa-regular fa-circle-check"></i></span>已完成評鑑</h4></li></template>
+                                <template v-else><li><h4><span><i class="fa-solid fa-triangle-exclamation"></i></span>尚未完成評鑑</h4></li></template>
                             </ul>
                         </div>
                         <div class="col-4">
@@ -98,7 +99,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="setItem(item);showCheckOut(item.status,item.orderId)">點擊查看訂單明細</a>
+                        <a class="small text-white stretched-link" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="setItem(item);getComment(item)">點擊查看您的評鑑</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -111,21 +112,18 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">住宿評鑑</h5>
+                <h5 class="modal-title" id="exampleModalLabel">您的評鑑</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
                 <div class="card bg-light text-black mb-4">
                     <div class="card-body bg-secondary text-white">訂單編號:{{item.orderId}}</div>
-                    <div :class="changeStatusColor(item.status)" id="1" v-if="item.status==1">
-                        <h5><span><i class="fa-solid fa-triangle-exclamation"></i></span>{{item.statusDisplay}}</h5>
+                    <div class="card-body bg-success text-white" id="1" v-if="ratings.commentId">
+                        <h5><span><i class="fa-regular fa-circle-check"></i></span>已完成評鑑</h5>
                     </div>
-                    <div :class="changeStatusColor(item.status)" id="2" v-if="item.status==2">
-                        <h5><span><i class="fa-regular fa-circle-check"></i></span>{{item.statusDisplay}}</h5>
-                    </div>
-                    <div :class="changeStatusColor(item.status)" id="3" v-if="item.status==3">
-                        <h5><span><i class="fa-regular fa-circle-xmark"></i></span>{{item.statusDisplay}}</h5>
+                    <div class="card-body bg-warning text-white" id="2" v-else>
+                        <h5><span><i class="fa-solid fa-triangle-exclamation"></i></span>尚未完成評鑑</h5>
                     </div>
                     <div class="row">
                         <div class="col-12">
@@ -151,64 +149,71 @@
                             </ul>
                         </div>
                     </div>
-                    <hr>
-                    <div class="rating">
-                        <h4>性價比</h4>
-                        <div class="stars" id="cpStars">
-                            <span class="star" onclick="rate('cp', 1)">&#9733;</span>
-                            <span class="star" onclick="rate('cp', 2)">&#9733;</span>
-                            <span class="star" onclick="rate('cp', 3)">&#9733;</span>
-                            <span class="star" onclick="rate('cp', 4)">&#9733;</span>
-                            <span class="star" onclick="rate('cp', 5)">&#9733;</span>
+                    <div style="text-align:center" class="card-body bg-secondary text-white"><h5>旅店評分</h5></div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="rating">
+                                <h4>性價比</h4>
+                                <div class="stars" id="cpStars">
+                                    <span class="star" @@click="rate('cp', 1)">&#9733;</span>
+                                    <span class="star" @@click="rate('cp', 2)">&#9733;</span>
+                                    <span class="star" @@click="rate('cp', 3)">&#9733;</span>
+                                    <span class="star" @@click="rate('cp', 4)">&#9733;</span>
+                                    <span class="star" @@click="rate('cp', 5)">&#9733;</span>
+                                </div>
+                            </div>
+                            <div class="rating">
+                                <h4>舒適度</h4>
+                                <div class="stars" id="comfortableStars">
+                                    <span class="star" @@click="rate('comfortable', 1)">&#9733;</span>
+                                    <span class="star" @@click="rate('comfortable', 2)">&#9733;</span>
+                                    <span class="star" @@click="rate('comfortable', 3)">&#9733;</span>
+                                    <span class="star" @@click="rate('comfortable', 4)">&#9733;</span>
+                                    <span class="star" @@click="rate('comfortable', 5)">&#9733;</span>
+                                </div>
+                            </div>
+                            <div class="rating">
+                                <h4>員工服務</h4>
+                                <div class="stars" id="staffStars">
+                                    <span class="star" @@click="rate('staff', 1)">&#9733;</span>
+                                    <span class="star" @@click="rate('staff', 2)">&#9733;</span>
+                                    <span class="star" @@click="rate('staff', 3)">&#9733;</span>
+                                    <span class="star" @@click="rate('staff', 4)">&#9733;</span>
+                                    <span class="star" @@click="rate('staff', 5)">&#9733;</span>
+                                </div>
+                            </div>
                         </div>
-                        <span class="rating-text">有點貴</span>
-                    </div>
-                    <div class="rating">
-                        <h4>舒適度</h4>
-                        <div class="stars" id="comfortableStars">
-                            <span class="star" onclick="rate('comfortable', 1)">&#9733;</span>
-                            <span class="star" onclick="rate('comfortable', 2)">&#9733;</span>
-                            <span class="star" onclick="rate('comfortable', 3)">&#9733;</span>
-                            <span class="star" onclick="rate('comfortable', 4)">&#9733;</span>
-                            <span class="star" onclick="rate('comfortable', 5)">&#9733;</span>
+                        <div class="col-6">
+                            <div class="rating">
+                                <h4>設施</h4>
+                                <div class="stars" id="facilityStars">
+                                    <span class="star" @@click="rate('facility', 1)">&#9733;</span>
+                                    <span class="star" @@click="rate('facility', 2)">&#9733;</span>
+                                    <span class="star" @@click="rate('facility', 3)">&#9733;</span>
+                                    <span class="star" @@click="rate('facility', 4)">&#9733;</span>
+                                    <span class="star" @@click="rate('facility', 5)">&#9733;</span>
+                                </div>
+                            </div>
+                            <div class="rating">
+                                <h4>清潔</h4>
+                                <div class="stars" id="cleanStars">
+                                    <span class="star" @@click="rate('clean', 1)">&#9733;</span>
+                                    <span class="star" @@click="rate('clean', 2)">&#9733;</span>
+                                    <span class="star" @@click="rate('clean', 3)">&#9733;</span>
+                                    <span class="star" @@click="rate('clean', 4)">&#9733;</span>
+                                    <span class="star" @@click="rate('clean', 5)">&#9733;</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="rating">
-                        <h4>員工服務</h4>
-                        <div class="stars" id="staffStars">
-                            <span class="star" onclick="rate('staff', 1)">&#9733;</span>
-                            <span class="star" onclick="rate('staff', 2)">&#9733;</span>
-                            <span class="star" onclick="rate('staff', 3)">&#9733;</span>
-                            <span class="star" onclick="rate('staff', 4)">&#9733;</span>
-                            <span class="star" onclick="rate('staff', 5)">&#9733;</span>
-                        </div>
-                    </div>
-                    <div class="rating">
-                        <h4>設施</h4>
-                        <div class="stars" id="facilityStars">
-                            <span class="star" onclick="rate('facility', 1)">&#9733;</span>
-                            <span class="star" onclick="rate('facility', 2)">&#9733;</span>
-                            <span class="star" onclick="rate('facility', 3)">&#9733;</span>
-                            <span class="star" onclick="rate('facility', 4)">&#9733;</span>
-                            <span class="star" onclick="rate('facility', 5)">&#9733;</span>
-                        </div>
-                    </div>
-                    <div class="rating">
-                        <h4>清潔</h4>
-                        <div class="stars" id="cleanStars">
-                            <span class="star" onclick="rate('clean', 1)">&#9733;</span>
-                            <span class="star" onclick="rate('clean', 2)">&#9733;</span>
-                            <span class="star" onclick="rate('clean', 3)">&#9733;</span>
-                            <span class="star" onclick="rate('clean', 4)">&#9733;</span>
-                            <span class="star" onclick="rate('clean', 5)">&#9733;</span>
-                        </div>
-                    </div>
-                    <button onclick="submitRating()">提交評價</button>
+                    <div style="text-align:center" class="card-body bg-secondary text-white"><h5>旅店評論</h5></div>
+                    <textarea name="feedback" id="feedback" rows="8" placeholder="您的回覆是我們進步的動力!" style="border:2px #2f3944 solid;" v-model="ratings.note"></textarea>
                 </div>
+                <span v-if="ratings.date!='0001-01-01T00:00:00'">最後修改時間:{{ratings.date| formatDateTime}}</span>
             </div>
             <div class="modal-footer">
-                <span v-html="checkOutBtn"></span>
-                <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">關閉</button>
+                <button @@click="submitRating()">提交評價</button>
+                <button type="button" class="btn-secondary" data-bs-dismiss="modal">關閉</button>
             </div>
         </div>
     </div>
@@ -216,26 +221,6 @@
 
 @section Scripts{
     <script>
-        var ratings = {};
-
-        // 評價函式
-        function rate(category, value) {
-            ratings[category] = value;
-            var stars = document.getElementById(category + 'Stars').children;
-            for (var i = 0; i < value; i++) {
-                stars[i].style.color = '#ffc107'; // 被選中的星星顏色為黃色
-            }
-            for (var j = value; j < 5; j++) {
-                stars[j].style.color = '#ccc'; // 未被選中的星星顏色為灰色
-            }
-        }
-
-        // 提交評價函式
-        function submitRating() {
-            // 在這裡可以使用ratings物件進行評價的後續處理，例如傳送到伺服器或顯示結果
-            console.log(ratings);
-        }
-
         var app = new Vue({
             el: '#app',
             data: {
@@ -293,10 +278,15 @@
                     });
                     _this.orderId = "";
                 },
-                showCheckOut: function (status, orderId) {
-                    axios.post(`/CustomerOrders/ShowCheckOut?status=${status}&orderId=${orderId}`).then(response => {
-                        exampleModal.checkOutBtn = response.data;
-                    });
+                getComment: function (item) {
+                    let _this = this;
+                    var request = {};
+                    request.HotelId = item.hotelId;
+                    request.OrderId = item.orderId;
+                    axios.post(`/CustomerOrders/GetComment`, request).then(response => {
+                        exampleModal.ratings = response.data;
+                        exampleModal.rateAll();
+                    })
                 },
             },
         });
@@ -306,10 +296,10 @@
             el: '#exampleModal',
             data: {
                 item: [],
-                checkOutBtn: "",
+                ratings: {cp:0,comfortable:0,staff:0,facility:0,clean:0},
             },
             mounted: function () {
-
+              
             },
             filters: {
                 formatDateTime(value) {
@@ -335,14 +325,6 @@
                 }
             },
             methods: {
-                changeStatusColor: function (status) {
-                    const statusMap = {
-                        1: "card-body bg-warning text-white",
-                        2: "card-body bg-success text-white",
-                        3: "card-body bg-danger text-white"
-                    };
-                    return statusMap[status];
-                },
                 changeStatus: function (status) {
                     const statusMap = {
                         1: "fa-solid fa-triangle-exclamation",
@@ -350,6 +332,50 @@
                         3: "fa-regular fa-circle-xmark"
                     };
                     return statusMap[status];
+                },
+                rate: function (category, value) {
+                    let _this = this;
+                    _this.ratings[category] = value;
+                    var stars = document.getElementById(category + 'Stars').children;
+                    for (var i = 0; i < value; i++) {
+                        stars[i].style.color = '#ffc107'; // 被選中的星星顏色為黃色
+                    }
+                    for (var j = value; j < 5; j++) {
+                        stars[j].style.color = '#ccc'; // 未被選中的星星顏色為灰色
+                    }
+                },
+                submitRating: function () {
+                    let _this = this;
+                    var cm = {
+                        CommentId: _this.ratings.commentId,
+                        HotelId: _this.ratings.hotelId,
+                        OrderId: _this.ratings.orderId,
+                        CustomerId:_this.ratings.customerId,
+                        Cp: _this.ratings.cp,
+                        Comfortable: _this.ratings.comfortable,
+                        Staff: _this.ratings.staff,
+                        Facility: _this.ratings.facility,
+                        Clean: _this.ratings.clean,
+                        Note: _this.ratings.note,
+                    };
+                    axios.post('/CustomerOrders/PostComment', cm).then(response => {
+                        alert(response.data);
+                        //$('#insertPage').modal('hide');
+                        app.getFinishOrders();
+                    });
+                },
+                rateAll: function () {
+                    let _this = this;
+                    var targetProperties = ['cp', 'comfortable', 'staff', 'facility', 'clean'];
+
+                    for (var i = 0; i < targetProperties.length; i++) {
+                        var category = targetProperties[i];
+
+                        if (_this.ratings.hasOwnProperty(category)) {
+                            var value = _this.ratings[category];
+                            _this.rate(category, value);
+                        }
+                    }
                 },
             },
         });
