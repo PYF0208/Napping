@@ -316,6 +316,7 @@
 				},
 				initMap: function () {
 					let _this = this;
+					console.log(_this.resultVM[46].positionLat);
 					_this.map = new google.maps.Map(document.getElementById("map"), {
 						zoom: 8,
 						center: { lat: parseFloat(_this.resultVM[46].positionLat), lng: parseFloat(_this.resultVM[46].positionLon) },
