@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<RoomDetailViewModel>
+
 <div id="checkOut">
     <div class="container">
         <div class="py-5 text-center">
@@ -50,42 +51,47 @@
             </div>
             <div class="col-md-8 order-md-1">
                 <h4 class="mb-3">訂房資訊</h4>
-                <form class="needs-validation" novalidate="" asp-controller="Bank" asp-action="SpgatewayPayBill">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="firstName">姓名</label>
-                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="王小明" value="" required="">
-                            <div class="invalid-feedback"> 請輸入您的姓名. </div>
+                
+                <template>
+                    <form asp-action="SpgatewayPayBill" asp-controller="Bank" class="needs-validation" v-on:submit="disableButton">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName">姓名</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" placeholder="王小明" value="" required="">
+                                <div class="invalid-feedback"> 請輸入您的姓名. </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phone">連絡電話 <span class="text-muted">(Optional)</span></label>
+                                <input type="number" class="form-control" id="phone" name="phone" placeholder="0987654321" required="">
+                                <div class="invalid-feedback"> 請輸入您的聯絡電話. </div>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="phone">連絡電話 <span class="text-muted">(Optional)</span></label>
-                            <input type="number" class="form-control" id="phone" name="phone" placeholder="0987654321" required="">
-                            <div class="invalid-feedback"> 請輸入您的聯絡電話. </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">去付款</button>
-                </form>
+                        <span v-if="submitting">加載中...</span>
+                        <button v-else id="submitBtn" class="btn btn-primary btn-lg btn-block" type="submit">去付款</button>
+                    </form>
+                </template>
+
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts
-{
+    {
     <script>
-        (function() {
+        (function () {
             'use strict'
 
             window.addEventListener('load',
-                function() {
+                function () {
                     // Fetch all the forms we want to apply custom Bootstrap validation styles to
                     var forms = document.getElementsByClassName('needs-validation')
 
                     // Loop over them and prevent submission
                     Array.prototype.filter.call(forms,
-                        function(form) {
+                        function (form) {
                             form.addEventListener('submit',
-                                function(event) {
+                                function (event) {
                                     if (form.checkValidity() === false) {
                                         event.preventDefault()
                                         event.stopPropagation()
@@ -103,15 +109,16 @@
             el: '#checkOut',
             data: {
                 checkOutItem: [],
+                submitting: false,
             },
-            mounted: function() {
+            mounted: function () {
                 var self = this;
                 //self.getRoomListBySession();
                 self.checkOutItem = @Html.Raw(Json.Serialize(Model));
                 console.log(self.checkOutItem);
             },
             methods: {
-                getRoomListBySession: function() {
+                getRoomListBySession: function () {
                     var self = this;
                     axios.get(`${location.origin}/CheckOut/GetRoomListBySession`)
                         .then(response => {
@@ -121,7 +128,7 @@
                             console.log(error.response.data);
                         });
                 },
-                getCheckOutListByOrderId: function() {
+                getCheckOutListByOrderId: function () {
                     var self = this;
                     axios.get(`${location.origin}/CheckOut/GetCheckOutListByOrderId`, { params: { orderId: 57 } })
                         .then(response => {
@@ -131,7 +138,7 @@
                             console.log(error.response.data);
                         });
                 },
-                getFormatedTime: function(value) {
+                getFormatedTime: function (value) {
                     var date = new Date(value);
                     var year = date.getFullYear();
                     var month = String(date.getMonth() + 1).padStart(2, '0');
@@ -140,6 +147,9 @@
                     var minutes = String(date.getMinutes()).padStart(2, '0');
 
                     return `${year}-${month}-${day} ${hours}:${minutes}`;
+                },
+                disableButton: function () {
+                    this.submitting = true;
                 },
             },
         });

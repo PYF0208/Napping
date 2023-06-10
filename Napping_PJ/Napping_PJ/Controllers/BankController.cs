@@ -18,7 +18,8 @@ namespace Napping_PJ.Controllers
         private readonly db_a989f8_nappingContext _Context;
         private readonly IBackgroundJobClient backgroundJobs;
         private readonly IChangePaymentStatusService paymentStatusService;
-
+        private static readonly object _lockObject = new object();
+        private static bool _isProcessing = false;
         public BankController(db_a989f8_nappingContext context, IBackgroundJobClient backgroundJobs, IChangePaymentStatusService paymentStatusService)
         {
             _Context = context;
@@ -51,12 +52,30 @@ namespace Napping_PJ.Controllers
         [HttpPost]
         //[Route("Bank/SpgatewayPayBillAsync/")]
         public async Task SpgatewayPayBillAsync(string firstName = null, string phone = null, int orderId = -1)
-
         {
+            if (_isProcessing)
+            {
+                // 如果已经在处理中，则直接返回，避免重复执行
+                return;
+            }
+
+            lock (_lockObject)
+            {
+                if (_isProcessing)
+                {
+                    // 检查是否已经在处理中（在获取锁之前可能有其他线程已经进入了临界区）
+                    return;
+                }
+
+                _isProcessing = true;
+            }
+
+
             Order thisOrder = new Order();
             int subTotle = 0;
             if (orderId < 0)
             {
+
                 #region 寫入訂單
 
                 var userEmialClaim = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
@@ -65,7 +84,8 @@ namespace Napping_PJ.Controllers
                     return;
                 }
 
-                Customer loginUser = await _Context.Customers.FirstOrDefaultAsync(x => x.Email == userEmialClaim.Value);
+                Customer loginUser =
+                    await _Context.Customers.FirstOrDefaultAsync(x => x.Email == userEmialClaim.Value);
                 byte[] cartBytes = HttpContext.Session.Get($"{loginUser.CustomerId}_cartItem");
                 if (cartBytes == null)
                 {
@@ -116,7 +136,8 @@ namespace Napping_PJ.Controllers
                         Order = newOrder,
                     };
 
-                    newOrderDetail.OrderDetailExtraServices = rDVM.selectedExtraServices.Where(x => x.serviceQuantity > 0)
+                    newOrderDetail.OrderDetailExtraServices = rDVM.selectedExtraServices
+                        .Where(x => x.serviceQuantity > 0)
                         .Select(x =>
                         {
                             return new OrderDetailExtraService
@@ -131,12 +152,26 @@ namespace Napping_PJ.Controllers
 
                     newOrder.OrderDetails.Add(newOrderDetail);
                 }
-
-                _Context.Orders.Add(newOrder);
-                await _Context.SaveChangesAsync();
+                using (var transaction = _Context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        _Context.Orders.Add(newOrder);
+                        _Context.SaveChanges();
+                        transaction.Commit();
+                        _isProcessing = false;
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                }
                 //清空購物車
                 thisOrder = newOrder;
-                subTotle = roomDetailViewModels.Sum(x => (Int32)(x.tPromotionPrice + x.tServicePrice + x.tRoomPrice));
+                subTotle = roomDetailViewModels.Sum(
+                    x => (Int32)(x.tPromotionPrice + x.tServicePrice + x.tRoomPrice));
                 HttpContext.Session.Remove($"{loginUser.CustomerId}_cartItem");
 
                 #endregion
@@ -148,6 +183,7 @@ namespace Napping_PJ.Controllers
                     TimeSpan.FromMinutes(10));
 
                 #endregion
+
 
             }
             else
