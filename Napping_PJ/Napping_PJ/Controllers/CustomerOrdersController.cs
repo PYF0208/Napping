@@ -243,7 +243,15 @@ namespace Napping_PJ.Controllers
                 };
                 return Ok(cm);
             }
-            return Content("住宿評價尚未完成!");
+            var nocm = new CommentViewModel
+            {
+                Cp = 0,
+                Comfortable = 0,
+                Staff = 0,
+                Facility = 0,
+                Clean = 0,
+            };
+            return Ok(nocm);
         }
     }
 

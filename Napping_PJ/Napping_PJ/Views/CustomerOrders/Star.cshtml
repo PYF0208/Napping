@@ -207,7 +207,7 @@
                         </div>
                     </div>
                     <div style="text-align:center" class="card-body bg-secondary text-white"><h5>旅店評論</h5></div>
-                    <textarea name="feedback" id="feedback" rows="8" placeholder="您的回覆是我們進步的動力!" style="border:2px #2f3944 solid;"></textarea>
+                    <textarea name="feedback" id="feedback" rows="8" placeholder="您的回覆是我們進步的動力!" style="border:2px #2f3944 solid;" v-model="ratings.note"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -221,26 +221,6 @@
 
 @section Scripts{
     <script>
-        //var ratings = {};
-
-        // //評價函式
-        //function rate(category, value) {
-        //    ratings[category] = value;
-        //    var stars = document.getElementById(category + 'Stars').children;
-        //    for (var i = 0; i < value; i++) {
-        //        stars[i].style.color = '#ffc107'; // 被選中的星星顏色為黃色
-        //    }
-        //    for (var j = value; j < 5; j++) {
-        //        stars[j].style.color = '#ccc'; // 未被選中的星星顏色為灰色
-        //    }
-        //}
-
-        //// 提交評價函式
-        //function submitRating() {
-        //    // 在這裡可以使用ratings物件進行評價的後續處理，例如傳送到伺服器或顯示結果
-        //    console.log(ratings);
-        //}
-
         var app = new Vue({
             el: '#app',
             data: {
@@ -305,6 +285,7 @@
                     request.OrderId = item.orderId;
                     axios.post(`/CustomerOrders/GetComment`, request).then(response => {
                         exampleModal.ratings = response.data;
+                        exampleModal.rateAll();
                     })
                 },
             },
@@ -315,11 +296,10 @@
             el: '#exampleModal',
             data: {
                 item: [],
-                ratings: {},
-                checkOutBtn: "",
+                ratings: {cp:0,comfortable:0,staff:0,facility:0,clean:0,note:""},
             },
             mounted: function () {
-
+              
             },
             filters: {
                 formatDateTime(value) {
@@ -367,6 +347,19 @@
                 submitRating: function () {
                     let _this = this;
                     console.log(_this.ratings);
+                },
+                rateAll: function () {
+                    let _this = this;
+                    var targetProperties = ['cp', 'comfortable', 'staff', 'facility', 'clean'];
+
+                    for (var i = 0; i < targetProperties.length; i++) {
+                        var category = targetProperties[i];
+
+                        if (_this.ratings.hasOwnProperty(category)) {
+                            var value = _this.ratings[category];
+                            _this.rate(category, value);
+                        }
+                    }
                 },
             },
         });
