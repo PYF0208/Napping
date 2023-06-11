@@ -137,7 +137,6 @@
 			},
 			methods: {
 				filterFeatureVMs: function () {
-					//alert("有！！");
 					let _this = this;
 					var request = {};
 					request.FeatureId = isNaN(Number(_this.Filter)) ? -1 : Number(_this.Filter);
@@ -166,17 +165,20 @@
 					_this.image = item.image;
 				},
 				update: function () {
-					//alert("UPDATE");
 					let _this = this;
 					var request = {
 						FeatureId: _this.featureId,
 						Name: _this.name,
 						Image: _this.image,
 					};
-					//alert(JSON.stringify(request));
 					axios.put(`Feature/UpdateFeature?id=${_this.featureId}`, request)
 						.then(response => {
-							alert(response.data);
+
+							swal({
+								title: response.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							$("#editModal").modal("hide");
 							_this.filterFeatureVMs();
 						});
@@ -193,7 +195,11 @@
 					};
 					axios.post(`Feature/InsertFeature`, request)
 						.then(response => {
-							alert(response.data);
+							swal({
+								title: response.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							$("#insertModal").modal("hide");
 							insertName = "";
 							insertImage = "";
@@ -202,13 +208,26 @@
 				},
 				deleteFeature: function (featureId) {
 					let _this = this;
-					var ret = confirm("確定要刪除嗎？")
-					if (ret == true) {
-						axios.delete(`Feature/DeleteFeature?id=${_this.featureId}`).then(response => {
-							alert(response.data);
-							_this.filterFeatureVMs();
+					swal({
+						title: "確定要刪除嗎？",
+						text: "此項操作將無法復原",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+						.then((willDelete) => {
+							if (willDelete) {
+								axios.delete(`Feature/DeleteFeature?id=${_this.featureId}`).then(response => {
+									swal({
+										title: response.data,
+										icon: "success",
+										button: "關閉視窗",
+									});
+									_this.filterFeatureVMs();
+								});
+							} 
 						});
-					}
+
 				},
 			}
 		})

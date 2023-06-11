@@ -164,7 +164,12 @@
 					   };
 					axios.post("Profits/NewCreate", request)
 						.then(res => {
-							alert(res.data);
+							//alert(res.data);
+							swal({
+								title: res.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							$("#insertPage").modal('hide');
 							_this.getProfit();
 						})
@@ -220,7 +225,12 @@
 					};
 					axios.put(`Profits/Edit?ID=${_this.profitId}`, request)
 						.then(response => {
-							alert(response.data);
+							//alert(response.data);
+							swal({
+								title: response.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							_this.getProfit();
 							$("#editModal").modal("hide");
 						});
@@ -238,14 +248,30 @@
 					let _this = this;
 					var x = _this.ProfitViewModel.find(h => h.profitId == profitId)
 
-					var ret = confirm(`您確定要將ID:${x.profitId}刪除嗎?`);
-					if (ret == true) {
-						axios.delete(`Profits/DeleteConfirmed?ID=${profitId}`)
-							.then(response => {
-								var y = _this.ProfitViewModel.findIndex(h => h.profitId == profitId)
-								_this.ProfitViewModel.splice(y, 1)
-							});
-					}
+					swal({
+						title: `您確定要將ID:${x.profitId}刪除嗎?`,
+						text: "此項操作將無法復原",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+						.then((willDelete) => {
+							if (willDelete) {
+								axios.delete(`Profits/DeleteConfirmed?ID=${profitId}`).then(response => {
+									var y = _this.ProfitViewModel.findIndex(h => h.profitId == profitId)
+									_this.ProfitViewModel.splice(y, 1)
+								});
+							}
+						});
+
+					//var ret = confirm(`您確定要將ID:${x.profitId}刪除嗎?`);
+					//if (ret == true) {
+					//	axios.delete(`Profits/DeleteConfirmed?ID=${profitId}`)
+					//		.then(response => {
+					//			var y = _this.ProfitViewModel.findIndex(h => h.profitId == profitId)
+					//			_this.ProfitViewModel.splice(y, 1)
+					//		});
+					//}
 				},
 			}
 		});

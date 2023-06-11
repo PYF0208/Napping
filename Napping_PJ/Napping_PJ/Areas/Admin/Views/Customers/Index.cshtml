@@ -682,7 +682,13 @@
                 sendMail(){
                     axios.post("/Member/SendMail")
                     .then(res => {
-                        alert(res.data)
+
+                            swal({
+                                title: res.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
+                        //alert(res.data)
                     })
                 },
                 getCityList: async function () {
@@ -809,7 +815,13 @@
                         _this.CustomersViewModels = model;
                         //console.log('SkipPage成功');
                     } catch (error) {
-                        alert(error.response.data)
+
+                        swal({
+                            title: error.response.data,
+                            icon: "warning",
+                            button: "關閉視窗",
+                        });
+                        //alert(error.response.data)
                     }
                 },
                 isThisPage(n) {

@@ -182,7 +182,12 @@
 						Discount: item.discount
 					};
 					axios.post('Promotions/SendMailByPromotionId', request).then(response => {
-						alert(response.data);
+						//alert(response.data);
+						swal({
+							title: response.data,
+							icon: "success",
+							button: "關閉視窗",
+						});
 					});
 
 				},
@@ -231,7 +236,12 @@
 						LevelName: _this.levelName
 					};
 					axios.put(`Promotions/PutPromotions?id=${_this.promotionId}`, request).then(response => {
-						alert(response.data);
+						//alert(response.data);
+						swal({
+							title: response.data,
+							icon: "success",
+							button: "關閉視窗",
+						});
 						_this.filterPromotions();
 						//_this.cancel();
 
@@ -252,7 +262,12 @@
 
 					};
 					axios.post('Promotions/PostPromotion', prViewModel).then(response => {
-						alert(response.data);
+						//alert(response.data);
+						swal({
+							title: response.data,
+							icon: "success",
+							button: "關閉視窗",
+						});
 						$('#insertPage').modal('hide');
 						_this.filterPromotions();
 					});
@@ -261,14 +276,31 @@
 					//alert("delete");
 					let _this = this;
 					var x = _this.PromotionViewModel.find(p => p.promotionId == promotionId)
-					var ret = confirm(`您確定要將促銷編號${x.promotionId}-${x.name}刪除嗎?`);
-					if (ret == true) {
-						axios.delete(`Promotions/DeletePromotions?Id=${promotionId}`)
-							.then(response => {
-								var y = _this.PromotionViewModel.findIndex(p => p.promotionId == promotionId)
-								_this.PromotionViewModel.splice(y, 1)
-							});
-					}
+
+					swal({
+						title: `您確定要將促銷編號${x.promotionId}-${x.name}刪除嗎?`,
+						text: "此項操作將無法復原",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+						.then((willDelete) => {
+							if (willDelete) {
+								axios.delete(`Promotions/DeletePromotions?Id=${promotionId}`).then(response => {
+									var y = _this.PromotionViewModel.findIndex(p => p.promotionId == promotionId)
+									_this.PromotionViewModel.splice(y, 1)
+								});
+							}
+						});
+					
+					//var ret = confirm(`您確定要將促銷編號${x.promotionId}-${x.name}刪除嗎?`);
+					//if (ret == true) {
+					//	axios.delete(`Promotions/DeletePromotions?Id=${promotionId}`)
+					//		.then(response => {
+					//			var y = _this.PromotionViewModel.findIndex(p => p.promotionId == promotionId)
+					//			_this.PromotionViewModel.splice(y, 1)
+					//		});
+					//}
 				},
 			}
 		})

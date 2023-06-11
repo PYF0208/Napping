@@ -199,7 +199,12 @@
 					//alert(JSON.stringify(request));
 					axios.put(`HotelExtraServices/UpdateHotelExtraServices?hotelId=${_this.hotelId}&extraServiceId=${_this.extraServiceId}`, request)
 						.then(response => {
-							alert(response.data);
+							//alert(response.data);
+							swal({
+								title: response.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							$("#editModal").modal("hide");
 							_this.filterHotelExtraServices();
 						});
@@ -216,7 +221,12 @@
 					};
 					axios.post(`HotelExtraServices/InsertHotelExtraServices`, request)
 						.then(response => {
-							alert(response.data);
+							//alert(response.data);
+							swal({
+								title: response.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							$("#insertModal").modal("hide");
 							insertHotelId = "";
 							insertExtraServiceId = "";
@@ -226,13 +236,32 @@
 				},
 				deleteHotelExtraServices: function (hotelId,extraServiceId) {
 					let _this = this;
-					var ret = confirm("確定要刪除嗎？")
-					if (ret == true) {
-						axios.delete(`HotelExtraServices/DeleteHotelExtraServices?hotelId=${hotelId}&extraServiceId=${extraServiceId}`).then(response => {
-							alert(response.data);
-							_this.filterHotelExtraServices();
+					swal({
+						title: "確定要刪除嗎？",
+						text: "此項操作將無法復原",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+						.then((willDelete) => {
+							if (willDelete) {
+								axios.delete(`HotelExtraServices/DeleteHotelExtraServices?hotelId=${hotelId}&extraServiceId=${extraServiceId}`).then(response => {
+									swal({
+										title: response.data,
+										icon: "success",
+										button: "關閉視窗",
+									});
+									_this.filterHotelExtraServices();
+								});
+							}
 						});
-					}
+					//var ret = confirm("確定要刪除嗎？")
+					//if (ret == true) {
+					//	axios.delete(`HotelExtraServices/DeleteHotelExtraServices?hotelId=${hotelId}&extraServiceId=${extraServiceId}`).then(response => {
+					//		alert(response.data);
+					//		_this.filterHotelExtraServices();
+					//	});
+					//}
 				},
 			}
 		})

@@ -144,7 +144,11 @@
                     };
                     //alert(JSON.stringify(request));
                     axios.put(`Levels/PutLevel?id=${_this.levelId}`, request).then(response => {
-                        alert(response.data);
+                        swal({
+                            title: response.data,
+                            icon: "success",
+                            button: "關閉視窗",
+                        });
                         _this.filterLevel();
                     });
                 },
@@ -158,7 +162,12 @@
                     };
                     axios.post(`Levels/PostLevel`, request)
                         .then(response => {
-                            alert(response.data);
+                            //alert(response.data);
+                            swal({
+                                title: response.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
                             $("#insertModal").modal("hide");
                             insertName = "";
 
@@ -167,13 +176,32 @@
                 },
                 deleteLevel: function (levelId) {
                     let _this = this;
-                    var ret = confirm("確定要刪除嗎？")
-                    if (ret == true) {
-                        axios.delete(`Levels/DeleteLevel?id=${levelId}`).then(response => {
-                            alert(response.data);
-                            _this.filterLevel();
+                    swal({
+                        title: "確定要刪除嗎？",
+                        text: "此項操作將無法復原",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                axios.delete(`Levels/DeleteLevel?id=${levelId}`).then(response => {
+                                    swal({
+                                        title: response.data,
+                                        icon: "success",
+                                        button: "關閉視窗",
+                                    });
+                                    _this.filterLevel();
+                                });
+                            }
                         });
-                    }
+                    //var ret = confirm("確定要刪除嗎？")
+                    //if (ret == true) {
+                    //    axios.delete(`Levels/DeleteLevel?id=${levelId}`).then(response => {
+                    //        alert(response.data);
+                    //        _this.filterLevel();
+                    //    });
+                    //}
                 },
             }
         })

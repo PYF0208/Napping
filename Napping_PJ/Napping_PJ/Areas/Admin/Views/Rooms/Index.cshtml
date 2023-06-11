@@ -292,7 +292,12 @@
 					};
 					axios.post(`Rooms/Edit?ID=${_this.originalRoomId}`, request)
 						.then(response => {
-							alert(response.data);
+							//alert(response.data);
+							swal({
+								title: response.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							_this.RoomsViewModel = [];
 							_this.getRooms();
 							$("#editModal").modal('hide');
@@ -315,21 +320,45 @@
 					};
 					axios.post("Rooms/CreateRooms", req)
 						.then(response => {
-							alert(response.data);
+							//alert(response.data);
+							swal({
+								title: response.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							$("#insertModal").modal('hide');
 							_this.getRooms();
 						})
 				},
 				deleteRooms: function (roomId) {
 					let _this = this;
-					var ret = confirm("確定要刪除嗎？")
-					if (ret == true) {
-						axios.delete(`Rooms/DeleteConfirmed?ID=${roomId}`)
-							.then(response => {
-								alert(response.data);
-								_this.getRooms();
-							});
-					}
+					swal({
+						title: "確定要刪除嗎？",
+						text: "此項操作將無法復原",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+						.then((willDelete) => {
+							if (willDelete) {
+								axios.delete(`Rooms/DeleteConfirmed?ID=${roomId}`).then(response => {
+									swal({
+										title: response.data,
+										icon: "success",
+										button: "關閉視窗",
+									});
+									_this.getRooms();
+								});
+							}
+						});
+					//var ret = confirm("確定要刪除嗎？")
+					//if (ret == true) {
+					//	axios.delete(`Rooms/DeleteConfirmed?ID=${roomId}`)
+					//		.then(response => {
+					//			alert(response.data);
+					//			_this.getRooms();
+					//		});
+					//}
 				},
 			}
 		})
