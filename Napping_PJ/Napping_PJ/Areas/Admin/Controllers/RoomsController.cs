@@ -264,14 +264,14 @@ namespace Napping_PJ.Areas.Admin.Controllers
 		[HttpDelete]
 		public async Task<string> DeleteConfirmed(int id)
 		{
-			var delete = await _context.Rooms.FindAsync(id);
+			var delete = await _context.Rooms.Include(x=>x.Features).FirstOrDefaultAsync(c=>c.RoomId == id);
 			if (delete == null)
 			{
 				return "刪除失敗1";
-			}
-			var pics = _context.RoomImages.Where(r => r.RoomId == id);
-			_context.Rooms.Remove(delete);
-			_context.RoomImages.RemoveRange(pics);
+            }
+            var pics = _context.RoomImages.Where(r => r.RoomId == id);
+            _context.Rooms.Remove(delete);
+            _context.RoomImages.RemoveRange(pics);
 			try
 			{
 				await _context.SaveChangesAsync();
