@@ -43,10 +43,6 @@
 
   <ItemGroup>
     <None Include="Areas\Admin\Views\Customers\Index.cshtml" />
-    <None Include="Areas\Admin\Views\Feature\Create.cshtml" />
-    <None Include="Areas\Admin\Views\Feature\Delete.cshtml" />
-    <None Include="Areas\Admin\Views\Feature\Details.cshtml" />
-    <None Include="Areas\Admin\Views\Feature\Edit.cshtml" />
     <None Include="Areas\Admin\Views\Feature\Index.cshtml" />
     <None Include="Areas\Admin\Views\Home\Index.cshtml" />
     <None Include="Areas\Admin\Views\Hotels\Index.cshtml" />
