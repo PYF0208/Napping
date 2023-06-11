@@ -17,7 +17,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
 
 		}
 
-		public IEnumerable<ChartAreaViewModel> Get()
+		public IEnumerable<ChartAreaViewModel> GetOrderData()
 		{
 			return _context.Orders.Join(_context.OrderDetails, o => o.OrderId , od => od.OrderId, (o , od) => new ChartAreaViewModel
 			{
@@ -25,9 +25,21 @@ namespace Napping_PJ.Areas.Admin.Controllers
 				Date = o.Date,
 				TotalPrice = od.RoomTotalPrice + od.EspriceTotal - od.DiscountTotalPrice,
 
+			}).OrderBy(o => o.Date);
+
+
+		}
+
+		public IEnumerable<ChartBarViewModel> GetHotelData() {
+
+			return _context.Hotels.GroupBy(x => x.City).Select(c => new ChartBarViewModel { 
+			
+			City = c.Key,
+			Count = c.Count()
+			
 			});
-
-
+		
+		
 		}
 	}
 }

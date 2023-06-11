@@ -6,4 +6,13 @@
 		public DateTime Date { get; set; }
 		public double TotalPrice { get; set; }
 	}
+
+	public class ChartBarViewModel {
+
+		public string City { get; set; }
+		public int Count { get; set; }
+
+	}
+
+
 }
