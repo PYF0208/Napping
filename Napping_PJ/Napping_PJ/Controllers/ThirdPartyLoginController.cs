@@ -35,12 +35,13 @@ namespace Napping_PJ.Controllers
             var authenticateResult = await HttpContext.AuthenticateAsync("External");
             if (!authenticateResult.Succeeded)
                 return BadRequest(); // TODO: 處理此錯誤的方式。
-                                     // 檢查是否通過 Google 或其他連結進行重新導向
-            string authType = authenticateResult.Principal.Identities.ToList()[0].AuthenticationType.ToLower();
-            if (authType == "google")
+
+            // 檢查主要值是否存在
+            if (authenticateResult.Principal != null)
             {
-                // 檢查主要值是否存在
-                if (authenticateResult.Principal != null)
+                // 檢查是否通過 Google 或其他連結進行重新導向
+                string authType = authenticateResult.Principal.Identities.ToList()[0].AuthenticationType.ToLower();
+                if (authType == "google")
                 {
                     //自訂方法，檢查是否已使用GoogleId註冊過
                     List<UserRole> hasRoles = CheckOAuthRecord(authenticateResult);
@@ -59,6 +60,7 @@ namespace Napping_PJ.Controllers
                         await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
                         return RedirectToAction("Index", "Home");
                     }
+
                 }
             }
             return RedirectToAction("Index", "Home");
@@ -76,6 +78,7 @@ namespace Napping_PJ.Controllers
             string OAuthAccountType = authenticateResult.Principal.Identities.ToList()[0].AuthenticationType.ToLower();
             //查詢新會員的ID
             Customer getCustomer = _context.Customers.FirstOrDefault(c => c.Email == googleAccountEmail);
+            //如果沒找到，即尚未使用此google帳號註冊過
             if (getCustomer == null)
             {
                 Customer newCustomer = new Customer()
@@ -99,40 +102,41 @@ namespace Napping_PJ.Controllers
                 _context.Oauths.Add(newOauth);
                 _context.SaveChanges();
             }
+            //取得使用者角色
             List<UserRole> getOauth = _context.UserRoles.Where(ur => ur.Customer == getCustomer).ToList();
             return getOauth;
         }
-        internal (List<UserRole>, bool) CheckOAuthRecord(string Email, string passWord)
-        {
-            bool newUser = false;
-            //查詢新會員的ID
-            Customer? getCustomer = _context.Customers.FirstOrDefault(c => c.Email == Email);
-            if (getCustomer == null)
-            {
-                newUser = true;
-                string passwodHash = PasswordHasher.HashPassword(passWord, Email);
-                Customer newCustomer = new Customer()
-                {
-                    Name = Email,
-                    Email = Email,
-                    Password = passwodHash
-                };
-                //寫入Customers資料表
-                _context.Customers.Add(newCustomer);
-                _context.SaveChanges();
-                //查詢新會員的ID
-                getCustomer = _context.Customers.FirstOrDefault(c => c.Email == Email);
+        //internal (List<UserRole>, bool) CheckOAuthRecord(string Email, string passWord)
+        //{
+        //    bool newUser = false;
+        //    //查詢新會員的ID
+        //    Customer? getCustomer = _context.Customers.FirstOrDefault(c => c.Email == Email);
+        //    if (getCustomer == null)
+        //    {
+        //        newUser = true;
+        //        string passwodHash = PasswordHasher.HashPassword(passWord, Email);
+        //        Customer newCustomer = new Customer()
+        //        {
+        //            Name = Email,
+        //            Email = Email,
+        //            Password = passwodHash
+        //        };
+        //        //寫入Customers資料表
+        //        _context.Customers.Add(newCustomer);
+        //        _context.SaveChanges();
+        //        //查詢新會員的ID
+        //        getCustomer = _context.Customers.FirstOrDefault(c => c.Email == Email);
 
-                UserRole newUserRole = new UserRole()
-                {
-                    CustomerId = getCustomer.CustomerId,
-                    RoleId = 3
-                };
-                _context.UserRoles.Add(newUserRole);
-                _context.SaveChanges();
-            }
-            List<UserRole> getOauth = _context.UserRoles.Where(ur => ur.Customer == getCustomer).ToList();
-            return (getOauth, newUser);
-        }
+        //        UserRole newUserRole = new UserRole()
+        //        {
+        //            CustomerId = getCustomer.CustomerId,
+        //            RoleId = 3
+        //        };
+        //        _context.UserRoles.Add(newUserRole);
+        //        _context.SaveChanges();
+        //    }
+        //    List<UserRole> getOauth = _context.UserRoles.Where(ur => ur.Customer == getCustomer).ToList();
+        //    return (getOauth, newUser);
+        //}
     }
 }

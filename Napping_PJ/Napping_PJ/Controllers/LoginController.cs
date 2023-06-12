@@ -98,6 +98,11 @@ namespace Napping_PJ.Controllers
 
             return BadRequest(error);
         }
+        /// <summary>
+        /// 確認是否已登入，如未登入則導向登入頁
+        /// </summary>
+        /// <param name="ReturnUrl"></param>
+        /// <returns></returns>
         public async Task<IActionResult> CheckIsLogined(string ReturnUrl)
         {
             Claim userEmailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);

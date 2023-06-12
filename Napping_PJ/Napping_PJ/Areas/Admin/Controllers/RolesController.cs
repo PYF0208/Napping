@@ -171,8 +171,7 @@ namespace Napping_PJ.Areas.Admin.Controllers
             }
             return BadRequest("新增失敗");
         }
-
-        // POST: Admin/Roles/RemoveRole?roleId=5
+        
         [HttpPost]
         public async Task<IActionResult> RemoveRole(int roleId)
         {

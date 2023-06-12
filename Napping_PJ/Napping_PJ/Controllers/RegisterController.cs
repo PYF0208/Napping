@@ -61,7 +61,7 @@ namespace Napping_PJ.Controllers
                 IEnumerable<string> emailErrors = ModelState["Email"]?.Errors.Select(e => e.ErrorMessage);
                 IEnumerable<string> passwordErrors = ModelState["Password"]?.Errors.Select(e => e.ErrorMessage);
                 IEnumerable<string> confirmPasswordError = ModelState["ConfirmPassword"]?.Errors.Select(e => e.ErrorMessage);
-
+                //寫入錯誤資訊資料模型
                 userValidViewModel.mainError = null;
                 userValidViewModel.emailError = emailErrors == null ? null : string.Join(", ", emailErrors);
                 userValidViewModel.passWordError = passwordErrors == null ? null : string.Join(", ", passwordErrors);
@@ -91,15 +91,16 @@ namespace Napping_PJ.Controllers
             //驗證資料是否符合RegisterViewModel規範
             if (!ModelState.IsValid)
             {
+                //取得驗證失敗訊息
                 IEnumerable<string> emailErrors = ModelState["Email"]?.Errors.Select(e => e.ErrorMessage);
                 IEnumerable<string> passwordErrors = ModelState["Password"]?.Errors.Select(e => e.ErrorMessage);
                 IEnumerable<string> confirmPasswordError = ModelState["ConfirmPassword"]?.Errors.Select(e => e.ErrorMessage);
-
+                //寫入驗證失敗訊息
                 error.mainError = null;
                 error.emailError = emailErrors == null ? null : string.Join(", ", emailErrors);
                 error.passWordError = passwordErrors == null ? null : string.Join(", ", passwordErrors);
                 error.confirmPasswordError = confirmPasswordError == null ? null : string.Join(", ", confirmPasswordError);
-
+                //回傳錯誤訊息
                 return BadRequest(error);
             }
             // 创建新用户
@@ -107,7 +108,7 @@ namespace Napping_PJ.Controllers
             {
                 Name = registerViewModel.Email,
                 Email = registerViewModel.Email,
-                //密碼加鹽加密
+                //密碼加鹽加密，鹽是信箱
                 Password = PasswordHasher.HashPassword(registerViewModel.Password, registerViewModel.Email)
             };
             try
@@ -127,6 +128,7 @@ namespace Napping_PJ.Controllers
             // 添加默認角色到用戶角色表
             UserRole newUserRole = new UserRole()
             {
+                //預設角色為消費者
                 RoleId = 3,
                 CustomerId = getCustomer.CustomerId
             };
@@ -181,19 +183,22 @@ namespace Napping_PJ.Controllers
 
                 return BadRequest(emailErrors == null ? null : string.Join(", ", emailErrors));
             }
+            //尋找發出驗證請求的使用者
             Customer getCustomer = _context.Customers.FirstOrDefault(c => c.Email == emailValidViewModel.Email);
+            //確認有找到使用者
             if (getCustomer != null)
             {
+                //確認此帳號是否曾通過驗證
                 if (getCustomer.Locked == false)
                 {
                     return BadRequest("此帳號已通過驗證");
                 }
             }
-            //加密資料
-            var obj = new AesValidationDto(emailValidViewModel.Email, DateTime.Now.AddDays(3));
-            var jString = JsonSerializer.Serialize(obj);
-            var code = _encrypt.AesEncryptToBase64(jString);
-            string encodedStr = HttpUtility.UrlEncode(code);
+            
+            var obj = new AesValidationDto(emailValidViewModel.Email, DateTime.Now.AddDays(3));//設定過期時間為3天
+            var jString = JsonSerializer.Serialize(obj); // 將物件序列化為 JSON 字串
+            var code = _encrypt.AesEncryptToBase64(jString); // 將 JSON 字串進行 AES 加密並轉換為 Base64 字串
+            string encodedStr = HttpUtility.UrlEncode(code); // 將加密後的字串進行 URL 編碼，如沒有做此編碼，將導致在網址上串接的查詢字串，與上行轉Base64 字串的code不同，導致解密失敗
 
             //寄送驗證信
             var mail = new MailMessage()
@@ -210,7 +215,7 @@ namespace Napping_PJ.Controllers
                 using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
                 {
                     sm.EnableSsl = true;
-                    sm.Credentials = new NetworkCredential("tibameth101team3@gmail.com", "glyirsixoioagwmh");
+                    sm.Credentials = new NetworkCredential("tibameth101team3@gmail.com", "glyirsixoioagwmh");//需輸入申請的應用程式密碼
                     sm.Send(mail);
                 }
             }
@@ -220,8 +225,14 @@ namespace Napping_PJ.Controllers
             }
             return Ok("驗證信件已寄出");
         }
+        /// <summary>
+        /// 當使用者點擊信件的驗證連結，將轉到ValidEmail方法
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public async Task<IActionResult> ValidEmail(string code)
         {
+            //解密
             var str = _encrypt.AesDecryptToString(code);
             var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
             if (DateTime.Now > obj.ExpiredDate)
