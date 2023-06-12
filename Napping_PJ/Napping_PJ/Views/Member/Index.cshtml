@@ -153,6 +153,7 @@
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     <script src="~/lib/vue/vue.min.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         var vueApp = new Vue({
 
@@ -255,7 +256,7 @@
                 editMemberInfo: function () {
                     var _this = this;
                     axios.post(`Member/EditMemberInfo`, _this.MemberViewModel)
-                        .then(response => {alert("修改成功");})
+                        .then(response => {swal("修改成功");})
                         .catch(error =>{console.log("修改失敗");});
                 },
             },

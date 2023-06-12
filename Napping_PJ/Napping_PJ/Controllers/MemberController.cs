@@ -64,7 +64,7 @@ namespace Napping_PJ.Controllers
                 return BadRequest("寫入失敗");
             }
 
-            return View(memberViewModel);
+            return Ok(memberViewModel);
         }
         [HttpPost]
 		public IActionResult SendMail()
