@@ -114,7 +114,7 @@
             },
             methods: {
                 ValidField: function () {
-                    console.log('Register/ValidField')
+                    //console.log('Register/ValidField')
                     let _this = this;
                     var request = {};
                     request.Email = _this.email;
@@ -123,14 +123,14 @@
 
                     axios.post(`Register/ValidField`, request)
                         .then(res => {
-                            console.log(res.data);
+                            //console.log(res.data);
                             _this.errorMesseage.mainError = res.data.mainError;
                             _this.errorMesseage.emailError = res.data.emailError;
                             _this.errorMesseage.passWordError = res.data.passWordError;
                             _this.errorMesseage.confirmPasswordError = res.data.confirmPasswordError;
                         })
                         .catch(err => {
-                            console.log(err.response.data);
+                            //console.log(err.response.data);
                             _this.errorMesseage.mainError = err.response.data.mainError;
                             _this.errorMesseage.emailError = err.response.data.emailError;
                             _this.errorMesseage.passWordError = err.response.data.passWordError;

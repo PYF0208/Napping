@@ -44,21 +44,25 @@ namespace Napping_PJ
 			// 加入身份驗證服務
 			builder.Services.AddAuthentication(o =>
             {
+                // 設置預設的身份驗證方案為 "Application"
                 o.DefaultScheme = "Application";
+                // 設置預設的外部登入方案為 "External"，供第三方登入使用
                 o.DefaultSignInScheme = "External";
             })
             .AddCookie("Application", options =>
             {
-                options.LoginPath = "/Login/Index";
-                options.AccessDeniedPath = "/Path/To/Your/AccessDeniedPage";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                // 設置應用程式身份驗證的 Cookie 相關選項
+                options.LoginPath = "/Login/Index"; // 登入頁面的路徑，如需要權限將轉向此頁面
+                options.AccessDeniedPath = "/Path/To/Your/AccessDeniedPage"; // 拒絕存取的錯誤頁面的路徑
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Cookie 的過期時間間隔為 30 分鐘
             })
-            .AddCookie("External")
+            .AddCookie("External")// 添加外部身份驗證的 Cookie
             .AddGoogle(options =>
             {
+                // 配置 Google 身份驗證提供者
                 IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
-                options.ClientId = googleAuthNSection["ClientId"];
-                options.ClientSecret = googleAuthNSection["ClientSecret"];
+                options.ClientId = googleAuthNSection["ClientId"]; // 設置 Google ClientId
+                options.ClientSecret = googleAuthNSection["ClientSecret"]; // 設置 Google ClientSecret
             });
             //添加session服務
             builder.Services.AddSession(options =>
@@ -84,8 +88,8 @@ namespace Napping_PJ
 			app.UseHangfireDashboard(); //定期寄送生日信
 			app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseAuthentication();//啟用身份驗證
+            app.UseAuthorization();//啟用身分授權
             //啟動session
             app.UseSession();
 
