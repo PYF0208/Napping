@@ -212,7 +212,12 @@
                     var okOrderId = isNaN(Number(_this.orderId)) ? 0 : Number(_this.orderId);
                     axios.get(`/CustomerOrders/FilterCustomerOrders?orderId=${okOrderId}`).then(response => {
                         if (typeof response.data === 'string') {
-                            alert(response.data);
+                            //alert(response.data);
+                            swal({
+                                title: response.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
                         }
                         else {
                             _this.CustomerOrders = response.data;

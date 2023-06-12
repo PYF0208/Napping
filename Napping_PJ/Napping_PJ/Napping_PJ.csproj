@@ -43,7 +43,6 @@
 
   <ItemGroup>
     <None Include="Areas\Admin\Views\Customers\Index.cshtml" />
-    <None Include="Areas\Admin\Views\ExtraServices\Index.cshtml" />
     <None Include="Areas\Admin\Views\Feature\Create.cshtml" />
     <None Include="Areas\Admin\Views\Feature\Delete.cshtml" />
     <None Include="Areas\Admin\Views\Feature\Details.cshtml" />

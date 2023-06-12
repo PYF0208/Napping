@@ -209,9 +209,9 @@
                     <div style="text-align:center" class="card-body bg-secondary text-white"><h5>旅店評論</h5></div>
                     <textarea name="feedback" id="feedback" rows="8" placeholder="您的回覆是我們進步的動力!" style="border:2px #2f3944 solid;" v-model="ratings.note"></textarea>
                 </div>
-                <span v-if="ratings.date!='0001-01-01T00:00:00'">最後修改時間:{{ratings.date| formatDateTime}}</span>
             </div>
             <div class="modal-footer">
+                <span v-if="ratings.date!='0001-01-01T00:00:00'">最後編輯:{{ratings.date| formatDateTime}}</span>
                 <button @@click="submitRating()">提交評價</button>
                 <button type="button" class="btn-secondary" data-bs-dismiss="modal">關閉</button>
             </div>
@@ -296,10 +296,10 @@
             el: '#exampleModal',
             data: {
                 item: [],
-                ratings: {cp:0,comfortable:0,staff:0,facility:0,clean:0},
+                ratings: { cp: 0, comfortable: 0, staff: 0, facility: 0, clean: 0 },
             },
             mounted: function () {
-              
+
             },
             filters: {
                 formatDateTime(value) {
@@ -350,7 +350,7 @@
                         CommentId: _this.ratings.commentId,
                         HotelId: _this.ratings.hotelId,
                         OrderId: _this.ratings.orderId,
-                        CustomerId:_this.ratings.customerId,
+                        CustomerId: _this.ratings.customerId,
                         Cp: _this.ratings.cp,
                         Comfortable: _this.ratings.comfortable,
                         Staff: _this.ratings.staff,
@@ -359,8 +359,13 @@
                         Note: _this.ratings.note,
                     };
                     axios.post('/CustomerOrders/PostComment', cm).then(response => {
-                        alert(response.data);
-                        //$('#insertPage').modal('hide');
+                        //alert(response.data);
+                        swal({
+                            title: response.data,
+                            icon: "success",
+                            button: "關閉視窗",
+                        });
+                        $('#exampleModal').modal('hide');
                         app.getFinishOrders();
                     });
                 },

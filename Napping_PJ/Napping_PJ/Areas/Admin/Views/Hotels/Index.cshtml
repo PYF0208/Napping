@@ -265,7 +265,12 @@
 					};
 					axios.post("Hotels/NewCreate", request)
 						.then(res => {
-							alert(res.data);
+							//alert(res.data);
+							swal({
+								title: res.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							$("#insertPage").modal('hide');
 							_this.getHotel()
 						})
@@ -288,7 +293,12 @@
 					};
 					axios.put(`Hotels/Edit?ID=${_this.hotelId}`, request)
 						.then(response => {
-							alert(response.data);
+							//alert(response.data);
+							swal({
+								title: response.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							_this.getHotel();
 							//_this.cancel();
 							$('#editModal').modal('hide');
@@ -360,14 +370,29 @@
 					let _this = this;
 					var x = _this.HotelsViewModel.find(h => h.hotelId == hotelId)
 
-					var ret = confirm(`您確定要將ID:${x.hotelId}-${x.name}刪除嗎?`);
-					if (ret == true) {
-						axios.delete(`Hotels/DeleteConfirmed?ID=${hotelId}`)
-							.then(response => {
-								var y = _this.HotelsViewModel.findIndex(h => h.hotelId == hotelId)
-								_this.HotelsViewModel.splice(y, 1)
-							});
-					}
+					swal({
+						title: `您確定要將ID:${x.hotelId}-${x.name}刪除嗎?`,
+						text: "此項操作將無法復原",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+						.then((willDelete) => {
+							if (willDelete) {
+								axios.delete(`Hotels/DeleteConfirmed?ID=${hotelId}`).then(response => {
+									var y = _this.HotelsViewModel.findIndex(h => h.hotelId == hotelId)
+									_this.HotelsViewModel.splice(y, 1)
+								});
+							}
+						});
+					//var ret = confirm(`您確定要將ID:${x.hotelId}-${x.name}刪除嗎?`);
+					//if (ret == true) {
+					//	axios.delete(`Hotels/DeleteConfirmed?ID=${hotelId}`)
+					//		.then(response => {
+					//			var y = _this.HotelsViewModel.findIndex(h => h.hotelId == hotelId)
+					//			_this.HotelsViewModel.splice(y, 1)
+					//		});
+					//}
 				},
 			}
 		});

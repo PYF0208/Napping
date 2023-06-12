@@ -88,7 +88,12 @@
                     axios.post(`SendValidEmail`, _this.EmailValidViewModel)
                         .then(response => {
                             _this.EmailErroe.emailError = response.data;
-                            alert('已寄出')
+                            swal({
+                                title: '已寄出信件！',
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
+                            //alert('已寄出')
                             location.href = `${basePath}Home/Index`;
                         })
                         .catch(error => {

@@ -117,10 +117,23 @@
                     axios.post(`Roles/AddRoleToUser?userId=${userId}&roleId=${RoleId}`)
                         .then(response => {
                             var user = _this.rolesIndexViewModel.UserRoleViewModels.find(u => u.customer.CustomerId == userId);
-                            alert(response.data);
+                            //alert(response.data);
+                            swal({
+                                title: response.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
                             this.GetUserRoleList()
                         })
-                        .catch(err => { alert(err.response.data) })
+                        .catch(err => { 
+                            //alert(err.response.data)
+                            swal({
+                                title: err.response.data,
+                                icon: "warning",
+                                button: "關閉視窗",
+                            });
+                        
+                        })
                 },
                 RemoveRoleToUser: function (userId, roleId) {
                     _this = this;
@@ -129,10 +142,21 @@
                             var user = _this.rolesIndexViewModel.UserRoleViewModels.find(u => u.customer.CustomerId == userId);
                             //var roleIndex = user.SelectedRole.findIndex(r => r.RoleId == roleId);
                             //user.SelectedRole.splice(roleIndex, 1);
-                            alert(response.data);
+                            //alert(response.data);
+                            swal({
+                                title: response.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
                             this.GetUserRoleList()
                         })
-                        .catch(err => { alert(err.response.data) })
+                        .catch(err => { //alert(err.response.data)
+                            swal({
+                                title: err.response.data,
+                                icon: "warning",
+                                button: "關閉視窗",
+                            });
+                        })
                 },
                 AddRole: function () {
                     _this = this;
@@ -142,22 +166,42 @@
                     }
                     axios.post(`Roles/AddRole`, RoleViewModel)
                         .then(response => {
-                            alert(response.data);
+                            //alert(response.data);
+                            swal({
+                                title: response.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
                             _this.GetUserRoleList();
                         })
                         .catch(err => {
-                            alert(err.response.data)
+                            //alert(err.response.data)
+                            swal({
+                                title: err.response.data,
+                                icon: "warning",
+                                button: "關閉視窗",
+                            });
                         })
                 },
                 RemoveRole: function (role) {
                     _this = this;
                     axios.post(`Roles/RemoveRole?roleId=${role.RoleId}`)
                         .then(response => {
-                            alert(response.data);
+                            //alert(response.data);
+                            swal({
+                                title: response.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
                             _this.GetUserRoleList();
                         })
                         .catch(err => {
-                            alert(err.response.data)
+                           // alert(err.response.data)
+                            swal({
+                                title: err.response.data,
+                                icon: "warning",
+                                button: "關閉視窗",
+                            });
                         })
                 },
                 EditRole: function (role,index) {
@@ -178,13 +222,23 @@
                     role.Name = _this.editRoleName;
                     axios.post(`Roles/UpdateRole`, role)
                         .then(response => {
-                            alert(response.data);
+                            //alert(response.data);
+                            swal({
+                                title: response.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
                             this.$set(_this.rolesIndexViewModel.Roles[index], 'Edit', false);
                             var obj = JSON.parse(JSON.stringify(this.rolesIndexViewModel));
                             _this.rolesIndexViewModel = obj;
                         })
                         .catch(error => {
-                            alert(response.data);
+                            //alert(response.data);
+                            swal({
+                                title: err.response.data,
+                                icon: "warning",
+                                button: "關閉視窗",
+                            });
                         })
                 },
             },

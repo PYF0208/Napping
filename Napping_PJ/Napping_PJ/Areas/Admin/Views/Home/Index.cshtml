@@ -1,27 +1,24 @@
-﻿<h1>
+﻿<h1 class="mt-3">
 	Welcome to Napping Admin!
 </h1>
 
 
 
-
-@*
-
 <div id="chartApp" class="row">
-	<div class="col-xl-6">
+	<div class="col-xl-12">
 		<div class="card mb-4">
 			<div class="card-header">
 				<i class="fas fa-chart-area me-1"></i>
-				Area Chart Example
+				訂單統計
 			</div>
 			<div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
 		</div>
 	</div>
-	<div class="col-xl-6">
+	<div class="col-xl-12">
 		<div class="card mb-4">
 			<div class="card-header">
 				<i class="fas fa-chart-bar me-1"></i>
-				Bar Chart Example
+				各地飯店統計
 			</div>
 			<div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
 		</div>
@@ -40,42 +37,46 @@
 				return {
 					vueCanvas: null,
 					chartAreaVM: [],
+					chartBarVM: [],
 
 				}
 			},
 			mounted: function () {
 				let _this = this;
-				_this.getData();
-				_this.setChartArea();
+				_this.getOrderData();
+				_this.getHotelData();
 			},
 			methods: {
-				getData: function () {
+				getOrderData: function () {
 					let _this = this;
-					axios.get(`/Admin/ChartArea/Get`).then(response => {
+					axios.get(`/Admin/ChartArea/GetOrderData`).then(response => {
 
 						_this.chartAreaVM = response.data;
-
+						_this.setChartArea();
 					})
 				},
 				setChartArea(){
 					let _this = this;
 
-					const totalPriceByDate = {};
+					const dates = [];  // 日期
+					const totalPrices = [];  // 金額
+
 					for (const item of _this.chartAreaVM) {
 
 						const date = item.date.split('T')[0];
+						const totalPrice = item.totalPrice;
 
-						if (!totalPriceByDate[date]) {
-							totalPriceByDate[date] = 0;
+						const dateIndex = dates.indexOf(date);  // 檢查日期是否已存在dates中
+
+						if (dateIndex !== -1) {
+							// 如果日期已存在，把金額加到totalPrices裡
+							totalPrices[dateIndex] += totalPrice;
+						} else {
+							// 如果日期不存在，增加此日期到date，把金額加到totalPrices裡
+							dates.push(date);
+							totalPrices.push(totalPrice);
 						}
-
-						totalPriceByDate[date] += item.totalPrice;
 					}
-
-					for (const date in totalPriceByDate) {
-						console.log(`日期: ${date}, 總計: ${totalPriceByDate[date]}`);
-					}
-
 
 
 					Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -85,9 +86,9 @@
 					var myLineChart = new Chart(ctx, {
 						type: 'line',
 						data: {
-							labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
+							labels: dates,
 							datasets: [{
-								label: "Sessions",
+								label: "總計",
 								lineTension: 0.3,
 								backgroundColor: "rgba(2,117,216,0.2)",
 								borderColor: "rgba(2,117,216,1)",
@@ -98,7 +99,7 @@
 								pointHoverBackgroundColor: "rgba(2,117,216,1)",
 								pointHitRadius: 50,
 								pointBorderWidth: 2,
-								data: totalPriceByDate[date],
+								data: totalPrices,
 							}],
 						},
 						options: {
@@ -117,7 +118,7 @@
 								yAxes: [{
 									ticks: {
 										min: 0,
-										max: 40000,
+										max: 161000,
 										maxTicksLimit: 5
 									},
 									gridLines: {
@@ -133,7 +134,74 @@
 				
 				
 				},
+				getHotelData: function () {
+					let _this = this;
+					axios.get(`/Admin/ChartArea/GetHotelData`).then(response => {
 
+						_this.chartBarVM = response.data;
+						_this.setChartBar();
+					})
+				},
+				setChartBar: function(){
+
+					let _this = this;
+
+					Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+					Chart.defaults.global.defaultFontColor = '#292b2c';
+
+					var cities = [];
+					var cityCount = [];
+
+					for (const item of _this.chartBarVM) {
+
+						if (item.ctiy != ""){
+							cities.push(item.city);
+							cityCount.push(item.count);
+						}
+					}
+
+
+					var ctx = document.getElementById("myBarChart");
+					var myLineChart = new Chart(ctx, {
+						type: 'bar',
+						data: {
+							labels: cities,
+							datasets: [{
+								label: "合計數量",
+								backgroundColor: "rgba(2,117,216,1)",
+								borderColor: "rgba(2,117,216,1)",
+								data: cityCount,
+							}],
+						},
+						options: {
+							scales: {
+								xAxes: [{
+									gridLines: {
+										display: false
+									},
+									ticks: {
+										maxTicksLimit: 7
+									}
+								}],
+								yAxes: [{
+									ticks: {
+										min: 0,
+										max: 15,
+										maxTicksLimit: 5
+									},
+									gridLines: {
+										display: true
+									}
+								}],
+							},
+							legend: {
+								display: false
+							}
+						}
+					});
+
+				
+				},
 
 
 			}
@@ -145,52 +213,11 @@
 	</script>
 
 	<script>
-		Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-		Chart.defaults.global.defaultFontColor = '#292b2c';
+		
 
 
-		var ctx = document.getElementById("myBarChart");
-		var myLineChart = new Chart(ctx, {
-			type: 'bar',
-			data: {
-				labels: ["January", "February", "March", "April", "May", "June"],
-				datasets: [{
-					label: "Revenue",
-					backgroundColor: "rgba(2,117,216,1)",
-					borderColor: "rgba(2,117,216,1)",
-					data: [4215, 5312, 6251, 7841, 9821, 14984],
-				}],
-			},
-			options: {
-				scales: {
-					xAxes: [{
-						time: {
-							unit: 'month'
-						},
-						gridLines: {
-							display: false
-						},
-						ticks: {
-							maxTicksLimit: 6
-						}
-					}],
-					yAxes: [{
-						ticks: {
-							min: 0,
-							max: 15000,
-							maxTicksLimit: 5
-						},
-						gridLines: {
-							display: true
-						}
-					}],
-				},
-				legend: {
-					display: false
-				}
-			}
-		});
+		
 
 
 	</script>
-}*@
+}

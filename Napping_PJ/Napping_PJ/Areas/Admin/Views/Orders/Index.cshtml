@@ -322,7 +322,12 @@
 					};
 					axios.post("Orders/Create", request)
 						.then(res => {
-							alert(res.data);
+							//alert(res.data);
+							swal({
+								title: res.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							$("#insertPage").modal('hide');
 							_this.getOrder();
 						})
@@ -356,7 +361,12 @@
 					};
 					axios.post(`Orders/Edit?ID=${_this.orderId}`, request)
 						.then(response => {
-							alert(response.data);
+							//alert(response.data);
+							swal({
+								title: response.data,
+								icon: "success",
+								button: "關閉視窗",
+							});
 							_this.getOrder();
 							$("#editModal").modal("hide");
 						});
@@ -377,14 +387,31 @@
 					let _this = this;
 					var x = _this.OrdersViewModel.find(h => h.orderId == orderId)
 
-					var ret = confirm(`您確定要將ID:${x.orderId}刪除嗎?`);
-					if (ret == true) {
-						axios.delete(`Orders/DeleteConfirmed?ID=${orderId}`)
-							.then(response => {
-								var y = _this.OrdersViewModel.findIndex(h => h.orderId == orderId)
-								_this.OrdersViewModel.splice(y, 1)
-							});
-					}
+					swal({
+						title: `您確定要將ID:${x.orderId}刪除嗎?`,
+						text: "此項操作將無法復原",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					})
+						.then((willDelete) => {
+							if (willDelete) {
+								axios.delete(`Orders/DeleteConfirmed?ID=${orderId}`).then(response => {
+									var y = _this.OrdersViewModel.findIndex(h => h.orderId == orderId)
+									_this.OrdersViewModel.splice(y, 1)
+								});
+							}
+						});
+
+
+					//var ret = confirm(`您確定要將ID:${x.orderId}刪除嗎?`);
+					//if (ret == true) {
+					//	axios.delete(`Orders/DeleteConfirmed?ID=${orderId}`)
+					//		.then(response => {
+					//			var y = _this.OrdersViewModel.findIndex(h => h.orderId == orderId)
+					//			_this.OrdersViewModel.splice(y, 1)
+					//		});
+					//}
 				},
 			}
 		});
