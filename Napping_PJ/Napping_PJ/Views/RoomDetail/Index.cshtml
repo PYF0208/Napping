@@ -287,7 +287,7 @@
                     if (self.RoomDetail.checkIn !== null && self.RoomDetail.checkOut !== null) {
                         for (var i = 0; i < days; i++) {
                             var day16Start = new Date(start.getTime() + (i * oneDay));
-                            var day12End = new Date(day16Start.getTime() + (i * oneDay / 24 * 20));
+                            var day12End = new Date(day16Start.getTime() + (oneDay / 24 * 20));
                             //查每晚的利潤成數
                             var profitOfDay = self.checkProfit(self.RoomDetail.profitDictionary, day16Start.getTime(), day12End.getTime());
                             var roomBasePrice = self.RoomDetail.basePrice;
