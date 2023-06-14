@@ -360,6 +360,13 @@
                     };
                     axios.post('/CustomerOrders/PostComment', cm).then(response => {
                         //alert(response.data);
+                        if (response.data == "評分範圍為1顆星至5顆星!"){
+                            return swal({
+                                title: response.data,
+                                icon: "error",
+                                button: "關閉視窗",
+                            });
+                        }
                         swal({
                             title: response.data,
                             icon: "success",
