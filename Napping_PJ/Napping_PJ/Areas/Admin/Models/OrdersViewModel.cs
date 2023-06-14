@@ -12,12 +12,16 @@ namespace Napping_PJ.Areas.Admin.Models
         public string? CustomerName { get; set; }
         public virtual Customer Customer { get; set; } = null!;
 		public virtual Payment Payment { get; set; } = null!;
+		public string NameOfBooking { get; set; } = null!;
+		public string PhoneOfBooking { get; set; } = null!;
+		public int Status { get; set; }
 
-        
 
-        /* 訂單明細 */
+	
 
-        public int OrderDetailId { get; set; }
+		/* 訂單明細 */
+
+		public int OrderDetailId { get; set; }
         
 
         public DateTime CheckIn { get; set; } //入住時間

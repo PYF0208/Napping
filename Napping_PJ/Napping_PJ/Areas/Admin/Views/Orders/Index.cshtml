@@ -21,7 +21,7 @@
 				<div class="row">
 					@*如果想來點查詢功能<input type="text" class="form-control" placeholder="請輸入篩選關鍵字" v-model="Filter" @@keyup="filterEmployeeDTOes" />*@
 					<div>
-						<button class="btn btn-info" data-toggle="modal" @@click="showInsertPage"><span><i class="fa-solid fa-circle-plus"></i> 新增</span></button>
+					@*	<button class="btn btn-info" data-toggle="modal" @@click="showInsertPage"><span><i class="fa-solid fa-circle-plus"></i> 新增</span></button>*@
 					</div>
 				</div>
 			</div>
@@ -53,7 +53,7 @@
 						</td>
 						<td>
 							<a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
-							<a class="btn delete" @@click="deleteOrderIdService(item.orderId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
+							@*<a class="btn delete" @@click="deleteOrderIdService(item.orderId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>*@
 						</td>
 
 					</tr>
@@ -63,7 +63,7 @@
 
 		</div>
 		@*訂單明細用的互動視窗*@
-		<div class="form-group" >
+		<div class="form-group">
 			<div class="modal fade" id="orderDetailsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
 					<div class="modal-content">
@@ -73,13 +73,13 @@
 						</div>
 						<div class="modal-body" v-for="item in OrderDetailsViewModel">
 							<div class="form-group">
-								<label class="form-label">訂單ID: {{item.orderId}}</label>								
+								<label class="form-label">訂單ID: {{item.orderId}}</label>
 							</div>
 							<div class="form-group">
-								<label class="form-label">訂單明細ID:{{item.orderDetailId}}</label>								
+								<label class="form-label">訂單明細ID:{{item.orderDetailId}}</label>
 							</div>
 							<div class="form-group">
-								<label class="form-label">房型ID:{{item.roomId}}</label>								
+								<label class="form-label">房型ID:{{item.roomId}}</label>
 							</div>
 							<div class="form-group">
 								<label class="form-label">入住時間:{{item.checkIn}}</label>
@@ -104,14 +104,14 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-							
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		@*編輯用的互動視窗*@
-		<div class="form-group" >
+		<div class="form-group">
 			<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
 					<div class="modal-content">
@@ -126,18 +126,37 @@
 								<label class="form-label">訂單ID:</label>
 								<input class="form-control" v-model="orderId" disabled />
 							</div>
+
 							<div class="form-group">
-								<label class="form-label">會員名稱:{{customerName}}</label>
-								<input class="form-control" v-model="customerId"  disabled />
+								<label class="form-label">訂購人姓名:</label>
+								<input class="form-control" v-model="nameOfBooking" />
 							</div>
 
 							<div class="form-group">
-								<label class="form-label">付款方式:{{paymentType}}</label>								
-								<input class="form-control"  disabled />
+								<label class="form-label">訂購人電話:</label>
+								<input class="form-control" v-model="phoneOfBooking" />
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">訂單狀態:</label>
+								<select v-model="status">
+									<option value="1">未付款</option>
+									<option value="2">已付款</option>
+									<option value="3">已取消</option>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">會員名稱:{{customerName}}</label>
+								<input class="form-control" v-model="customerId" disabled />
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">付款方式:{{paymentType}}</label>
 							</div>
 							<div class="form-group">
-								<label class="form-label">日期</label>
-								<input class="form-control" type="datetime" v-model="date" disabled/>
+								<label class="form-label">日期:</label>
+								<input class="form-control" type="datetime" v-model="date" disabled />
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -167,10 +186,10 @@
 							</div>
 
 							@*<div>
-								<label>付款類型:</label>
-								<select class="form-control" v-model="paymentId">
-									<option v-for="item in PaymentViewModel" :value="item.paymentId">{{item.type}}</option>
-								</select>
+							<label>付款類型:</label>
+							<select class="form-control" v-model="paymentId">
+							<option v-for="item in PaymentViewModel" :value="item.paymentId">{{item.type}}</option>
+							</select>
 							</div>*@
 							<div>
 								<div class="form-group">
@@ -209,9 +228,13 @@
 				orderId: "",
 				//paymentId: "",
 				orderDetailId: "",
-				customerName:"",
-				paymentType:"",
-				roomId:"",
+				customerName: "",
+				paymentType: "",
+				roomId: "",
+				nameOfBooking: "",
+				phoneOfBooking: "",
+				status: "",
+
 			},
 			mounted: function () {
 				let _this = this;
@@ -244,7 +267,7 @@
 				}
 			},
 			methods: {
-				getOrderDetails:  function (item) {
+				getOrderDetails: function (item) {
 					let _this = this;
 					_this.roomId = item.roomId;
 					_this.orderId = item.orderId;
@@ -255,9 +278,9 @@
 
 							//alert(JSON.stringify(response.data))
 							_this.OrderDetailsViewModel = response.data;
-							for (i = 0; i < _this.OrderDetailsViewModel.length;i++){
+							for (i = 0; i < _this.OrderDetailsViewModel.length; i++) {
 								var ord = _this.OrderDetailsViewModel[i];
-								ord.checkIn = new Date(ord.checkIn).toISOString().slice(0,10);
+								ord.checkIn = new Date(ord.checkIn).toISOString().slice(0, 10);
 								ord.checkOut = new Date(ord.checkOut).toISOString().slice(0, 10);
 								//ord.date.splice(10, 1);
 							}
@@ -298,7 +321,7 @@
 							//alert(JSON.stringify(response.data))
 							_this.OrdersViewModel = response.data;
 
-							for (i = 0; i < _this.OrdersViewModel.length;i++){
+							for (i = 0; i < _this.OrdersViewModel.length; i++) {
 								var or = _this.OrdersViewModel[i];
 								//or.date=new Date(or.date).toISOString().slice(0,16)
 							}
@@ -357,6 +380,9 @@
 						customerId: _this.customerId,
 						orderId: _this.orderId,
 						date: _this.date,
+						nameOfBooking: _this.nameOfBooking,
+						phoneOfBooking: _this.phoneOfBooking,
+						status: _this.status,
 
 					};
 					axios.post(`Orders/Edit?ID=${_this.orderId}`, request)
@@ -377,10 +403,15 @@
 					let _this = this;
 					_this.paymentId = item.paymentId;
 					_this.paymentType = item.paymentType;
-					_this.customerName=item.customerName;
+					_this.customerName = item.customerName;
 					_this.customerId = item.customerId;
 					_this.orderId = item.orderId;
 					_this.date = item.date;
+					_this.nameOfBooking = item.nameOfBooking;
+					_this.phoneOfBooking = item.phoneOfBooking;
+					_this.status = item.status;
+					
+
 				},
 				deleteOrderIdService: function (orderId) {
 					//alert("delete");

@@ -40,6 +40,9 @@ namespace Napping_PJ.Areas.Admin.Controllers
                 Date = o.Date,
                 CustomerName = o.Customer.Name,
                 PaymentType = o.Payments.OrderBy(x => x.OrderId).Last().Type,
+                NameOfBooking = o.NameOfBooking,
+                PhoneOfBooking = o.PhoneOfBooking,
+                Status = o.Status,
                 /* 訂單明細*/
 
 
@@ -168,6 +171,9 @@ namespace Napping_PJ.Areas.Admin.Controllers
             ord.OrderId = order.OrderId;
             ord.CustomerId = order.CustomerId;
             ord.Date = order.Date;
+            ord.Status = order.Status;
+            ord.NameOfBooking = order.NameOfBooking;
+            ord.PhoneOfBooking = order.PhoneOfBooking;
             try
             {
                 _context.Update(ord);
