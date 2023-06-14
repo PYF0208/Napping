@@ -11,7 +11,7 @@
         public string? Region { get; set; }
         public string? Country { get; set; }
         public int? LevelId { get; set; }
-        public string LevelName { get; set; }
+        public string? LevelName { get; set; }
         public int CustomerId { get; set; }
     }
 }
