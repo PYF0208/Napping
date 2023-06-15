@@ -255,7 +255,6 @@ namespace Napping_PJ.Controllers
                 // 设置findRDVM的相应属性的值
                 property.SetValue(findRDVM, value);
             }
-
             //存入session列表
             byte[] bytes = null;
             string json = JsonConvert.SerializeObject(roomDetailViewModels);
