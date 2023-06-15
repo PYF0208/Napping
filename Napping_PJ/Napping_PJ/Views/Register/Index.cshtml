@@ -77,7 +77,6 @@
                                     <form asp-controller="ThirdPartyLogin" asp-action="OauthGooleLogin" method="post">
                                         <button type="submit" class="btn btn-primary" name="provider">使用Google帳號登入</button>
                                     </form>
-                                    <button asp-controller="ThirdPartyLogin" asp-action="OauthGooleLogin">try</button>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +94,7 @@
     <script src="~/lib/vue/vue.min.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script>
-        var basePath = "https://localhost:7265/";
+        var basePath = location.origin;
         var vueApp = new Vue({
             data: {
                 LoginViewModel: [],
@@ -150,7 +149,7 @@
                             _this.errorMesseage.emailError = res.data.emailError;
                             _this.errorMesseage.passWordError = res.data.passWordError;
                             _this.errorMesseage.confirmPasswordError = res.data.confirmPasswordError;
-                            location.href = `${basePath}Home/Index`;
+                            location.href = `${basePath}/Home/Index`;
                         })
                         .catch(err => {
                             console.log(err.response.data);

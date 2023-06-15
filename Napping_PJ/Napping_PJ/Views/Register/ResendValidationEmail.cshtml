@@ -56,7 +56,7 @@
     <script src="~/lib/vue/vue.min.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script>
-        var basePath = "https://localhost:7265/";
+        var basePath = location.origin;
         var vueApp = new Vue({
             data: {
                 EmailErroe: {
@@ -94,7 +94,7 @@
                                 button: "關閉視窗",
                             });
                             //alert('已寄出')
-                            location.href = `${basePath}Home/Index`;
+                            location.href = `${basePath}/Home/Index`;
                         })
                         .catch(error => {
                             //console.log(error.response.data)

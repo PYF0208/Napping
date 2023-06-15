@@ -70,7 +70,7 @@ namespace Napping_PJ.Controllers
                 _isProcessing = true;
             }
 
-
+            _bankInfoModel.ReturnURL = $"{Request.Scheme}://{Request.Host}/CheckOut/CheckOutReturn";
             Order thisOrder = new Order();
             int subTotle = 0;
             if (orderId < 0)
