@@ -141,7 +141,7 @@
 					var request = {};
 					request.FeatureId = isNaN(Number(_this.Filter)) ? -1 : Number(_this.Filter);
 					request.FeatureId = request.Name = request.Image = _this.Filter;
-					axios.post(`https://localhost:7265/Admin/Feature/FilterFeature`, request).then(response => {
+					axios.post(`${location.origin}/Admin/Feature/FilterFeature`, request).then(response => {
 
 						_this.FeatureVMs = response.data;
 						var FList = [];
