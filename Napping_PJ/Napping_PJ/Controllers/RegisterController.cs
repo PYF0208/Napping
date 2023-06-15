@@ -109,7 +109,8 @@ namespace Napping_PJ.Controllers
                 Name = registerViewModel.Email,
                 Email = registerViewModel.Email,
                 //密碼加鹽加密，鹽是信箱
-                Password = PasswordHasher.HashPassword(registerViewModel.Password, registerViewModel.Email)
+                Password = PasswordHasher.HashPassword(registerViewModel.Password, registerViewModel.Email),
+                LevelId = 1,
             };
             try
             {

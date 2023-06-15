@@ -1,269 +1,278 @@
 ﻿@section Styles{
-	<link href="~/css/table.css" rel="stylesheet" />
+    <link href="~/css/table.css" rel="stylesheet" />
 }
 
 <h1 class="mt-3">服務選取及價格設定</h1>
 
 <div id="app" class="container">
-	<div class="table-responsive">
-		<div class="table-wrapper">
-			@*藍藍綠綠那一塊*@
-			<div class="table-title">
-				<div class="row">
-					<input type="text" class="form-control" placeholder="請輸入篩選關鍵字" v-model="Filter" @@keyup="filterHotelExtraServices()" />
-					<div>
-						<button class="btn btn-info" @@click="showInsert()" data-toggle="modal"><span><i class="fa-solid fa-circle-plus"></i> 新增</span></button>
-					</div>
-				</div>
-			</div>
-			@*藍藍綠綠那一塊*@
-			@*表格標題*@
-			<table class="table table-striped table-hover">
-				<thead>
-					<tr>
-						<td>旅店名稱</td>
-						<td>服務名稱</td>
-						<td>單價</td>
-						<th>功能</th>
-					</tr>
-				</thead>
-				@*表格標題*@
-				@*表格內容*@
-				<tbody>
-					<tr v-for="item in ExtraServiceViewModel">
-						<td>{{item.hotelName}}</td>
-						<td><i :class="item.image"></i>{{item.extraServiceName}}</td>
-						<td>{{item.extraServicePrice}}</td>
-						<td>
-							<a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
-							<a class="btn delete" @@click="deleteHotelExtraServices(item.hotelId,item.extraServiceId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
-						</td>
-					</tr>
-				</tbody>
-				@*表格內容*@
-			</table>
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            @*藍藍綠綠那一塊*@
+            <div class="table-title">
+                <div class="row">
+                    <input type="text" class="form-control" placeholder="請輸入篩選關鍵字" v-model="Filter" @@keyup="filterHotelExtraServices()" />
+                    <div>
+                        <button class="btn btn-info" @@click="showInsert()" data-toggle="modal"><span><i class="fa-solid fa-circle-plus"></i> 新增</span></button>
+                    </div>
+                </div>
+            </div>
+            @*藍藍綠綠那一塊*@
+            @*表格標題*@
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <td>旅店名稱</td>
+                        <td>服務名稱</td>
+                        <td>單價</td>
+                        <th>功能</th>
+                    </tr>
+                </thead>
+                @*表格標題*@
+                @*表格內容*@
+                <tbody>
+                    <tr v-for="item in ExtraServiceViewModel">
+                        <td>{{item.hotelName}}</td>
+                        <td><i :class="item.image"></i>{{item.extraServiceName}}</td>
+                        <td>{{item.extraServicePrice}}</td>
+                        <td>
+                            <a class="btn edit" @@click="edit(item)"><i class="fa-solid fa-pen" title="Edit"></i></a>
+                            <a class="btn delete" @@click="deleteHotelExtraServices(item.hotelId,item.extraServiceId)"><i class="fa-solid fa-trash-can" title="Delete"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+                @*表格內容*@
+            </table>
 
-		</div>
-		@*編輯用的互動視窗*@
-		<div class="form-group">
-			<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="modalTitleId">編輯</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<div class="form-group">
-								<label class="form-label">旅店名稱:</label>
-								<select class="form-control" v-model="hotelId">
-									<option v-for="item in HotelNames" :value="item.hotelId">{{ item.name }}</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="form-label">服務名稱:</label>
-								<select class="form-control" v-model="extraServiceId">
-									<option v-for="item in ExtraServiceNames" :value="item.extraServiceId">{{ item.extraServiceName }}</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="form-label">單價</label>
-								<input class="form-control" v-model="extraServicePrice" />
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-							<button type="button" @@click="update()" class="btn btn-primary">儲存</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		@*新增用的互動視窗*@
-		<div class="form-group">
-			<div class="modal fade" id="insertModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="modalTitleId">新增</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<div class="form-group">
-								<label class="form-label">旅店名稱:</label>
-								<select class="form-control" v-model="insertHotelId">
-									<option v-for="item in HotelNames" :value="item.hotelId">{{ item.name }}</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="form-label">服務名稱:</label>
-								<select class="form-control" v-model="insertExtraServiceId">
-									<option v-for="item in ExtraServiceNames" :value="item.extraServiceId">{{ item.extraServiceName }}</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="form-label">單價</label>
-								<input class="form-control" v-model="insertExtraServicePrice" />
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-							<button type="button" @@click="insert()" class="btn btn-primary">新增</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        </div>
+        @*編輯用的互動視窗*@
+        <div class="form-group">
+            <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTitleId">編輯</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">旅店名稱:</label>
+                                <select class="form-control" v-model="hotelId">
+                                    <option v-for="item in HotelNames" :value="item.hotelId">{{ item.name }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">服務名稱:</label>
+                                <select class="form-control" v-model="extraServiceId">
+                                    <option v-for="item in ExtraServiceNames" :value="item.extraServiceId">{{ item.extraServiceName }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">單價</label>
+                                <input class="form-control" v-model="extraServicePrice" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                            <button type="button" @@click="update()" class="btn btn-primary">儲存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*新增用的互動視窗*@
+        <div class="form-group">
+            <div class="modal fade" id="insertModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTitleId">新增</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="form-label">旅店名稱:</label>
+                                <select class="form-control" v-model="insertHotelId">
+                                    <option v-for="item in HotelNames" :value="item.hotelId">{{ item.name }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">服務名稱:</label>
+                                <select class="form-control" v-model="insertExtraServiceId">
+                                    <option v-for="item in ExtraServiceNames" :value="item.extraServiceId">{{ item.extraServiceName }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">單價</label>
+                                <input class="form-control" v-model="insertExtraServicePrice" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                            <button type="button" @@click="insert()" class="btn btn-primary">新增</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 
 @section Scripts{
 
-	<script src="~/lib/vue/vue.min.js"></script>
-	<script src="~/lib/axios/axios.min.js"></script>
-	<script>
-		const vm = new Vue({
-			el: "#app",
-			data() {
-				return {
-					ExtraServiceViewModel: [],
-					HotelNames:[],
-					ExtraServiceNames:[],
-					Filter: "",
-					hotelId: "",
-					extraServiceId:"",
-					extraServicePrice: "",
-					insertHotelId: "",
-					insertExtraServiceId: "",
-					insertExtraServicePrice:"",
-				};
-			},
-			mounted: function () {
-				let _this = this;
-				_this.filterHotelExtraServices();
-				_this.getExtraServiceName();
-				_this.getHotelName();
-			},
-			methods: {
-				getExtraServiceName:function(){
-					let _this = this;
-					axios.get('HotelExtraServices/GetExtraServiceName')
-						.then(function (response) {
-							//alert(JSON.stringify(response.data));
-							_this.ExtraServiceNames = response.data;
-						});
-				},
-				getHotelName: function () {
-				    let _this = this;
-					axios.get('HotelExtraServices/GetHotelName')
-				        .then(function (response) {
-				            //alert(JSON.stringify(response.data));
-							_this.HotelNames = response.data;
-				        });
-				},
-				filterHotelExtraServices: function () {
-					let _this = this;
-					var request = {};
-					request.ExtraServicePrice = isNaN(Number(_this.Filter)) ? -1 : Number(_this.Filter);
-					request.HotelName = request.ExtraServiceName = _this.Filter;
-					axios.post(`HotelExtraServices/FilterHotelExtraServices`, request).then(response => {
+    <script src="~/lib/vue/vue.min.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    ExtraServiceViewModel: [],
+                    HotelNames: [],
+                    ExtraServiceNames: [],
+                    Filter: "",
+                    hotelId: "",
+                    extraServiceId: "",
+                    extraServicePrice: "",
+                    editHotelId: "",
+                    editExtraServiceId: "",
+                    insertHotelId: "",
+                    insertExtraServiceId: "",
+                    insertExtraServicePrice: "",
+                };
+            },
+            mounted: function () {
+                let _this = this;
+                _this.filterHotelExtraServices();
+                _this.getExtraServiceName();
+                _this.getHotelName();
+            },
+            methods: {
+                getExtraServiceName: function () {
+                    let _this = this;
+                    axios.get('HotelExtraServices/GetExtraServiceName')
+                        .then(function (response) {
+                            //alert(JSON.stringify(response.data));
+                            _this.ExtraServiceNames = response.data;
+                        });
+                },
+                getHotelName: function () {
+                    let _this = this;
+                    axios.get('HotelExtraServices/GetHotelName')
+                        .then(function (response) {
+                            //alert(JSON.stringify(response.data));
+                            _this.HotelNames = response.data;
+                        });
+                },
+                filterHotelExtraServices: function () {
+                    let _this = this;
+                    var request = {};
+                    request.ExtraServicePrice = isNaN(Number(_this.Filter)) ? -1 : Number(_this.Filter);
+                    request.HotelName = request.ExtraServiceName = _this.Filter;
+                    axios.post(`HotelExtraServices/FilterHotelExtraServices`, request).then(response => {
 
-						_this.ExtraServiceViewModel = response.data;
-						var FList = [];
+                        _this.ExtraServiceViewModel = response.data;
+                        var FList = [];
 
-						_this.ExtraServiceViewModel.forEach(
-							item => {
-								FList.push(item);
-							}
-						)
-						_this.ExtraServiceViewModel = FList;
-					})
-				},
-				edit: function (item) {
-					$("#editModal").modal("show");
-					let _this = this;
-					_this.hotelId = item.hotelId;
-					_this.extraServiceId = item.extraServiceId;
-					_this.extraServicePrice = item.extraServicePrice;
-				},
-				update: function () {
-					//alert("UPDATE");
-					let _this = this;
-					var request = {
-						HotelId: _this.hotelId,
-						ExtraServiceId: _this.extraServiceId,
-						ExtraServicePrice: _this.extraServicePrice,
-					};
-					//alert(JSON.stringify(request));
-					axios.put(`HotelExtraServices/UpdateHotelExtraServices?hotelId=${_this.hotelId}&extraServiceId=${_this.extraServiceId}`, request)
-						.then(response => {
-							//alert(response.data);
-							swal({
-								title: response.data,
-								icon: "success",
-								button: "關閉視窗",
-							});
-							$("#editModal").modal("hide");
-							_this.filterHotelExtraServices();
-						});
-				},
-				showInsert: function () {
-					$("#insertModal").modal("show");
-				},
-				insert: function () {
-					let _this = this;
-					var request = {
-						HotelId: _this.insertHotelId,
-						ExtraServiceId: _this.insertExtraServiceId,
-						ExtraServicePrice: _this.insertExtraServicePrice,
-					};
-					axios.post(`HotelExtraServices/InsertHotelExtraServices`, request)
-						.then(response => {
-							//alert(response.data);
-							swal({
-								title: response.data,
-								icon: "success",
-								button: "關閉視窗",
-							});
-							$("#insertModal").modal("hide");
-							insertHotelId = "";
-							insertExtraServiceId = "";
-							insertExtraServicePrice="";
-							_this.filterHotelExtraServices();
-						});
-				},
-				deleteHotelExtraServices: function (hotelId,extraServiceId) {
-					let _this = this;
-					swal({
-						title: "確定要刪除嗎？",
-						text: "此項操作將無法復原",
-						icon: "warning",
-						buttons: true,
-						dangerMode: true,
-					})
-						.then((willDelete) => {
-							if (willDelete) {
-								axios.delete(`HotelExtraServices/DeleteHotelExtraServices?hotelId=${hotelId}&extraServiceId=${extraServiceId}`).then(response => {
-									swal({
-										title: response.data,
-										icon: "success",
-										button: "關閉視窗",
-									});
-									_this.filterHotelExtraServices();
-								});
-							}
-						});
-					//var ret = confirm("確定要刪除嗎？")
-					//if (ret == true) {
-					//	axios.delete(`HotelExtraServices/DeleteHotelExtraServices?hotelId=${hotelId}&extraServiceId=${extraServiceId}`).then(response => {
-					//		alert(response.data);
-					//		_this.filterHotelExtraServices();
-					//	});
-					//}
-				},
-			}
-		})
-	</script>
+                        _this.ExtraServiceViewModel.forEach(
+                            item => {
+                                FList.push(item);
+                            }
+                        )
+                        _this.ExtraServiceViewModel = FList;
+                    })
+                },
+                edit: function (item) {
+                    $("#editModal").modal("show");
+                    let _this = this;
+                    _this.hotelId = _this.editHotelId = item.hotelId;
+                    _this.extraServiceId = _this.editExtraServiceId = item.extraServiceId;
+                    _this.extraServicePrice = item.extraServicePrice;
+                },
+                update: function () {
+                    //alert("UPDATE");
+                    let _this = this;
+                    var request = {
+                        HotelId: _this.editHotelId,
+                        ExtraServiceId: _this.editExtraServiceId,
+                        ExtraServicePrice: _this.extraServicePrice,
+                    };
+                    //alert(JSON.stringify(request));
+                    axios.put(`HotelExtraServices/UpdateHotelExtraServices?hotelId=${_this.hotelId}&extraServiceId=${_this.extraServiceId}`, request)
+                        .then(response => {
+                            //alert(response.data);
+                            if (response.data == "旅店所屬服務已存在！"){
+                                return swal({
+                                    title: response.data,
+                                    icon: "error",
+                                    button: "關閉視窗",
+                                });
+                            }
+                            swal({
+                                title: response.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
+                            $("#editModal").modal("hide");
+                            _this.filterHotelExtraServices();
+                        });
+                },
+                showInsert: function () {
+                    $("#insertModal").modal("show");
+                },
+                insert: function () {
+                    let _this = this;
+                    var request = {
+                        HotelId: _this.insertHotelId,
+                        ExtraServiceId: _this.insertExtraServiceId,
+                        ExtraServicePrice: _this.insertExtraServicePrice,
+                    };
+                    axios.post(`HotelExtraServices/InsertHotelExtraServices`, request)
+                        .then(response => {
+                            //alert(response.data);
+                            swal({
+                                title: response.data,
+                                icon: "success",
+                                button: "關閉視窗",
+                            });
+                            $("#insertModal").modal("hide");
+                            _this.insertHotelId = "";
+                            _this.insertExtraServiceId = "";
+                            _this.insertExtraServicePrice = "";
+                            _this.filterHotelExtraServices();
+                        });
+                },
+                deleteHotelExtraServices: function (hotelId, extraServiceId) {
+                    let _this = this;
+                    swal({
+                        title: "確定要刪除嗎？",
+                        text: "此項操作將無法復原",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                axios.delete(`HotelExtraServices/DeleteHotelExtraServices?hotelId=${hotelId}&extraServiceId=${extraServiceId}`).then(response => {
+                                    swal({
+                                        title: response.data,
+                                        icon: "success",
+                                        button: "關閉視窗",
+                                    });
+                                    _this.filterHotelExtraServices();
+                                });
+                            }
+                        });
+                    //var ret = confirm("確定要刪除嗎？")
+                    //if (ret == true) {
+                    //	axios.delete(`HotelExtraServices/DeleteHotelExtraServices?hotelId=${hotelId}&extraServiceId=${extraServiceId}`).then(response => {
+                    //		alert(response.data);
+                    //		_this.filterHotelExtraServices();
+                    //	});
+                    //}
+                },
+            }
+        })
+    </script>
 }

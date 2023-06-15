@@ -217,7 +217,7 @@
 					})
 						.then((willDelete) => {
 							if (willDelete) {
-								axios.delete(`Feature/DeleteFeature?id=${_this.featureId}`).then(response => {
+								axios.delete(`Feature/DeleteFeature?id=${featureId}`).then(response => {
 									swal({
 										title: response.data,
 										icon: "success",
